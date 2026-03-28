@@ -47,6 +47,14 @@ topNPickers.forEach(e => {
 let charts = []
 let showTopN = []
 
+function i18nText(key, fallback, params) {
+    return window.t ? window.t(key, params) : fallback
+}
+
+function formatLocalizedDate(value, mode = 'date') {
+    return window.formatDateValue ? window.formatDateValue(value, mode) : new Date(value).toLocaleDateString()
+}
+
 // Premium Minimalist Grid Defaults
 function updateChartDefaults() {
     const isLight = document.documentElement.classList.contains('light');
@@ -92,6 +100,10 @@ updateChartDefaults();
 window.addEventListener('themeChanged', () => {
     updateChartDefaults();
     draw(); // Full re-render with new colors
+});
+
+window.addEventListener('languageChanged', () => {
+    draw();
 });
 
 String.prototype.toHHMMSS = function () {
@@ -145,8 +157,8 @@ function draw(subselection) {
                         : [val, lbl]
                     return ` ${d[1]}: ${d[0].toString().toHHMMSS()}`
                 },
-                title: () => 'Total Time',
-                footer: () => key === 'projects' ? 'Click for details' : null
+                title: () => i18nText('summary.tooltip.total_time', 'Total Time'),
+                footer: () => key === 'projects' ? i18nText('summary.tooltip.click_details', 'Click for details') : null
             }
         }
     }
@@ -191,7 +203,7 @@ function draw(subselection) {
                     xAxes: {
                         title: {
                             display: true,
-                            text: 'Duration (hh:mm:ss)',
+                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
                         },
                         ticks: {
                             callback: (label) => label.toString().toHHMMSS(),
@@ -433,7 +445,7 @@ function draw(subselection) {
                     xAxes: {
                         title: {
                             display: true,
-                            text: 'Duration (hh:mm:ss)',
+                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
                         },
                         ticks: {
                             callback: (label) => label.toString().toHHMMSS(),
@@ -483,7 +495,7 @@ function draw(subselection) {
                     xAxes: {
                         title: {
                             display: true,
-                            text: 'Duration (hh:mm:ss)',
+                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
                         },
                         ticks: {
                             callback: (label) => label.toString().toHHMMSS(),
@@ -521,7 +533,7 @@ function draw(subselection) {
                     xAxes: {
                         title: {
                             display: true,
-                            text: 'Duration (hh:mm:ss)',
+                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
                         },
                         ticks: {
                             callback: (label) => label.toString().toHHMMSS(),
@@ -546,7 +558,7 @@ function draw(subselection) {
         ? new Chart(timelineCanvas.getContext('2d'), {
             type: 'bar',
             data: {
-                labels: wakapiData.timelineStats.map(day => new Date(day.date).toLocaleDateString()),
+                labels: wakapiData.timelineStats.map(day => formatLocalizedDate(day.date, 'date')),
                 datasets: wakapiData.timelineStats
                     .flatMap(day => day.projects.map(project => project.name))
                     .sort()
@@ -566,14 +578,14 @@ function draw(subselection) {
                         stacked: true,
                         title: {
                             display: true,
-                            text: 'Date'
+                            text: i18nText('summary.axis.date', 'Date')
                         }
                     },
                     y: {
                         stacked: true,
                         title: {
                             display: true,
-                            text: 'Duration (hh:mm:ss)'
+                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)')
                         },
                         ticks: {
                             callback: value => value.toString().toHHMMSS()
@@ -614,7 +626,7 @@ function draw(subselection) {
                         let toTime = new Date(fromTime.getTime() + (cur.duration / 1e9 * 1e3))
 
                         // "The values for the first bar of a stack are absolute values, all following values of the same stack must be relative to the end of the previous bar"
-                        data[i] = [+fromTime - pre, +toTime - pre, `${fromTime.toLocaleTimeString()} - ${toTime.toLocaleTimeString()} (${(cur.duration / 1e9).toString().toHHMMSS()})`]
+                        data[i] = [+fromTime - pre, +toTime - pre, `${formatLocalizedDate(fromTime, 'time')} - ${formatLocalizedDate(toTime, 'time')} (${(cur.duration / 1e9).toString().toHHMMSS()})`]
                         pre = +toTime
 
                         if (data[i] < 0) {
@@ -645,22 +657,19 @@ function draw(subselection) {
                         ticks: {
                             stepSize: 1000 * 60 * 60, // per hour
                             callback: (value) => {
-                                return new Date(value).toLocaleString([], {
-                                    dateStyle: 'short',
-                                    timeStyle: 'short',
-                                })
+                                return formatLocalizedDate(value, 'datetime')
                             },
                         },
                         title: {
                             display: true,
-                            text: 'Time'
+                            text: i18nText('summary.axis.time', 'Time')
                         }
                     },
                     y: {
                         stacked: true,
                         title: {
                             display: true,
-                            text: 'Projects'
+                            text: i18nText('summary.axis.projects', 'Projects')
                         }
                     }
                 },

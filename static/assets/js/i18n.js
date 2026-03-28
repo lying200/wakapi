@@ -101,6 +101,24 @@
         'summary.activity': { en: 'Activity', zh: '活动' },
         'summary.no_data': { en: 'No data', zh: '暂无数据' },
         'summary.loading_activity': { en: 'Loading activity chart ...', zh: '加载活动图表中...' },
+        'summary.after': { en: 'after', zh: '起始于' },
+        'summary.after_title': { en: '(your oldest heartbeat in selected range)', zh: '（所选时间范围内你最早的一次 heartbeat）' },
+        'summary.category_info': {
+            en: 'After the category chart was introduced as a new feature in March \'24, you will have to run "Settings → Danger Zone → Regenerate Summaries" once to have your categories reflected properly. This may take a few minutes.',
+            zh: '分类图表于 2024 年 3 月作为新功能引入后，你需要执行一次“设置 → 危险区域 → 重新生成汇总”，分类数据才能正确显示。这个过程可能需要几分钟。'
+        },
+        'summary.hourly_info': {
+            en: 'Only the last 24 hours within the selected interval are shown in this chart. Use Ctrl + wheel to zoom, hold and click to drag. If there are too many small segments to be displayed, chart remains blank on purpose.',
+            zh: '该图表仅显示所选时间范围内最近 24 小时的数据。使用 Ctrl + 滚轮可缩放，按住并拖动可平移。如果细小片段过多而无法清晰展示，图表会有意保持空白。'
+        },
+        'summary.interval_min_3': { en: 'Only available for intervals >= 3 days', zh: '仅适用于大于等于 3 天的时间范围' },
+        'summary.interval_max_30': { en: 'Only available for intervals <= 30 days', zh: '仅适用于小于等于 30 天的时间范围' },
+        'summary.tooltip.total_time': { en: 'Total Time', zh: '总时间' },
+        'summary.tooltip.click_details': { en: 'Click for details', zh: '点击查看详情' },
+        'summary.axis.duration': { en: 'Duration (hh:mm:ss)', zh: '时长（hh:mm:ss）' },
+        'summary.axis.date': { en: 'Date', zh: '日期' },
+        'summary.axis.time': { en: 'Time', zh: '时间' },
+        'summary.axis.projects': { en: 'Projects', zh: '项目' },
 
         // Summary filters / time picker
         'entity_filter.placeholder': { en: 'Filter by {type} ...', zh: '按{type}筛选...' },
@@ -133,6 +151,9 @@
         'projects.clear': { en: 'Clear', zh: '清除' },
         'projects.previous': { en: 'Previous', zh: '上一页' },
         'projects.next': { en: 'Next', zh: '下一页' },
+        'projects.empty': { en: 'No project data available, yet... Go start coding! 🤓', zh: '还没有项目数据，先开始编码吧！🤓' },
+        'projects.no_match_prefix': { en: 'No projects matching', zh: '没有找到匹配' },
+        'projects.no_match_suffix': { en: 'found.', zh: '的项目。' },
 
         // Leaderboard
         'leaderboard.title': { en: 'Leaderboard', zh: '排行榜' },
@@ -170,6 +191,7 @@
         'common.created': { en: 'Created', zh: '创建时间' },
         'common.last_used': { en: 'Last Used', zh: '最后使用' },
         'common.actions': { en: 'Actions', zh: '操作' },
+        'common.never_used': { en: 'Never used', zh: '从未使用' },
         'weekday.sunday': { en: 'Sunday', zh: '周日' },
         'weekday.monday': { en: 'Monday', zh: '周一' },
         'weekday.tuesday': { en: 'Tuesday', zh: '周二' },
@@ -353,11 +375,115 @@
         return browserLang.startsWith('zh') ? 'zh' : DEFAULT_LANG;
     }
 
-    function t(key) {
+    function t(key, params) {
         const entry = translations[key];
         if (!entry) return key;
         const lang = getLang();
-        return entry[lang] || entry[DEFAULT_LANG] || key;
+        let value = entry[lang] || entry[DEFAULT_LANG] || key;
+        if (params && typeof value === 'string') {
+            Object.entries(params).forEach(function ([name, replacement]) {
+                value = value.replaceAll(`{${name}}`, replacement);
+            });
+        }
+        return value;
+    }
+
+    function getLocale() {
+        return getLang() === 'zh' ? 'zh-CN' : 'en-US';
+    }
+
+    function parseDateValue(value) {
+        if (value === null || value === undefined || value === '') return null;
+
+        const stringValue = String(value).trim();
+        const dateOnlyMatch = stringValue.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (dateOnlyMatch) {
+            return new Date(
+                Number(dateOnlyMatch[1]),
+                Number(dateOnlyMatch[2]) - 1,
+                Number(dateOnlyMatch[3])
+            );
+        }
+
+        const dateTimeMatch = stringValue.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?$/);
+        if (dateTimeMatch) {
+            return new Date(
+                Number(dateTimeMatch[1]),
+                Number(dateTimeMatch[2]) - 1,
+                Number(dateTimeMatch[3]),
+                Number(dateTimeMatch[4]),
+                Number(dateTimeMatch[5]),
+                Number(dateTimeMatch[6] || 0)
+            );
+        }
+
+        const numericValue = Number(stringValue);
+        if (!Number.isNaN(numericValue) && stringValue !== '') {
+            return new Date(numericValue > 1e12 ? numericValue : numericValue * 1000);
+        }
+
+        const date = new Date(stringValue);
+        return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function formatDateValue(value, mode) {
+        const date = parseDateValue(value);
+        if (!date) return value || '';
+
+        const lang = getLang();
+        const locale = getLocale();
+        let options;
+
+        switch (mode) {
+            case 'datetime':
+                options = lang === 'zh'
+                    ? { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }
+                    : { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                break;
+            case 'datetimetz':
+                options = lang === 'zh'
+                    ? { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short' }
+                    : { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
+                break;
+            case 'time':
+                options = { hour: '2-digit', minute: '2-digit', hour12: false };
+                break;
+            case 'date':
+            default:
+                options = lang === 'zh'
+                    ? { year: 'numeric', month: '2-digit', day: '2-digit' }
+                    : { year: 'numeric', month: 'short', day: '2-digit' };
+                break;
+        }
+
+        return new Intl.DateTimeFormat(locale, options).format(date);
+    }
+
+    function formatDateRange(from, to, mode) {
+        return `${formatDateValue(from, mode)} - ${formatDateValue(to, mode)}`;
+    }
+
+    function applyLocalizedDates() {
+        document.querySelectorAll('[data-localize-date]').forEach(function (el) {
+            el.textContent = formatDateValue(el.getAttribute('data-localize-date'), 'date');
+        });
+
+        document.querySelectorAll('[data-localize-datetime]').forEach(function (el) {
+            el.textContent = formatDateValue(el.getAttribute('data-localize-datetime'), 'datetime');
+        });
+
+        document.querySelectorAll('[data-localize-datetimetz]').forEach(function (el) {
+            el.textContent = formatDateValue(el.getAttribute('data-localize-datetimetz'), 'datetimetz');
+        });
+
+        document.querySelectorAll('[data-localize-range-from][data-localize-range-to]').forEach(function (el) {
+            const mode = el.getAttribute('data-localize-range-mode') || 'date';
+            el.textContent = formatDateRange(
+                el.getAttribute('data-localize-range-from'),
+                el.getAttribute('data-localize-range-to'),
+                mode
+            );
+        });
     }
 
     function applyTranslations() {
@@ -395,6 +521,8 @@
                 el.setAttribute('title', translated);
             }
         });
+
+        applyLocalizedDates();
     }
 
     function shouldTranslateNode(node) {
@@ -404,7 +532,11 @@
             node.hasAttribute('data-i18n-html') ||
             node.hasAttribute('data-i18n-placeholder') ||
             node.hasAttribute('data-i18n-title') ||
-            node.querySelector('[data-i18n], [data-i18n-html], [data-i18n-placeholder], [data-i18n-title]')
+            node.hasAttribute('data-localize-date') ||
+            node.hasAttribute('data-localize-datetime') ||
+            node.hasAttribute('data-localize-datetimetz') ||
+            node.hasAttribute('data-localize-range-from') ||
+            node.querySelector('[data-i18n], [data-i18n-html], [data-i18n-placeholder], [data-i18n-title], [data-localize-date], [data-localize-datetime], [data-localize-datetimetz], [data-localize-range-from]')
         );
     }
 
@@ -439,13 +571,14 @@
             subtree: true,
             childList: true,
             attributes: true,
-            attributeFilter: ['data-i18n', 'data-i18n-html', 'data-i18n-placeholder', 'data-i18n-title'],
+            attributeFilter: ['data-i18n', 'data-i18n-html', 'data-i18n-placeholder', 'data-i18n-title', 'data-localize-date', 'data-localize-datetime', 'data-localize-datetimetz', 'data-localize-range-from', 'data-localize-range-to'],
         });
     }
 
     function setLang(lang) {
         localStorage.setItem(LANG_KEY, lang);
         applyTranslations();
+        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
     }
 
     window.toggleLang = function () {
@@ -455,6 +588,9 @@
 
     window.t = t;
     window.getLang = getLang;
+    window.getLocale = getLocale;
+    window.formatDateValue = formatDateValue;
+    window.formatDateRange = formatDateRange;
     window.applyTranslations = applyTranslations;
 
     // Apply translations on DOM ready

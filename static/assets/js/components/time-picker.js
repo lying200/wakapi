@@ -11,6 +11,11 @@ function TimePicker({ fromDate, toDate, timeSelection }) {
         intervalLabel(interval) {
             return window.t ? window.t(`time_picker.${interval}`) : interval
         },
+        customRangeLabel() {
+            return window.formatDateRange
+                ? window.formatDateRange(this.fromDate, this.toDate, 'date')
+                : `${this.fromDate} - ${this.toDate}`
+        },
         fieldLabel(field) {
             return window.t ? window.t(`time_picker.${field}`) : field
         },
@@ -35,6 +40,8 @@ function TimePicker({ fromDate, toDate, timeSelection }) {
             if (query.has('interval')) {
                 const interval = query.get('interval')
                 this.timeSelection = this.intervalLabel(interval)
+            } else {
+                this.timeSelection = this.customRangeLabel()
             }
 
             // Time picker keyboard shortcuts
@@ -42,6 +49,14 @@ function TimePicker({ fromDate, toDate, timeSelection }) {
                 if (e.target !== document.body) return
                 const optionEl = document.querySelector(`a[data-hotkey="${e.key}"]`)
                 if (optionEl) optionEl.click()
+            })
+
+            window.addEventListener('languageChanged', () => {
+                if (query.has('interval')) {
+                    this.timeSelection = this.intervalLabel(query.get('interval'))
+                } else {
+                    this.timeSelection = this.customRangeLabel()
+                }
             })
         }
     }

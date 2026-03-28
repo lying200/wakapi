@@ -79,7 +79,10 @@
             <div class="kpi-card animate-fadein animate-fadein-delay-1">
                 <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.total_time">Total Time</span>
                 <span class="font-semibold text-xl text-foreground truncate block" title="{{ .TotalTime | duration }}">{{ .TotalTime | duration }}</span>
-                <span class="text-xs text-muted mt-1 block" title="(your oldest heartbeat in selected range)">after {{ .FromTime.T | datetime }}</span>
+                <span class="text-xs text-muted mt-1 block" data-i18n-title="summary.after_title" title="(your oldest heartbeat in selected range)">
+                    <span data-i18n="summary.after">after</span>
+                    <span data-localize-datetime="{{ .FromTime.T.Unix }}">{{ .FromTime.T | datetime }}</span>
+                </span>
             </div>
             <div class="kpi-card animate-fadein animate-fadein-delay-2">
                 <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.total_heartbeats">Total Heartbeats</span>
@@ -290,6 +293,7 @@
                         <span
                             class="iconify inline text-xl text-muted p-1 cursor-help" data-icon="octicon:info-16"
                             title="After the category chart was introduced as a new feature in March '24, you will have to run &quot;Settings → Danger Zone → Regenerate Summaries&quot; once to have your categories reflected properly. This may take a few minutes."
+                            data-i18n-title="summary.category_info"
                         ></span>
                     </div>
                     <div class="flex items-center text-xs text-muted gap-1">
@@ -316,9 +320,9 @@
                 </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     {{ if lt .SummaryParams.RangeDays 3 }}
-                    <span class="text-sm font-medium text-muted mt-4">Only available for intervals >= 3 days</span>
+                    <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.interval_min_3">Only available for intervals >= 3 days</span>
                     {{ else if gt .SummaryParams.RangeDays 31 }}
-                    <span class="text-sm font-medium text-muted mt-4">Only available for intervals <= 30 days</span>
+                    <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.interval_max_30">Only available for intervals <= 30 days</span>
                     {{ else }}
                     <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                     {{ end }}
@@ -331,7 +335,8 @@
                     <div class="flex items-center gap-2">
                         <span class="font-semibold text-title" data-i18n="summary.hourly_breakdown">Hourly Breakdown</span>
                         <span class="iconify inline text-xl text-muted p-1 cursor-help" data-icon="octicon:info-16"
-                              title="Only the last 24 hours within the selected interval are shown in this chart. Use Ctrl + wheel to zoom, hold and click to drag. If there are too many small segments to be displayed, chart remains blank on purpose."></span>
+                              title="Only the last 24 hours within the selected interval are shown in this chart. Use Ctrl + wheel to zoom, hold and click to drag. If there are too many small segments to be displayed, chart remains blank on purpose."
+                              data-i18n-title="summary.hourly_info"></span>
                     </div>
                 </div>
                 <div class="mt-2 flex-1 min-h-0 relative">

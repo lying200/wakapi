@@ -40,16 +40,25 @@
                         <span class="text-sm text-muted">({{ $project.TopLanguage }})</span>
                         {{ end }}
                         </span>
-                    <small class="text-muted">{{ $project.First.T | datetime }} – {{ $project.Last.T | datetime }}</small>
+                    <small
+                        class="text-muted"
+                        data-localize-range-from="{{ $project.First.T.Unix }}"
+                        data-localize-range-to="{{ $project.Last.T.Unix }}"
+                        data-localize-range-mode="datetime"
+                    >{{ $project.First.T | datetime }} – {{ $project.Last.T | datetime }}</small>
                 </a>
             </li>
             {{ end }}
         </ul>
         {{ else }}
         {{ if .Query }}
-        <p class="text-sm text-secondary">No projects matching "{{ .Query }}" found.</p>
+        <p class="text-sm text-secondary">
+            <span data-i18n="projects.no_match_prefix">No projects matching</span>
+            "{{ .Query }}"
+            <span data-i18n="projects.no_match_suffix">found.</span>
+        </p>
         {{ else }}
-        <p class="text-sm text-secondary">No project data available, yet... Go start coding! 🤓</p>
+        <p class="text-sm text-secondary" data-i18n="projects.empty">No project data available, yet... Go start coding! 🤓</p>
         {{ end }}
         {{ end }}
 

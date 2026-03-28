@@ -82,7 +82,7 @@
                 </li>
                 {{ end }}
             </ol>
-            <p class="text-xs text-muted pt-6"><span data-i18n="leaderboard.last_updated">Last Updated:</span> {{ .LastUpdate | datetimetz }}</p>
+            <p class="text-xs text-muted pt-6"><span data-i18n="leaderboard.last_updated">Last Updated:</span> <span data-localize-datetimetz="{{ .LastUpdate.Unix }}">{{ .LastUpdate | datetimetz }}</span></p>
             {{ else }}
             <p class="text-secondary">
                 <span class="iconify inline text-base" data-icon="twemoji:frowning-face"></span>&nbsp;

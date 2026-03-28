@@ -213,8 +213,10 @@
                     {{ range $i, $credential := .WebAuthnCredentials }}
                     <tr>
                         <td class="py-2 text-foreground">{{ $credential.Name }}</td>
-                        <td class="py-2 text-muted text-sm">{{ $credential.CreatedAt | datetime }}</td>
-                        <td class="py-2 text-muted text-sm">{{ if $credential.LastUsedAt.Valid }}{{ $credential.LastUsedAt.Time | datetime }}{{ else }}Never used{{ end }}</td>
+                        <td class="py-2 text-muted text-sm">
+                            <span data-localize-datetime="{{ $credential.CreatedAt.Unix }}">{{ $credential.CreatedAt | datetime }}</span>
+                        </td>
+                        <td class="py-2 text-muted text-sm">{{ if $credential.LastUsedAt.Valid }}<span data-localize-datetime="{{ $credential.LastUsedAt.Time.Unix }}">{{ $credential.LastUsedAt.Time | datetime }}</span>{{ else }}<span data-i18n="common.never_used">Never used</span>{{ end }}</td>
                         <td class="py-2 text-center">
                             <form action="" method="post" class="inline">
                                 <input type="hidden" name="action" value="webauthn_delete">
@@ -931,7 +933,7 @@
 
                 {{ if not .UserFirstData.IsZero }}
                 <span class="block text-sm text-muted">
-                    Your currently oldest data point is from <span class="text-foreground font-semibold">{{ .UserFirstData | datetime }}</span>.
+                    Your currently oldest data point is from <span class="text-foreground font-semibold" data-localize-datetime="{{ .UserFirstData.Unix }}">{{ .UserFirstData | datetime }}</span>.
                 </span>
                 <br>
                 {{ end }}
@@ -941,9 +943,9 @@
                     {{ if .User.HasActiveSubscription }}
                     <span class="font-semibold text-green-500 text-base">Active</span>
                     {{ if .User.SubscriptionRenewal }}
-                    (automatically renews at {{ .User.SubscriptionRenewal.T | date }})
+                    (automatically renews at <span data-localize-date="{{ .User.SubscriptionRenewal.T.Unix }}">{{ .User.SubscriptionRenewal.T | date }}</span>)
                     {{ else }}
-                    (until {{ .User.SubscribedUntil.T | date }})
+                    (until <span data-localize-date="{{ .User.SubscribedUntil.T.Unix }}">{{ .User.SubscribedUntil.T | date }}</span>)
                     {{ end }}
                     {{ else }}
                     <span class="font-semibold text-red-500 text-base">Inactive</span>
