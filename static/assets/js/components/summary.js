@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 svg.setAttribute('width', '100%');
                 svg.removeAttribute('height');
                 svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
-                svg.setAttribute('style', `display:block;width:100%;max-width:${width}px;height:auto;`);
+                svg.setAttribute('style', `display:block;width:100%;max-width:${width}px;`);
             }
 
             if (!window.getLang || window.getLang() !== 'zh' || !svgText) {
