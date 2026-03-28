@@ -582,8 +582,8 @@
             <form action="" method="post" class="w-full lg:w-3/4">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/2 mb-4 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Public Leaderboard</span>
-                        <p class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.permissions.public_leaderboard.title">Public Leaderboard</span>
+                        <p class="block text-sm text-muted" data-i18n-html="settings.permissions.public_leaderboard.desc">
                             Opt in to get listed in the <a class="link" href="leaderboard">public leaderboard</a>. It shows aggregated statistics from the past 7 days of your coding.
                         </p>
                     </div>
@@ -593,13 +593,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="enable_leaderboard">Participate in leaderboard</label>
+                                <label class="font-semibold text-foreground" for="enable_leaderboard" data-i18n="settings.permissions.public_leaderboard.label">Participate in leaderboard</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="enable_leaderboard" name="enable_leaderboard" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.PublicLeaderboard }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.PublicLeaderboard }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.PublicLeaderboard }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.PublicLeaderboard }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -608,7 +608,7 @@
                 </div>
 
                 <div class="flex justify-end mt-4">
-                    <button type="submit" class="btn-primary">
+                    <button type="submit" class="btn-primary" data-i18n="common.save">
                         Save
                     </button>
                 </div>
@@ -622,8 +622,8 @@
             <form action="" method="post" class="w-full lg:w-3/4">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/2 mb-4 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Public Data</span>
-                        <p class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.permissions.public_data.title">Public Data</span>
+                        <p class="block text-sm text-muted" data-i18n="settings.permissions.public_data.desc">
                             Some features require public access to your data without authentication. This mainly includes badges ("shields" endpoint) and the integration with GitHub Readme Stats ("stats" endpoint). You can choose which data to share publicly through these endpoints.
                         </p>
                     </div>
@@ -633,8 +633,8 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="max_days">Time Range</label>
-                                <span class="block text-sm text-muted">(in days; 0 = not public, -1 = unlimited)</span>
+                                <label class="font-semibold text-foreground" for="max_days" data-i18n="settings.permissions.public_data.time_range.label">Time Range</label>
+                                <span class="block text-sm text-muted" data-i18n="settings.permissions.public_data.time_range.hint">(in days; 0 = not public, -1 = unlimited)</span>
                             </div>
                             <div>
                                 <input class="input-default"
@@ -645,13 +645,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_projects">Share Projects</label>
+                                <label class="font-semibold text-foreground" for="share_projects" data-i18n="settings.permissions.public_data.share_projects">Share Projects</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_projects" name="share_projects" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareProjects }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareProjects }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareProjects }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareProjects }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -659,13 +659,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_languages">Share Languages</label>
+                                <label class="font-semibold text-foreground" for="share_languages" data-i18n="settings.permissions.public_data.share_languages">Share Languages</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_languages" name="share_languages" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareLanguages }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareLanguages }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareLanguages }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareLanguages }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -673,13 +673,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_editors">Share Editors</label>
+                                <label class="font-semibold text-foreground" for="share_editors" data-i18n="settings.permissions.public_data.share_editors">Share Editors</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_editors" name="share_editors" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareEditors }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareEditors }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareEditors }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareEditors }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -687,13 +687,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_oss">Share OS'</label>
+                                <label class="font-semibold text-foreground" for="share_oss" data-i18n="settings.permissions.public_data.share_oss">Share OS'</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_oss" name="share_oss" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareOSs }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareOSs }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareOSs }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareOSs }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -701,13 +701,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_machines">Share Machines</label>
+                                <label class="font-semibold text-foreground" for="share_machines" data-i18n="settings.permissions.public_data.share_machines">Share Machines</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_machines" name="share_machines" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareMachines }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareMachines }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareMachines }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareMachines }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -715,13 +715,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_labels">Share Project Labels</label>
+                                <label class="font-semibold text-foreground" for="share_labels" data-i18n="settings.permissions.public_data.share_labels">Share Project Labels</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_labels" name="share_labels" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareLabels }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareLabels }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareLabels }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareLabels }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -729,13 +729,13 @@
 
                         <div class="flex gap-x-8">
                             <div class="grow">
-                                <label class="font-semibold text-foreground" for="share_labels">Share Activity Chart</label>
+                                <label class="font-semibold text-foreground" for="share_activity_chart" data-i18n="settings.permissions.public_data.share_activity_chart">Share Activity Chart</label>
                             </div>
                             <div>
                                 <select autocomplete="off" id="share_activity_chart" name="share_activity_chart" class="select-default grow">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ShareActivityChart }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ShareActivityChart }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ShareActivityChart }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ShareActivityChart }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
@@ -744,7 +744,7 @@
                 </div>
 
                 <div class="flex justify-end mt-4">
-                    <button type="submit" class="btn-primary">
+                    <button type="submit" class="btn-primary" data-i18n="common.save">
                         Save
                     </button>
                 </div>
@@ -762,8 +762,8 @@
 
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/2 mb-4 md:mb-0 inline-block">
-                        <label class="font-semibold text-foreground text-lg" for="select-timezone">WakaTime</label>
-                        <span class="block text-sm text-muted">
+                        <label class="font-semibold text-foreground text-lg" for="select-timezone" data-i18n="settings.integrations.wakatime.title">WakaTime</label>
+                        <span class="block text-sm text-muted" data-i18n-html="settings.integrations.wakatime.desc">
                             You can connect Wakapi with the official WakaTime (or another Wakapi instance, when optionally specifying a custom API URL) in a way that all heartbeats sent to Wakapi are relayed. This way, you can use both services at the same time. To get started, get your API key at WakaTime's <a class="link" href="https://wakatime.com/settings/account" rel="noopener noreferrer" target="_blank">account settings</a> and paste it here.<br><br>
                             To forward data to another Wakapi instance, use <span class="text-xs font-mono">https://&lt;your-server&gt;/api/compat/wakatime/v1</span> as a URL.<br><br>
                             Please note: When enabling this feature, the operators of this server will, in theory, have unlimited access to your data stored in WakaTime. If you are concerned about your privacy, please do not enable this integration or wait for OAuth 2 authentication (<a
@@ -776,21 +776,21 @@
                                placeholder="{{ defaultWakatimeUrl }}" {{ if .User.WakatimeApiKey }}readonly{{ end }} value="{{ .User.WakaTimeURL "" }}">
                         <input type="password" name="api_key" id="wakatime_api_key"
                                class="w-full appearance-none bg-card text-foreground outline-none rounded py-2 px-4 mt-2 {{ if not .User.WakatimeApiKey }}focus:bg-focused{{ end }} {{ if .User.WakatimeApiKey }}cursor-not-allowed{{ end }}"
-                               placeholder="{{ $placeholderText }}" {{ if .User.WakatimeApiKey }}readonly{{ end }}>
+                               placeholder="{{ $placeholderText }}" {{ if not .User.WakatimeApiKey }}data-i18n-placeholder="settings.integrations.wakatime.api_key_placeholder"{{ end }} {{ if .User.WakatimeApiKey }}readonly{{ end }}>
                         <div class="mt-2 text-foreground">
                             <input type="checkbox" name="use_legacy_importer" id="use_legacy_importer_tmp" class="mr-1 cursor-pointer">
-                            <label for="use_legacy_importer_tmp" class="mx-1">Use legacy importer</label>
-                            <span class="cursor-help" title="If WakaTime import fails repeatedly, you may want to fall back to an older, less efficient importer mechanism">&#9432;</span>
+                            <label for="use_legacy_importer_tmp" class="mx-1" data-i18n="settings.integrations.wakatime.use_legacy_importer">Use legacy importer</label>
+                            <span class="cursor-help" data-i18n-title="settings.integrations.wakatime.use_legacy_importer_hint" title="If WakaTime import fails repeatedly, you may want to fall back to an older, less efficient importer mechanism">&#9432;</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-end mt-4">
                     {{ if not .User.WakatimeApiKey }}
-                    <button type="submit" class="btn-primary">Connect</button>
+                    <button type="submit" class="btn-primary" data-i18n="settings.integrations.wakatime.connect">Connect</button>
                     {{ else }}
-                    <button id="btn-import-wakatime" type="button" class="py-2 px-4 font-semibold rounded bg-card hover:bg-focused text-primary text-sm mr-1" @click.stop="confirmWakatimeImport">Import Data</button>
-                    <button type="submit" class="btn-danger ml-1">Disconnect</button>
+                    <button id="btn-import-wakatime" type="button" class="py-2 px-4 font-semibold rounded bg-card hover:bg-focused text-primary text-sm mr-1" @click.stop="confirmWakatimeImport" data-i18n="settings.integrations.wakatime.import">Import Data</button>
+                    <button type="submit" class="btn-danger ml-1" data-i18n="settings.integrations.wakatime.disconnect">Disconnect</button>
                     {{ end }}
                 </div>
             </form>
@@ -807,8 +807,8 @@
             <div class="w-full lg:w-3/4">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/2 mb-4 md:mb-0 inline-block">
-                        <label class="font-semibold text-foreground text-lg" for="select-timezone">Badges</label>
-                        <span class="block text-sm text-muted">
+                        <label class="font-semibold text-foreground text-lg" for="select-timezone" data-i18n="settings.integrations.badges.title">Badges</label>
+                        <span class="block text-sm text-muted" data-i18n-html="settings.integrations.badges.desc">
                             This integration with allows to generate badges for README pages or forums. To enable this feature, you need to grant public, unauthorized access to the respective endpoints. See <a class="link" href="settings#permissions">Permissions</a>. Adapt the URL's <i>label</i> and <i>color</i> parameters for customized badges.<br><br>
                             In addition, there is an endpoint compatible with <a class="link" href="https://shields.io" target="_blank" rel="noreferrer noopener">Shields.IO</a> to allow for even more customization (e.g. different <a class="link" href="https://shields.io/#styles" target="_blank" rel="noreferrer noopener">styles</a>). Only available on public instances, not on localhost.
                         </span>
@@ -864,8 +864,8 @@
             <div class="w-full lg:w-3/4">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/2 mb-4 md:mb-0 inline-block">
-                        <label class="font-semibold text-foreground text-lg" for="select-timezone">GitHub Readme Stats</label>
-                        <span class="block text-sm text-muted">
+                        <label class="font-semibold text-foreground text-lg" for="select-timezone" data-i18n="settings.integrations.readme_stats.title">GitHub Readme Stats</label>
+                        <span class="block text-sm text-muted" data-i18n-html="settings.integrations.readme_stats.desc">
                             Wakapi intregrates with <a class="link" href="https://github.com/anuraghazra/github-readme-stats#wakatime-week-stats" target="_blank" rel="noreferrer noopener">GitHub Readme Stats</a> to generate fancy cards for you. To enable this feature, you need to grant public, unauthorized access to the respective endpoints. See <a class="link" href="settings#permissions">Permissions</a>.<br><br>
                             Share data for >= 7 days → weekly summary card<br>
                             Share data for >= 366 days → yearly summary card<br>
@@ -888,11 +888,11 @@
                         <form class="w-full mt-4" action="" method="post">
                             <input type="hidden" name="action" value="update_readme_stats_base_url">
                             <div class="flex flex-col flex-grow gap-y-1">
-                                <label class="font-semibold text-foreground text-sm" for="readme_stats_base_url">Custom github-readme-stats base URL</label>
+                                <label class="font-semibold text-foreground text-sm" for="readme_stats_base_url" data-i18n="settings.integrations.readme_stats.custom_base_url">Custom github-readme-stats base URL</label>
                                 <input class="input-default w-full text-sm" type="url" id="readme_stats_base_url" name="readme_stats_base_url" placeholder="https://github-readme-stats.vercel.app" value="{{ .User.ReadmeStatsBaseUrl }}">
                             </div>
                             <div class="flex justify-end mt-4">
-                                <button type="submit" class="btn-primary h-min py-2">Save</button>
+                                <button type="submit" class="btn-primary h-min py-2" data-i18n="common.save">Save</button>
                             </div>
                         </form>
                         {{ end }}
@@ -975,21 +975,21 @@
                     <input type="hidden" name="action" value="reset_apikey">
 
                     <div class="w-1/2 mr-4">
-                        <span class="font-semibold text-foreground text-lg">Reset primary API key</span>
-                        <span class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.api_keys.reset_primary.title">Reset primary API key</span>
+                        <span class="block text-sm text-muted" data-i18n-html="settings.api_keys.reset_primary.desc">
                             Please note that resetting your API key requires you to update your <code>.wakatime.cfg</code> files on all of your computers to make the WakaTime client send heartbeats again.
                         </span>
                     </div>
                     <div class="w-1/2 ml-4 flex items-center justify-end">
-                        <button type="submit" class="btn-danger ml-1">Reset API key</button>
+                        <button type="submit" class="btn-danger ml-1" data-i18n="settings.api_keys.reset_primary.action">Reset API key</button>
                     </div>
                 </form>
             </div>
 
             <div class="flex w-full lg:w-3/4 justify-between items-center" id="form-generate-api-key">
                 <div class="w-1/2 mb-8">
-                    <span class="font-semibold text-foreground text-lg">Add API keys</span>
-                    <span class="block text-sm text-muted">
+                    <span class="font-semibold text-foreground text-lg" data-i18n="settings.api_keys.add.title">Add API keys</span>
+                    <span class="block text-sm text-muted" data-i18n-html="settings.api_keys.add.desc">
                         Besides the primary (aka. <i>main</i>) API key, which always exists, you can create additional API keys for different applications to access Wakapi. You can either grant read-only access or read-write access, which additionally allows to ingest heartbeats.
                     </span>
                 </div>
@@ -999,27 +999,27 @@
 
                     <div class="flex gap-2 items-center justify-end">
                         <input class="appearance-none bg-card text-foreground outline-none rounded py-2 px-4 focus:bg-focused"
-                               type="text" id="api-name" name="api_name" placeholder="Key Name" minlength="1"
+                               type="text" id="api-name" name="api_name" placeholder="Key Name" data-i18n-placeholder="settings.api_keys.add.name_placeholder" minlength="1"
                                maxlength="64" required>
                         <select autocomplete="off" id="api-readonly" name="api_readonly" class="select-default grow">
-                            <option value="false" class="cursor-pointer">Read / write</option>
-                            <option value="true" class="cursor-pointer">Read only</option>
+                            <option value="false" class="cursor-pointer" data-i18n="settings.api_keys.add.read_write">Read / write</option>
+                            <option value="true" class="cursor-pointer" data-i18n="settings.api_keys.add.read_only">Read only</option>
                         </select>
-                        <button type="submit" class="btn-primary">Add</button>
+                        <button type="submit" class="btn-primary" data-i18n="common.add">Add</button>
                     </div>
                 </form>
             </div>
 
             <div class="w-full lg:w-3/4">
-                <span class="flex font-semibold text-foreground text-lg mb-2">API Keys</span>
+                <span class="flex font-semibold text-foreground text-lg mb-2" data-i18n="settings.api_keys.list.title">API Keys</span>
 
                 <table class="w-full">
                     <thead>
                     <tr>
-                        <th class="text-left py-2 text-muted w-1/4">Name</th>
-                        <th class="text-left py-2 text-muted w-1/2">Key</th>
-                        <th class="text-center py-2 text-muted w-1/6">Type</th>
-                        <th class="text-center py-2 text-muted w-1/6">Actions</th>
+                        <th class="text-left py-2 text-muted w-1/4" data-i18n="common.name">Name</th>
+                        <th class="text-left py-2 text-muted w-1/2" data-i18n="settings.api_keys.table.key">Key</th>
+                        <th class="text-center py-2 text-muted w-1/6" data-i18n="settings.api_keys.table.type">Type</th>
+                        <th class="text-center py-2 text-muted w-1/6" data-i18n="common.actions">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -1029,11 +1029,11 @@
                         <td class="py-2 text-muted font-mono text-sm">{{ $ApiKey.Value }}</td>
                         <td class="py-2 text-center">
                             {{ if $ApiKey.ReadOnly }}
-                            <span class=" rounded-full text-xs">
+                            <span class=" rounded-full text-xs" data-i18n="settings.api_keys.list.read_only">
                                         Read-Only
                                     </span>
                             {{ else }}
-                            <span class="rounded-full text-xs text-accent">
+                            <span class="rounded-full text-xs text-accent" data-i18n="settings.api_keys.list.full_access">
                                         Full Access
                                     </span>
                             {{ end }}
@@ -1042,7 +1042,7 @@
                             <form action="" method="post" class="inline">
                                 <input type="hidden" name="action" value="delete_api_key">
                                 <input type="hidden" name="api_key_value" value="{{ $ApiKey.Value }}">
-                                <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-danger text-sm" title="Delete API Key">✕</button>
+                                <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-danger text-sm" data-i18n-title="settings.api_keys.delete_title" title="Delete API Key">✕</button>
                             </form>
                         </td>
                     </tr>

@@ -1,17 +1,31 @@
 function EntityFilter({type, options, selection}) {
+    const capitalize = (value) => {
+        if (!value || typeof value !== 'string') return ''
+        return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+
     return {
         $template: '#entity-filter-template',
         $delimiters: ['${', '}'],
         type: type,
         options: options,
         selection: selection,
-        display() {
-            return window.t ? window.t(`entity_filter.type.${this.type}`) : this.type.capitalize()
+        displayText() {
+            if (typeof window.t === 'function') {
+                const translated = window.t(`entity_filter.type.${this.type}`)
+                if (translated !== `entity_filter.type.${this.type}`) return translated
+            }
+            return capitalize(this.type)
         },
-        placeholder() {
-            return window.t
-                ? window.t('entity_filter.placeholder').replace('{type}', this.display().toLowerCase())
-                : `Filter by ${this.type} ...`
+        placeholderText() {
+            const entityType = this.displayText().toLowerCase()
+            if (typeof window.t === 'function') {
+                const translated = window.t('entity_filter.placeholder')
+                if (translated !== 'entity_filter.placeholder') {
+                    return translated.replace('{type}', entityType)
+                }
+            }
+            return `Filter by ${entityType} ...`
         },
         onSelectionUpdated(e) {
             this.selection = e.target.value == 'null' ? null : e.target.value

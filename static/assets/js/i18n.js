@@ -187,6 +187,71 @@
         'settings.tab.subscription': { en: 'Subscription', zh: '订阅' },
         'settings.tab.api_keys': { en: 'API Keys', zh: 'API 密钥' },
         'settings.tab.danger_zone': { en: 'Danger Zone', zh: '危险区域' },
+        'settings.permissions.public_leaderboard.title': { en: 'Public Leaderboard', zh: '公开排行榜' },
+        'settings.permissions.public_leaderboard.desc': {
+            en: 'Opt in to get listed in the <a class="link" href="leaderboard">public leaderboard</a>. It shows aggregated statistics from the past 7 days of your coding.',
+            zh: '启用后，你会出现在<a class="link" href="leaderboard">公开排行榜</a>中。排行榜会展示你过去 7 天编码活动的聚合统计。'
+        },
+        'settings.permissions.public_leaderboard.label': { en: 'Participate in leaderboard', zh: '参与排行榜' },
+        'settings.permissions.public_data.title': { en: 'Public Data', zh: '公开数据' },
+        'settings.permissions.public_data.desc': {
+            en: 'Some features require public access to your data without authentication. This mainly includes badges ("shields" endpoint) and the integration with GitHub Readme Stats ("stats" endpoint). You can choose which data to share publicly through these endpoints.',
+            zh: '某些功能需要在无需认证的情况下公开访问你的数据，主要包括徽章（"shields" endpoint）以及 GitHub Readme Stats 集成（"stats" endpoint）。你可以选择通过这些接口公开哪些数据。'
+        },
+        'settings.permissions.public_data.time_range.label': { en: 'Time Range', zh: '时间范围' },
+        'settings.permissions.public_data.time_range.hint': { en: '(in days; 0 = not public, -1 = unlimited)', zh: '（单位：天；0 = 不公开，-1 = 不限）' },
+        'settings.permissions.public_data.share_projects': { en: 'Share Projects', zh: '公开项目' },
+        'settings.permissions.public_data.share_languages': { en: 'Share Languages', zh: '公开语言' },
+        'settings.permissions.public_data.share_editors': { en: 'Share Editors', zh: '公开编辑器' },
+        'settings.permissions.public_data.share_oss': { en: 'Share OS\'', zh: '公开操作系统' },
+        'settings.permissions.public_data.share_machines': { en: 'Share Machines', zh: '公开机器' },
+        'settings.permissions.public_data.share_labels': { en: 'Share Project Labels', zh: '公开项目标签' },
+        'settings.permissions.public_data.share_activity_chart': { en: 'Share Activity Chart', zh: '公开活动图表' },
+        'settings.integrations.wakatime.title': { en: 'WakaTime', zh: 'WakaTime' },
+        'settings.integrations.wakatime.desc': {
+            en: 'You can connect Wakapi with the official WakaTime (or another Wakapi instance, when optionally specifying a custom API URL) in a way that all heartbeats sent to Wakapi are relayed. This way, you can use both services at the same time. To get started, get your API key at WakaTime\'s <a class="link" href="https://wakatime.com/settings/account" rel="noopener noreferrer" target="_blank">account settings</a> and paste it here.<br><br>To forward data to another Wakapi instance, use <span class="text-xs font-mono">https://&lt;your-server&gt;/api/compat/wakatime/v1</span> as a URL.<br><br>Please note: When enabling this feature, the operators of this server will, in theory, have unlimited access to your data stored in WakaTime. If you are concerned about your privacy, please do not enable this integration or wait for OAuth 2 authentication (<a class="link" target="_blank" href="https://github.com/muety/wakapi/issues/94" rel="noopener noreferrer">#94</a>) to be implemented.',
+            zh: '你可以把 Wakapi 连接到官方 WakaTime，或者在可选地指定自定义 API URL 后连接到另一个 Wakapi 实例，这样发送到 Wakapi 的所有 heartbeat 都会被转发。这样你可以同时使用两个服务。开始前，请到 WakaTime 的 <a class="link" href="https://wakatime.com/settings/account" rel="noopener noreferrer" target="_blank">账户设置</a> 获取 API key 并粘贴到这里。<br><br>如果要把数据转发到另一个 Wakapi 实例，请使用 <span class="text-xs font-mono">https://&lt;your-server&gt;/api/compat/wakatime/v1</span> 作为 URL。<br><br>请注意：启用此功能后，理论上本服务器的运营者将能无限制访问你存储在 WakaTime 中的数据。如果你担心隐私，请不要启用该集成，或者等待 OAuth 2 认证（<a class="link" target="_blank" href="https://github.com/muety/wakapi/issues/94" rel="noopener noreferrer">#94</a>）实现后再使用。'
+        },
+        'settings.integrations.wakatime.use_legacy_importer': { en: 'Use legacy importer', zh: '使用旧版导入器' },
+        'settings.integrations.wakatime.use_legacy_importer_hint': {
+            en: 'If WakaTime import fails repeatedly, you may want to fall back to an older, less efficient importer mechanism',
+            zh: '如果 WakaTime 导入持续失败，你可以退回到旧版但效率更低的导入机制'
+        },
+        'settings.integrations.wakatime.api_key_placeholder': { en: 'WakaTime API key', zh: 'WakaTime API 密钥' },
+        'settings.integrations.wakatime.connect': { en: 'Connect', zh: '连接' },
+        'settings.integrations.wakatime.import': { en: 'Import Data', zh: '导入数据' },
+        'settings.integrations.wakatime.disconnect': { en: 'Disconnect', zh: '断开连接' },
+        'settings.integrations.badges.title': { en: 'Badges', zh: '徽章' },
+        'settings.integrations.badges.desc': {
+            en: 'This integration with allows to generate badges for README pages or forums. To enable this feature, you need to grant public, unauthorized access to the respective endpoints. See <a class="link" href="settings#permissions">Permissions</a>. Adapt the URL\'s <i>label</i> and <i>color</i> parameters for customized badges.<br><br>In addition, there is an endpoint compatible with <a class="link" href="https://shields.io" target="_blank" rel="noreferrer noopener">Shields.IO</a> to allow for even more customization (e.g. different <a class="link" href="https://shields.io/#styles" target="_blank" rel="noreferrer noopener">styles</a>). Only available on public instances, not on localhost.',
+            zh: '这个集成可以为 README 页面或论坛生成徽章。要启用该功能，你需要为对应接口授予公开的匿名访问权限。参见 <a class="link" href="settings#permissions">权限</a>。你还可以调整 URL 中的 <i>label</i> 和 <i>color</i> 参数来自定义徽章。<br><br>此外，还提供了一个兼容 <a class="link" href="https://shields.io" target="_blank" rel="noreferrer noopener">Shields.IO</a> 的接口，以支持更多定制（例如不同的 <a class="link" href="https://shields.io/#styles" target="_blank" rel="noreferrer noopener">样式</a>）。该功能仅在公共实例上可用，本地 localhost 不支持。'
+        },
+        'settings.integrations.readme_stats.title': { en: 'GitHub Readme Stats', zh: 'GitHub Readme Stats' },
+        'settings.integrations.readme_stats.desc': {
+            en: 'Wakapi intregrates with <a class="link" href="https://github.com/anuraghazra/github-readme-stats#wakatime-week-stats" target="_blank" rel="noreferrer noopener">GitHub Readme Stats</a> to generate fancy cards for you. To enable this feature, you need to grant public, unauthorized access to the respective endpoints. See <a class="link" href="settings#permissions">Permissions</a>.<br><br>Share data for &gt;= 7 days → weekly summary card<br>Share data for &gt;= 366 days → yearly summary card<br>Share all data (-1) → all-time summary card<br><br>Only available on public instances, not on localhost.',
+            zh: 'Wakapi 可以与 <a class="link" href="https://github.com/anuraghazra/github-readme-stats#wakatime-week-stats" target="_blank" rel="noreferrer noopener">GitHub Readme Stats</a> 集成，为你生成精美卡片。要启用该功能，你需要为对应接口授予公开的匿名访问权限。参见 <a class="link" href="settings#permissions">权限</a>。<br><br>公开数据范围 &gt;= 7 天 → 周汇总卡片<br>公开数据范围 &gt;= 366 天 → 年度汇总卡片<br>公开全部数据（-1）→ 全时期汇总卡片<br><br>该功能仅在公共实例上可用，本地 localhost 不支持。'
+        },
+        'settings.integrations.readme_stats.custom_base_url': { en: 'Custom github-readme-stats base URL', zh: '自定义 github-readme-stats 基础 URL' },
+        'settings.api_keys.reset_primary.title': { en: 'Reset primary API key', zh: '重置主 API 密钥' },
+        'settings.api_keys.reset_primary.desc': {
+            en: 'Please note that resetting your API key requires you to update your <code>.wakatime.cfg</code> files on all of your computers to make the WakaTime client send heartbeats again.',
+            zh: '请注意，重置 API 密钥后，你需要在所有电脑上的 <code>.wakatime.cfg</code> 文件中更新该密钥，WakaTime 客户端才能继续发送 heartbeat。'
+        },
+        'settings.api_keys.reset_primary.action': { en: 'Reset API key', zh: '重置 API 密钥' },
+        'settings.api_keys.add.title': { en: 'Add API keys', zh: '添加 API 密钥' },
+        'settings.api_keys.add.desc': {
+            en: 'Besides the primary (aka. <i>main</i>) API key, which always exists, you can create additional API keys for different applications to access Wakapi. You can either grant read-only access or read-write access, which additionally allows to ingest heartbeats.',
+            zh: '除了一直存在的主 API 密钥（也就是 <i>main</i>）外，你还可以为不同应用创建额外的 API 密钥来访问 Wakapi。你可以授予只读权限，或授予读写权限，后者还允许写入 heartbeat。'
+        },
+        'settings.api_keys.add.name_placeholder': { en: 'Key Name', zh: '密钥名称' },
+        'settings.api_keys.add.read_write': { en: 'Read / write', zh: '读 / 写' },
+        'settings.api_keys.add.read_only': { en: 'Read only', zh: '只读' },
+        'settings.api_keys.list.title': { en: 'API Keys', zh: 'API 密钥' },
+        'settings.api_keys.table.key': { en: 'Key', zh: '密钥' },
+        'settings.api_keys.table.type': { en: 'Type', zh: '类型' },
+        'settings.api_keys.list.read_only': { en: 'Read-Only', zh: '只读' },
+        'settings.api_keys.list.full_access': { en: 'Full Access', zh: '完全访问' },
+        'settings.api_keys.delete_title': { en: 'Delete API Key', zh: '删除 API 密钥' },
         'settings.danger.regenerate.title': { en: 'Regenerate Summaries', zh: '重新生成汇总' },
         'settings.danger.regenerate.desc': {
             en: 'Regenerate all pre-computed summaries from raw heartbeat data. This may be useful if, for some reason, summaries are faulty or preconditions have change (e.g. you modified language mappings retrospectively). This may take some time. Be careful and only run this action if you know, what your are doing, as data loss might occur.',
