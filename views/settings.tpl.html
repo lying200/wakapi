@@ -14,7 +14,7 @@
 </script>
 <script type="module" src="assets/js/components/settings.js"></script>
 
-<body class="bg-background text-muted p-4 pt-10 flex flex-col min-h-screen max-w-screen-xl mx-auto justify-center">
+<body class="bg-background text-foreground min-h-screen flex flex-col">
 <style>
     .inline-bullet-list li a {
         text-decoration: underline;
@@ -33,32 +33,32 @@
 
 {{ template "alerts.tpl.html" . }}
 
-<main class="mt-10 grow flex justify-center w-full" v-scope @vue:mounted="mounted" id="settings-page">
-    <div class="flex flex-col grow mt-10 max-w-full">
-        <h1 class="font-semibold text-3xl text-primary m-0 mb-4">Settings</h1>
+<main class="flex-1 max-w-screen-xl mx-auto w-full px-4 pt-8 pb-16" v-scope @vue:mounted="mounted" id="settings-page">
+    <div class="flex flex-col grow max-w-full">
+        <h1 class="text-headline text-primary mb-6">Settings</h1>
 
-        <ul class="flex gap-x-4 mb-16 text-muted flex-wrap sm:flex-nowrap">
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('account'), 'hover:text-secondary': !isActive('account') }">
+        <ul class="flex gap-2 mb-12 text-muted flex-wrap sm:flex-nowrap">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('account'), 'hover:text-secondary': !isActive('account') }">
                 <a href="settings#account" @click="updateTab">Account</a>
             </li>
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('data'), 'hover:text-secondary': !isActive('data') }">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('data'), 'hover:text-secondary': !isActive('data') }">
                 <a href="settings#data" @click="updateTab">Data</a>
             </li>
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('permissions'), 'hover:text-secondary': !isActive('permissions') }">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('permissions'), 'hover:text-secondary': !isActive('permissions') }">
                 <a href="settings#permissions" @click="updateTab">Permissions</a>
             </li>
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('integrations'), 'hover:text-secondary': !isActive('integrations') }">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('integrations'), 'hover:text-secondary': !isActive('integrations') }">
                 <a href="settings#integrations" @click="updateTab">Integrations</a>
             </li>
             {{ if .SubscriptionsEnabled }}
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('subscription'), 'hover:text-secondary': !isActive('subscription') }">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('subscription'), 'hover:text-secondary': !isActive('subscription') }">
                 <a href="settings#subscription" @click="updateTab">Subscription</a>
             </li>
             {{ end }}
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('api_keys'), 'hover:text-secondary': !isActive('api_keys') }">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('api_keys'), 'hover:text-secondary': !isActive('api_keys') }">
                 <a href="settings#api_keys" @click="updateTab">API Keys</a>
             </li>
-            <li class="font-semibold text-2xl" v-bind:class="{ 'text-foreground': isActive('danger_zone'), 'hover:text-secondary': !isActive('danger_zone') }">
+            <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('danger_zone'), 'hover:text-secondary': !isActive('danger_zone') }">
                 <a href="settings#danger_zone" @click="updateTab">Danger Zone</a>
             </li>
         </ul>

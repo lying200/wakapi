@@ -5,79 +5,92 @@
 
 <script type="module" src="assets/vendor/simplewebauthn.umd.min.js"></script>
 <script src="assets/js/login.js"></script>
-<body class="bg-background text-muted p-4 pt-10 flex flex-col min-h-screen max-w-screen-lg mx-auto justify-center">
+<body class="bg-background text-foreground min-h-screen flex flex-col">
+
+<!-- Aurora Background -->
+<div class="aurora-bg"></div>
 
 {{ template "header.tpl.html" . }}
 
 {{ template "alerts.tpl.html" . }}
 
-<main class="mt-10 grow flex justify-center w-full">
-    <div class="grow max-w-lg mt-10">
-        <div class="mb-8">
-            <h1 class="h1">Welcome!</h1>
-            <span class="text-secondary">Log in to continue using Wakapi. First time? Check out the <a href="setup" class="text-foreground hover:text-secondary">setup instructions</a>.</span>
-        </div>
-        {{ if not .DisableLocalAuth }}
-        <form action="login" method="post" class="mb-8">
-            <div class="font-semibold mb-2 text-secondary">Local Sign-On</div>
-            <div class="mb-4">
-                <input class="input-default"
-                       type="text" id="username" autocomplete="username"
-                       name="username" placeholder="Username" minlength="1" required autofocus>
+<main class="flex-1 flex justify-center items-start px-4 pt-24 pb-16 relative z-10">
+    <div class="w-full max-w-md animate-slideup">
+        <!-- Glass Card Container -->
+        <div class="bento-card p-8">
+            <div class="mb-8">
+                <h1 class="text-headline text-primary mb-2" data-i18n="login.welcome">Welcome!</h1>
+                <p class="text-secondary text-sm">
+                    <span data-i18n="login.subtitle">Log in to continue using Wakapi.</span>
+                    <span data-i18n="login.first_time"> First time? Check out the</span>
+                    <a href="setup" class="text-accent hover:text-accent-hover transition-colors" data-i18n="login.setup_instructions">setup instructions</a>.
+                </p>
             </div>
-            <div class="mb-4">
-                <input class="input-default"
-                       type="password" id="password" autocomplete="current-password"
-                       name="password" placeholder="Password" minlength="6" required>
-            </div>
-            <div class="flex justify-between items-center">
-                <a href="reset-password" class="text-muted text-sm">
-                    Forgot password?
-                </a>
-                <div class="flex space-x-2">
-                    {{ if .AllowSignup }}
-                    <a href="signup">
-                        <button type="button" class="btn-default">Sign up</button>
-                    </a>
-                    {{ else }}
-                    <a title="The administrator of this instance has disabled sign up.">
-                        <button type="button" class="btn-disabled" disabled> Sign up </button>
-                    </a>
-                    {{ end }}
-                    <button type="submit" class="btn-primary">Log in</button>
+
+            {{ if not .DisableLocalAuth }}
+            <form action="login" method="post" class="mb-8">
+                <div class="text-xs font-semibold text-muted uppercase tracking-wider mb-3" data-i18n="login.local_signon">Local Sign-On</div>
+                <div class="mb-4">
+                    <input class="input-default"
+                           type="text" id="username" autocomplete="username"
+                           name="username" placeholder="Username" data-i18n-placeholder="login.username"
+                           minlength="1" required autofocus>
                 </div>
-            </div>
-        </form>
-        {{ end }}
-
-        {{ if not .DisableWebAuthn }}
-        <div class="mb-8">
-            <div class="font-semibold mb-2 text-secondary">WebAuthn Login</div>
-            <form action="webauthn/login" method="post" class="mb-2">
-                <input type="hidden" name="assertion_json" id="webauthn_assertion_json">
-                <button type="button" class="btn-default w-full flex items-center justify-center" id="webauthn_login">
-                    <span class="iconify inline text-white text-base mr-1" data-icon="bi:key-fill"></span>
-                    Login with passkey
-                </button>
+                <div class="mb-4">
+                    <input class="input-default"
+                           type="password" id="password" autocomplete="current-password"
+                           name="password" placeholder="Password" data-i18n-placeholder="login.password"
+                           minlength="6" required>
+                </div>
+                <div class="flex justify-between items-center">
+                    <a href="reset-password" class="text-muted text-xs hover:text-secondary transition-colors" data-i18n="login.forgot_password">
+                        Forgot password?
+                    </a>
+                    <div class="flex space-x-2">
+                        {{ if .AllowSignup }}
+                        <a href="signup">
+                            <button type="button" class="btn-default" data-i18n="login.signup">Sign up</button>
+                        </a>
+                        {{ else }}
+                        <a title="The administrator of this instance has disabled sign up.">
+                            <button type="button" class="btn-disabled" disabled data-i18n="login.signup">Sign up</button>
+                        </a>
+                        {{ end }}
+                        <button type="submit" class="btn-primary" data-i18n="login.login">Log in</button>
+                    </div>
+                </div>
             </form>
-        </div>
-        {{ end }}
+            {{ end }}
 
-        {{ if len .OidcProviders }}
-        <div>
-            <div class="font-semibold mb-2 text-secondary">Single Sign-On</div>
-            {{ range $provider := .OidcProviders }}
-            <a href="oidc/{{ $provider.Name | lower }}/login" class="block mb-2">
-                <button type="button" class="btn-default w-full flex items-center gap-2 justify-center">
-                    {{ if $.OidcProviderIcon $provider.Name }}
-                    <span class="iconify inline text-white text-base" data-icon="{{ ($.OidcProviderIcon $provider.Name) | urlSafe }}"></span>
-                    {{ end }}
-                    Login with {{ $provider.DisplayName }}
-                </button>
-            </a>
+            {{ if not .DisableWebAuthn }}
+            <div class="mb-6">
+                <div class="text-xs font-semibold text-muted uppercase tracking-wider mb-3" data-i18n="login.webauthn">WebAuthn Login</div>
+                <form action="webauthn/login" method="post" class="mb-2">
+                    <input type="hidden" name="assertion_json" id="webauthn_assertion_json">
+                    <button type="button" class="btn-default w-full flex items-center justify-center gap-2" id="webauthn_login">
+                        <span class="iconify inline text-foreground text-base" data-icon="bi:key-fill"></span>
+                        <span data-i18n="login.passkey">Login with passkey</span>
+                    </button>
+                </form>
+            </div>
+            {{ end }}
+
+            {{ if len .OidcProviders }}
+            <div>
+                <div class="text-xs font-semibold text-muted uppercase tracking-wider mb-3" data-i18n="login.sso">Single Sign-On</div>
+                {{ range $provider := .OidcProviders }}
+                <a href="oidc/{{ $provider.Name | lower }}/login" class="block mb-2">
+                    <button type="button" class="btn-default w-full flex items-center gap-2 justify-center">
+                        {{ if $.OidcProviderIcon $provider.Name }}
+                        <span class="iconify inline text-foreground text-base" data-icon="{{ ($.OidcProviderIcon $provider.Name) | urlSafe }}"></span>
+                        {{ end }}
+                        Login with {{ $provider.DisplayName }}
+                    </button>
+                </a>
+                {{ end }}
+            </div>
             {{ end }}
         </div>
-        {{ end }}
     </div>
 </main>
 

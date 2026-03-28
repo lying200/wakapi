@@ -1,17 +1,26 @@
-<footer class="absolute inset-x-0 bottom-0 flex justify-between w-full text-muted mt-20 items-center gap-x-4 py-4 max-w-screen-xl mx-auto">
-    <div class="text-xs font-mono font-semibold">
-        {{ getVersion }} @ {{ getDbType }}
-    </div>
-    <div class="font-semibold text-sm">
-        Made with &nbsp; <span class="iconify inline" data-icon="bi:heart-fill"></span>&nbsp; by <a href="https://muetsch.io" target="_blank" class="text-secondary hover:text-foreground">Ferdi</a>
-        <span>&nbsp;|&nbsp;</span>
-        Open source on &nbsp; <a href="https://github.com/muety/wakapi" target="_blank" rel="noreferrer noopener"><span class="iconify inline text-secondary hover:text-foreground" data-icon="codicon:github-inverted"></span></a>
-        {{ if eq getPublicUrl "https://wakapi.dev" }}
-        <span>&nbsp;|&nbsp;</span>
-        Hosted securely in &nbsp; <span class="iconify inline" data-icon="twemoji:flag-germany"></span>
-        {{ end }}
-    </div>
-    <div class="text-sm">
-        <a href="imprint" class="font-semibold hover:text-secondary">Imprint, Cookies & Data Privacy</a>
+<footer class="mt-20 py-6 border-t no-print" style="border-color: var(--glass-border);">
+    <div class="flex flex-col md:flex-row justify-between items-center max-w-screen-xl mx-auto px-4 gap-4 text-sm text-muted">
+        <div class="font-mono text-xs font-medium">
+            {{ getVersion }} @ {{ getDbType }}
+        </div>
+        <div class="flex items-center gap-2">
+            <span data-i18n="footer.made_with">Made with</span>
+            <span class="iconify inline text-danger" data-icon="bi:heart-fill"></span>
+            <span data-i18n="footer.by">by</span>
+            <a href="https://muetsch.io" target="_blank" class="text-secondary hover:text-foreground transition-colors">Ferdi</a>
+            <span class="text-muted/30">·</span>
+            <span data-i18n="footer.open_source">Open source on</span>
+            <a href="https://github.com/muety/wakapi" target="_blank" rel="noreferrer noopener">
+                <span class="iconify inline text-secondary hover:text-foreground transition-colors" data-icon="codicon:github-inverted"></span>
+            </a>
+            {{ if eq getPublicUrl "https://wakapi.dev" }}
+            <span class="text-muted/30">·</span>
+            <span data-i18n="footer.hosted_in">Hosted securely in</span>
+            <span class="iconify inline" data-icon="twemoji:flag-germany"></span>
+            {{ end }}
+        </div>
+        <div>
+            <a href="imprint" class="text-muted hover:text-secondary transition-colors" data-i18n="footer.imprint">Imprint, Cookies & Data Privacy</a>
+        </div>
     </div>
 </footer>

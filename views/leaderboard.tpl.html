@@ -7,7 +7,7 @@
     const defaultTab = 'total'
 </script>
 
-<body class="relative bg-background text-muted p-4 pt-10 flex flex-col min-h-screen {{ if .User }} max-w-screen-xl {{ else }} max-w-screen-lg {{end}} mx-auto justify-center">
+<body class="bg-background text-foreground min-h-screen flex flex-col">
 
 {{ template "alerts.tpl.html" . }}
 
@@ -18,55 +18,50 @@
 {{ template "login-btn.tpl.html" . }}
 {{ end }}
 
-<main class="mt-10 grow flex justify-center w-full" id="leaderboard-page">
-    <div class="flex flex-col grow mt-10 max-available">
-        <div class="flex items-center justify-start" style="margin-bottom: 0.5rem">
-            <h1 class="h1 inline-block">Leaderboard</h1>
+<main class="flex-1 max-w-screen-xl mx-auto w-full px-4 pt-8 pb-16" id="leaderboard-page">
+    <div class="flex flex-col grow max-available">
+        <div class="flex items-center justify-start mb-2">
+            <h1 class="text-headline text-primary" data-i18n="leaderboard.title">Leaderboard</h1>
             {{ if .IntervalLabel }}
-            <span class="text-muted text-xl inline-block ml-1">&nbsp;({{ .IntervalLabel }})</span>
+            <span class="text-muted text-lg ml-2">({{ .IntervalLabel }})</span>
             {{ end }}
         </div>
 
-        <p class="block text-sm text-foreground w-full lg:w-3/4 mb-8">
+        <p class="text-sm text-secondary w-full lg:w-3/4 mb-8">
             Wakapi's leaderboard shows a ranking of the most active users on this server, given they opted in to get listed on the public leaderboard. Statistics are updated at least every 12 hours and are based on the users' total coding time in a pre-defined interval.
             To participate, log in, go to <a class="link" href="settings#permissions">Settings 🠒 Permissions</a> and enable leaderboards.
         </p>
 
-        <ul class="flex space-x-4 mb-4 text-muted">
-            <li class="font-semibold text-xl {{ if eq .By "" }} text-foreground {{ else }} hover:text-secondary {{ end }}">
-                <a href="leaderboard">Total</a>
-            </li>
-            <li class="font-semibold text-xl {{ if eq .By "language" }} text-foreground {{ else }} hover:text-secondary {{ end }}">
-                <a href="leaderboard?by=language">By Language</a>
-            </li>
-        </ul>
+        <!-- Tab Navigation -->
+        <div class="flex gap-1 mb-6">
+            <a href="leaderboard" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ if eq .By "" }} bg-accent text-white {{ else }} text-secondary hover:text-foreground hover:bg-surface-2 {{ end }}" data-i18n="leaderboard.total">Total</a>
+            <a href="leaderboard?by=language" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ if eq .By "language" }} bg-accent text-white {{ else }} text-secondary hover:text-foreground hover:bg-surface-2 {{ end }}" data-i18n="leaderboard.by_language">By Language</a>
+        </div>
 
         {{ if ne .By "" }}
-        <div class="flex flex-wrap space-x-2 mb-4">
+        <div class="flex flex-wrap gap-2 mb-6">
             {{ range $i, $key := (strslice .TopKeys 0 10) }}
-            <div class="inline-block mb-4">
-                <a href="leaderboard?by={{ $.By }}&key={{ lower $key }}" class="{{ if eq (lower $.Key) (lower $key) }} btn-primary {{ else }} btn-default {{ end }} btn-small cursor-pointer whitespace-nowrap">
-                    {{ if and (eq (lower $.By) "language") ($.LangIcon $key) }}
-                    <span class="align-middle leading-none"><span class="iconify inline text-white text-base" data-icon="{{ ($.LangIcon $key) | urlSafe }}"></span>&nbsp;</span>
-                    {{ end }}
-                    <span>{{ $key }}</span>
-                </a>
-            </div>
+            <a href="leaderboard?by={{ $.By }}&key={{ lower $key }}" class="{{ if eq (lower $.Key) (lower $key) }} btn-primary {{ else }} btn-default {{ end }} btn-small cursor-pointer whitespace-nowrap">
+                {{ if and (eq (lower $.By) "language") ($.LangIcon $key) }}
+                <span class="align-middle leading-none"><span class="iconify inline text-base" data-icon="{{ ($.LangIcon $key) | urlSafe }}"></span>&nbsp;</span>
+                {{ end }}
+                <span>{{ $key }}</span>
+            </a>
             {{ end }}
         </div>
         {{ end }}
 
-        <div class="flex flex-col space-y-4 mt-4 text-foreground w-full lg:w-3/4">
+        <div class="flex flex-col gap-2 mt-2 text-foreground w-full lg:w-3/4">
             {{ if len .Items }}
             <ol>
                 {{ range $i, $item := .Items }}
-                <li class="px-4 py-2 my-2 rounded-md border-2 leaderboard-{{ ($.ColorModifier $item $.User) }} flex justify-between">
-                    <div class="w-12"><strong># {{ $item.Rank }}</strong></div>
-                    <div class="flex flex-grow w-16 mx-1 justify-start items-center space-x-4 align-middle">
+                <li class="px-4 py-3 my-1.5 rounded-lg border leaderboard-{{ ($.ColorModifier $item $.User) }} flex justify-between items-center transition-colors hover:bg-surface-2/30 animate-fadein" style="animation-delay: {{ $i }}0ms; opacity: 0;">
+                    <div class="w-12 font-semibold text-foreground"># {{ $item.Rank }}</div>
+                    <div class="flex flex-grow w-16 mx-1 justify-start items-center space-x-3 align-middle">
                         {{ if avatarUrlTemplate }}
-                        <img src="{{ $item.User.AvatarURL avatarUrlTemplate }}" width="24px" class="rounded-full border-accent" alt="User Profile Avatar"/>
+                        <img src="{{ $item.User.AvatarURL avatarUrlTemplate }}" width="28px" class="rounded-full border border-accent/30" alt="User Profile Avatar"/>
                         {{ else }}
-                        <span class="iconify inline cursor-pointer text-secondary rounded-full border-accent" style="width: 24px; height: 24px" data-icon="ic:round-person"></span>
+                        <span class="iconify inline cursor-pointer text-muted rounded-full" style="width: 28px; height: 28px" data-icon="ic:round-person"></span>
                         {{ end }}
                         <div>
                             <strong class="text-ellipsis truncate">@{{ $item.UserID }}</strong>
@@ -75,26 +70,25 @@
                             {{ end }}
                         </div>
                     </div>
-                    <div class="flex-1 mx-1 hidden sm:inline-block truncate leading-6 align-middle">
+                    <div class="flex-1 mx-1 hidden sm:inline-block truncate leading-6 align-middle text-sm text-secondary">
                         {{ range $i, $lang := (index $.UserLanguages $item.UserID) }}
                         {{ if $.LangIcon $lang }}
-                        <span class="align-middle leading-none"><span class="iconify inline text-white text-base" data-icon="{{ ($.LangIcon $lang) | urlSafe }}"></span></span>
+                        <span class="align-middle leading-none"><span class="iconify inline text-foreground text-base" data-icon="{{ ($.LangIcon $lang) | urlSafe }}"></span></span>
                         {{ end }}
                         <span class="text-sm leading-6">{{ $lang }}{{ if lt $i (add (len (index $.UserLanguages $item.UserID)) -1) }},&nbsp;{{ end }}</span>
                         {{ end }}
                     </div>
-                    <div class="flex-1 ml-1 text-right"><span>{{ $item.Total | duration }}</span></div>
+                    <div class="flex-1 ml-1 text-right font-medium text-foreground"><span>{{ $item.Total | duration }}</span></div>
                 </li>
                 {{ end }}
             </ol>
-            <p class="text-sm pt-8">Last Updated: {{ .LastUpdate | datetimetz }}</p>
+            <p class="text-xs text-muted pt-6"><span data-i18n="leaderboard.last_updated">Last Updated:</span> {{ .LastUpdate | datetimetz }}</p>
             {{ else }}
-            <p>
-                <span class="iconify inline text-white text-base" data-icon="twemoji:frowning-face"></span>&nbsp;
-                The leaderboard is currently empty ...
+            <p class="text-secondary">
+                <span class="iconify inline text-base" data-icon="twemoji:frowning-face"></span>&nbsp;
+                <span data-i18n="leaderboard.empty">The leaderboard is currently empty ...</span>
             </p>
             {{ end }}
-
         </div>
     </div>
 </main>
