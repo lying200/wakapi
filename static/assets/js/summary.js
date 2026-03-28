@@ -3,32 +3,37 @@
 // waiting for https://github.com/chartjs/Chart.js/discussions/9890
 const LEGEND_CHARACTERS = 20
 
-const projectsCanvas = document.getElementById('chart-projects')
-const osCanvas = document.getElementById('chart-os')
-const editorsCanvas = document.getElementById('chart-editor')
-const languagesCanvas = document.getElementById('chart-language')
-const machinesCanvas = document.getElementById('chart-machine')
-const labelsCanvas = document.getElementById('chart-label')
-const branchesCanvas = document.getElementById('chart-branches')
-const entitiesCanvas = document.getElementById('chart-entities')
-const categoriesCanvas = document.getElementById('chart-categories')
-const timelineCanvas = document.getElementById('chart-timeline')
-const hourlyCanvas = document.getElementById('chart-hourly')
+const getProjectsCanvas = () => document.getElementById('chart-projects')
+const getOsCanvas = () => document.getElementById('chart-os')
+const getEditorsCanvas = () => document.getElementById('chart-editor')
+const getLanguagesCanvas = () => document.getElementById('chart-language')
+const getMachinesCanvas = () => document.getElementById('chart-machine')
+const getLabelsCanvas = () => document.getElementById('chart-label')
+const getBranchesCanvas = () => document.getElementById('chart-branches')
+const getEntitiesCanvas = () => document.getElementById('chart-entities')
+const getCategoriesCanvas = () => document.getElementById('chart-categories')
+const getTimelineCanvas = () => document.getElementById('chart-timeline')
+const getHourlyCanvas = () => document.getElementById('chart-hourly')
 
-const projectContainer = document.getElementById('project-container')
-const osContainer = document.getElementById('os-container')
-const editorContainer = document.getElementById('editor-container')
-const languageContainer = document.getElementById('language-container')
-const machineContainer = document.getElementById('machine-container')
-const labelContainer = document.getElementById('label-container')
-const branchContainer = document.getElementById('branch-container')
-const entityContainer = document.getElementById('entity-container')
-const categoryContainer = document.getElementById('category-container')
-const timelineContainer = document.getElementById('timeline-container')
-const hourlyContainer = document.getElementById('hourly-container')
+const getProjectContainer = () => document.getElementById('project-container')
+const getOsContainer = () => document.getElementById('os-container')
+const getEditorContainer = () => document.getElementById('editor-container')
+const getLanguageContainer = () => document.getElementById('language-container')
+const getMachineContainer = () => document.getElementById('machine-container')
+const getLabelContainer = () => document.getElementById('label-container')
+const getBranchContainer = () => document.getElementById('branch-container')
+const getEntityContainer = () => document.getElementById('entity-container')
+const getCategoryContainer = () => document.getElementById('category-container')
+const getTimelineContainer = () => document.getElementById('timeline-container')
+const getHourlyContainer = () => document.getElementById('hourly-container')
 
-const containers = [projectContainer, osContainer, editorContainer, languageContainer, machineContainer, labelContainer, branchContainer, entityContainer, categoryContainer, timelineContainer, hourlyContainer]
-const canvases = [projectsCanvas, osCanvas, editorsCanvas, languagesCanvas, machinesCanvas, labelsCanvas, branchesCanvas, entitiesCanvas, categoriesCanvas, timelineCanvas, hourlyCanvas]
+function getContainers() {
+    return [getProjectContainer(), getOsContainer(), getEditorContainer(), getLanguageContainer(), getMachineContainer(), getLabelContainer(), getBranchContainer(), getEntityContainer(), getCategoryContainer(), getTimelineContainer(), getHourlyContainer()]
+}
+function getCanvases() {
+    return [getProjectsCanvas(), getOsCanvas(), getEditorsCanvas(), getLanguagesCanvas(), getMachinesCanvas(), getLabelsCanvas(), getBranchesCanvas(), getEntitiesCanvas(), getCategoriesCanvas(), getTimelineCanvas(), getHourlyCanvas()]
+}
+
 const data = [wakapiData.projects, wakapiData.operatingSystems, wakapiData.editors, wakapiData.languages, wakapiData.machines, wakapiData.labels, wakapiData.branches, wakapiData.entities, wakapiData.categories, wakapiData.timelineStats, wakapiData.hourlyBreakdown]
 
 let topNPickers = [...document.getElementsByClassName('top-picker')]
@@ -112,6 +117,19 @@ function filterLegendItem(item) {
 }
 
 function draw(subselection) {
+    console.log('[Summary] draw called with subselection:', subselection);
+    const projectsCanvas = getProjectsCanvas()
+    const osCanvas = getOsCanvas()
+    const editorsCanvas = getEditorsCanvas()
+    const languagesCanvas = getLanguagesCanvas()
+    const machinesCanvas = getMachinesCanvas()
+    const labelsCanvas = getLabelsCanvas()
+    const branchesCanvas = getBranchesCanvas()
+    const entitiesCanvas = getCanvases()[7] // entities is index 7
+    const categoriesCanvas = getCategoriesCanvas()
+    const timelineCanvas = getTimelineCanvas()
+    const hourlyCanvas = getHourlyCanvas()
+
     function getTooltipOptions(key, stacked) {
         return {
             callbacks: {
@@ -136,7 +154,9 @@ function draw(subselection) {
 
     charts
         .filter((c, i) => shouldUpdate(i))
-        .forEach(c => c.destroy())
+        .forEach(c => {
+            if (c) c.destroy()
+        })
 
     const vibrantColors = JSON.parse(window.localStorage.getItem('wakapi_vibrant_colors') || false);
 
@@ -682,17 +702,18 @@ function draw(subselection) {
         })
         : null
 
-    charts[0] = projectChart ? projectChart : charts[0]
-    charts[1] = osChart ? osChart : charts[1]
-    charts[2] = editorChart ? editorChart : charts[2]
-    charts[3] = languageChart ? languageChart : charts[3]
-    charts[4] = machineChart ? machineChart : charts[4]
-    charts[5] = labelChart ? labelChart : charts[5]
-    charts[6] = branchChart ? branchChart : charts[6]
-    charts[7] = entityChart ? entityChart : charts[7]
-    charts[8] = categoryChart ? categoryChart : charts[8]
-    charts[9] = timelineChart ? timelineChart : charts[9]
-    charts[10] = hourlyBreakdownChart ? hourlyBreakdownChart : charts[10]
+    if (shouldUpdate(0)) charts[0] = projectChart
+    if (shouldUpdate(1)) charts[1] = osChart
+    if (shouldUpdate(2)) charts[2] = editorChart
+    if (shouldUpdate(3)) charts[3] = languageChart
+    if (shouldUpdate(4)) charts[4] = machineChart
+    if (shouldUpdate(5)) charts[5] = labelChart
+    if (shouldUpdate(6)) charts[6] = branchChart
+    if (shouldUpdate(7)) charts[7] = entityChart
+    if (shouldUpdate(8)) charts[8] = categoryChart
+    if (shouldUpdate(9)) charts[9] = timelineChart
+    if (shouldUpdate(10)) charts[10] = hourlyBreakdownChart
+    console.log('[Summary] draw completed. Active charts:', charts.filter(c => c !== null).length);
 }
 
 function parseTopN() {
@@ -700,6 +721,8 @@ function parseTopN() {
 }
 
 function togglePlaceholders(mask) {
+    const containers = getContainers()
+    const canvases = getCanvases()
     const placeholderElements = containers.map(c => c ? c.querySelector('.placeholder-container') : null)
 
     for (let i = 0; i < mask.length; i++) {

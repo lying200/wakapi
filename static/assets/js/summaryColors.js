@@ -13,6 +13,3 @@ const baseColors = [
     '#34d399', // emerald-400
 ];
 
-Chart.defaults.color = "#E2E8F0"
-Chart.defaults.borderColor = "#242b3a"
-
