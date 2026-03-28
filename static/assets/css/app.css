@@ -114,10 +114,10 @@ main {
     --surface-2: 245 245 245;       /* Hover state */
     --focused: 240 240 240;         /* Focused state */
 
-    --foreground: 17 17 17;         /* Near black text */
-    --secondary: 100 100 100;       /* Secondary text */
-    --muted: 156 163 175;           /* Muted text */
-    --primary: 17 17 17;            /* Primary emphasis */
+    --foreground: 23 23 23;         /* Darken: Gray 900 */
+    --secondary: 75 85 99;          /* Darken: Gray 600 */
+    --muted: 82 82 91;           /* Darken: Gray 600 */
+    --primary: 23 23 23;
 
     /* Brand colors */
     --accent: 5 150 105;            /* Emerald for light mode */
@@ -126,10 +126,10 @@ main {
     --success: 22 163 74;
     --warning: 202 138 4;
 
-    --glass-bg: rgba(255, 255, 255, 0.70);
-    --glass-border: rgba(0, 0, 0, 0.06);
-    --glass-border-hover: rgba(0, 0, 0, 0.10);
-    --glass-blur: 20px;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.12);
+    --glass-border-hover: rgba(0, 0, 0, 0.20);
+    --glass-blur: 16px;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -269,6 +269,9 @@ main {
     @apply flex items-center px-3 py-2.5 rounded-lg text-sm transition-colors;
     color: rgb(var(--secondary));
 }
+.light .sidebar-item {
+    color: rgb(var(--foreground) / 0.85); /* More contrast */
+}
 .sidebar-item:hover, .sidebar-item.active {
     background: rgb(var(--surface-2) / 0.5);
     color: rgb(var(--foreground));
@@ -277,6 +280,13 @@ main {
 .sidebar-sub-item {
     @apply flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors;
     color: rgb(var(--secondary));
+}
+.light .sidebar-sub-item {
+    color: rgb(var(--foreground) / 0.75);
+}
+.sidebar-sub-item:hover {
+    background: rgb(var(--surface-2) / 0.5);
+    color: rgb(var(--foreground));
 }
 .sidebar-sub-item:hover {
     background: rgb(var(--surface-2) / 0.5);
@@ -499,6 +509,10 @@ main {
     background-size: 24px 24px;
 }
 
+.light .bento-card {
+    background-image: radial-gradient(circle, rgb(var(--foreground) / 0.08) 1px, transparent 1px);
+}
+
 .bento-card:hover {
     border-color: var(--glass-border-hover);
     box-shadow: var(--shadow-md);
@@ -687,6 +701,9 @@ main {
 .h1-subcaption {
     color: rgb(var(--muted));
     @apply text-sm;
+}
+.light .h1-subcaption {
+    color: rgb(var(--secondary));
 }
 
 /* ============================================

@@ -27,6 +27,7 @@
         }
         root.setAttribute('data-theme', theme);
         localStorage.setItem(THEME_KEY, theme);
+        window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme } }));
     }
 
     // Apply immediately to prevent flash

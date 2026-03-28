@@ -42,22 +42,49 @@ topNPickers.forEach(e => {
 let charts = []
 let showTopN = []
 
-Chart.defaults.font.family = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
-Chart.defaults.color = 'rgba(255, 255, 255, 0.5)'
-
 // Premium Minimalist Grid Defaults
-const gridDefaults = {
-    color: 'rgba(255, 255, 255, 0.08)',
-    lineWidth: 1,
-    borderDash: [3, 3],
-    drawBorder: false,
-    drawTicks: false
+function updateChartDefaults() {
+    const isLight = document.documentElement.classList.contains('light');
+    Chart.defaults.font.family = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+    Chart.defaults.color = isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.5)';
+
+    const gridDefaults = {
+        color: isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.08)',
+        lineWidth: 1,
+        borderDash: [3, 3],
+        drawBorder: false,
+        drawTicks: false
+    }
+
+    const tickDefaults = {
+        color: isLight ? 'rgba(0, 0, 0, 0.65)' : 'rgba(255, 255, 255, 0.5)'
+    }
+
+    Chart.defaults.scales.linear.grid = { ...gridDefaults }
+    Chart.defaults.scales.linear.ticks = { ...tickDefaults }
+    Chart.defaults.scales.category.grid = { display: false, drawBorder: false }
+    Chart.defaults.scales.category.ticks = { ...tickDefaults }
+    Chart.defaults.scales.timeseries.grid = { ...gridDefaults }
+    Chart.defaults.scales.timeseries.ticks = { ...tickDefaults }
+    Chart.defaults.scales.time.grid = { ...gridDefaults }
+    Chart.defaults.scales.time.ticks = { ...tickDefaults }
+
+    // Legend & Tooltip Defaults
+    Chart.defaults.plugins.legend.labels.color = isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.5)';
+    Chart.defaults.plugins.tooltip.backgroundColor = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(25, 25, 28, 0.9)';
+    Chart.defaults.plugins.tooltip.titleColor = isLight ? '#171717' : '#fff';
+    Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#171717' : '#fff';
+    Chart.defaults.plugins.tooltip.borderColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
 }
 
-Chart.defaults.scales.linear.grid = { ...gridDefaults }
-Chart.defaults.scales.category.grid = { display: false, drawBorder: false }
-Chart.defaults.scales.timeseries.grid = { ...gridDefaults }
-Chart.defaults.scales.time.grid = { ...gridDefaults }
+updateChartDefaults();
+
+// Listen for theme changes to re-render charts
+window.addEventListener('themeChanged', () => {
+    updateChartDefaults();
+    draw(); // Full re-render with new colors
+});
 
 String.prototype.toHHMMSS = function () {
     const sec_num = parseInt(this, 10)
