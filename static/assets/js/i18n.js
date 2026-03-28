@@ -165,6 +165,7 @@
         // Footer
         'footer.made_with': { en: 'Made with', zh: '用' },
         'footer.by': { en: 'by', zh: '制作 ·' },
+        'footer.ui_polish_by': { en: 'UI polish by', zh: '界面调整：' },
         'footer.open_source': { en: 'Open source on', zh: '开源于' },
         'footer.hosted_in': { en: 'Hosted securely in', zh: '安全托管于' },
         'footer.imprint': { en: 'Imprint, Cookies & Data Privacy', zh: '版权信息、Cookie 与隐私政策' },
@@ -353,8 +354,8 @@
         'settings.data.language_mappings.change_language_to': { en: 'change language to', zh: '将语言改为' },
         'settings.data.heartbeats_timeout.title': { en: 'Heartbeats Timeout', zh: 'Heartbeat 超时' },
         'settings.data.heartbeats_timeout.desc': {
-            en: 'This parameter affects the heuristic based on which a series of consecutive heartbeats sent by your IDE are aggregated to total coding time. Please see the <i>"How are durations calculated?"</i> section in our <a class="link" href="https://github.com/muety/wakapi?tab=readme-ov-file#-faqs" rel="noreferrer noopener" target="_blank">FAQs</a> as well as the discussion in <a class="link" href="https://github.com/muety/wakapi/issues/156" rel="noreferrer noopener" target="_blank">#156</a>.',
-            zh: '该参数会影响 Wakapi 将 IDE 连续发送的一组 heartbeat 聚合为总编码时长时所采用的启发式规则。请参阅 FAQ 中的 <i>“如何计算时长？”</i> 一节，以及 <a class="link" href="https://github.com/muety/wakapi?tab=readme-ov-file#-faqs" rel="noreferrer noopener" target="_blank">FAQs</a> 和 <a class="link" href="https://github.com/muety/wakapi/issues/156" rel="noreferrer noopener" target="_blank">#156</a> 中的讨论。'
+            en: 'This parameter affects the heuristic based on which a series of consecutive heartbeats sent by your IDE are aggregated to total coding time. Please see the <i>"How are durations calculated?"</i> section in our <a class="link" href="https://github.com/lying200/wakapi?tab=readme-ov-file#-faqs" rel="noreferrer noopener" target="_blank">FAQs</a> as well as the discussion in <a class="link" href="https://github.com/muety/wakapi/issues/156" rel="noreferrer noopener" target="_blank">#156</a>.',
+            zh: '该参数会影响 Wakapi 将 IDE 连续发送的一组 heartbeat 聚合为总编码时长时所采用的启发式规则。请参阅 FAQ 中的 <i>“如何计算时长？”</i> 一节，以及 <a class="link" href="https://github.com/lying200/wakapi?tab=readme-ov-file#-faqs" rel="noreferrer noopener" target="_blank">FAQs</a> 和 <a class="link" href="https://github.com/muety/wakapi/issues/156" rel="noreferrer noopener" target="_blank">#156</a> 中的讨论。'
         },
         'settings.data.heartbeats_timeout.label': { en: 'Timeout / offset (minutes)', zh: '超时 / 偏移（分钟）' },
         'settings.data.heartbeats_timeout.hint': { en: '(min. 1 min, max. 60 min)', zh: '（最小 1 分钟，最大 60 分钟）' },
