@@ -72,7 +72,13 @@ main {
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.15);
+    --shadow-glow: 0 0 20px rgb(var(--accent) / 0.15);
+
+    /* Glow Physics Tokens */
+    --glow-color-1: 16 185 129;    /* Bright Emerald */
+    --glow-color-2: 6 182 212;     /* Vibrant Cyan */
+    --glow-opacity-1: 0.35;        /* Punchy for dark mode */
+    --glow-opacity-2: 0.15;
 
     /* Spacing base (8px scale) */
     --space-1: 0.25rem;  /* 4px */
@@ -128,7 +134,13 @@ main {
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
-    --shadow-glow: 0 0 20px rgba(5, 150, 105, 0.10);
+    --shadow-glow: 0 0 20px rgb(var(--accent) / 0.10);
+
+    /* Glow Physics Tokens — Light Mode */
+    --glow-color-1: 5 150 105;     /* Darker emerald for contrast on white */
+    --glow-color-2: 20 184 166;    /* Teal */
+    --glow-opacity-1: 0.12;        /* Subtle for light mode */
+    --glow-opacity-2: 0.04;
 }
 
 /* ============================================
@@ -519,7 +531,7 @@ main {
     left: var(--mouse-x);
     top: var(--mouse-y);
     z-index: -1;
-    background: radial-gradient(circle at center, rgb(var(--accent) / 0.25) 0%, rgb(var(--gradient-mid) / 0.1) 40%, transparent 70%);
+    background: radial-gradient(circle at center, rgb(var(--glow-color-1) / var(--glow-opacity-1)) 0%, rgb(var(--glow-color-2) / var(--glow-opacity-2)) 40%, transparent 70%);
     opacity: 0;
     border-radius: 50%;
     transition: opacity 0.4s ease;
