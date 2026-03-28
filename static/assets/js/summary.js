@@ -42,7 +42,22 @@ topNPickers.forEach(e => {
 let charts = []
 let showTopN = []
 
-Chart.defaults.font.family = 'Source Sans 3, Roboto, Helvetica Neue, Arial, sens-serif'
+Chart.defaults.font.family = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
+Chart.defaults.color = 'rgba(255, 255, 255, 0.5)'
+
+// Premium Minimalist Grid Defaults
+const gridDefaults = {
+    color: 'rgba(255, 255, 255, 0.08)',
+    lineWidth: 1,
+    borderDash: [3, 3],
+    drawBorder: false,
+    drawTicks: false
+}
+
+Chart.defaults.scales.linear.grid = { ...gridDefaults }
+Chart.defaults.scales.category.grid = { display: false, drawBorder: false }
+Chart.defaults.scales.timeseries.grid = { ...gridDefaults }
+Chart.defaults.scales.time.grid = { ...gridDefaults }
 
 String.prototype.toHHMMSS = function () {
     const sec_num = parseInt(this, 10)

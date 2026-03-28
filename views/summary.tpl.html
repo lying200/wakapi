@@ -125,7 +125,7 @@
         <!-- Charts — Bento Grid -->
         <div class="bento-grid w-full mt-2">
             <!-- Projects -->
-            <div class="bento-card bento-span-2 bento-row-2 p-5 pb-10 flex flex-col w-full no-break {{ if .IsProjectDetails }} hidden {{ end }}" id="project-container" style="max-height: 608px;">
+            <div class="bento-card bento-span-2 bento-row-2 p-5 pb-5 flex flex-col w-full h-full no-break {{ if .IsProjectDetails }} hidden {{ end }}" id="project-container">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-title" data-i18n="summary.projects">Projects</span>
                     <div class="flex items-center text-xs text-muted gap-1">
@@ -134,14 +134,16 @@
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="0"></span>
                     </div>
                 </div>
-                <canvas id="chart-projects" class="mt-3"></canvas>
+                <div class="flex-1 min-h-0 relative mt-3">
+                    <canvas id="chart-projects"></canvas>
+                </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                 </div>
             </div>
 
             <!-- Branches -->
-            <div class="bento-card bento-span-2 bento-row-2 p-5 pb-10 flex flex-col w-full no-break {{ if not .IsProjectDetails }} hidden {{ end }}" id="branch-container" style="max-height: 608px;">
+            <div class="bento-card bento-span-2 bento-row-2 p-5 pb-5 flex flex-col w-full h-full no-break {{ if not .IsProjectDetails }} hidden {{ end }}" id="branch-container">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-title" data-i18n="summary.branches">Branches</span>
                     <div class="flex items-center text-xs text-muted gap-1">
@@ -150,14 +152,16 @@
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="6"></span>
                     </div>
                 </div>
-                <canvas id="chart-branches" class="mt-3"></canvas>
+                <div class="flex-1 min-h-0 relative mt-3">
+                    <canvas id="chart-branches"></canvas>
+                </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                 </div>
             </div>
 
             <!-- Languages -->
-            <div class="bento-card p-5 pb-10 flex flex-col w-full no-break" id="language-container" style="max-height: 300px">
+            <div class="bento-card p-5 pb-5 flex flex-col w-full h-full no-break" id="language-container">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-title" data-i18n="summary.languages">Languages</span>
                     <div class="flex items-center text-xs text-muted gap-1">
@@ -166,14 +170,16 @@
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="3"></span>
                     </div>
                 </div>
-                <canvas id="chart-language" class="mt-4"></canvas>
+                <div class="flex-1 min-h-0 relative mt-4">
+                    <canvas id="chart-language"></canvas>
+                </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                 </div>
             </div>
 
             <!-- Editors -->
-            <div class="bento-card p-5 pb-10 flex flex-col w-full no-break" id="editor-container" style="max-height: 300px">
+            <div class="bento-card p-5 pb-5 flex flex-col w-full h-full no-break" id="editor-container">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-title" data-i18n="summary.editors">Editors</span>
                     <div class="flex items-center text-xs text-muted gap-1">
@@ -182,7 +188,9 @@
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="2"></span>
                     </div>
                 </div>
-                <canvas id="chart-editor" class="mt-4"></canvas>
+                <div class="flex-1 min-h-0 relative mt-4">
+                    <canvas id="chart-editor"></canvas>
+                </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                 </div>
@@ -190,7 +198,7 @@
 
             <!-- Operating Systems -->
             <div class="{{ if .IsProjectDetails }} hidden {{ end }} bento-span-2 bento-row-2 w-full no-break">
-                <div class="bento-card p-5 pb-10 flex flex-col w-full h-full" id="os-container" style="max-height: 300px">
+                <div class="bento-card p-5 pb-5 flex flex-col w-full h-full" id="os-container">
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="font-semibold text-title mr-2 cursor-pointer" data-i18n="summary.operating_systems">Operating Systems</span>
@@ -202,7 +210,9 @@
                             <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="1"></span>
                         </div>
                     </div>
-                    <canvas id="chart-os" class="mt-4"></canvas>
+                    <div class="flex-1 min-h-0 relative mt-4">
+                        <canvas id="chart-os"></canvas>
+                    </div>
                     <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                         <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                     </div>
@@ -211,7 +221,7 @@
 
             <!-- Machines (hidden initially) -->
             <div class="hidden bento-span-2 bento-row-2 w-full no-break">
-                <div class="bento-card p-5 pb-10 flex flex-col w-full h-full" id="machine-container" style="max-height: 300px">
+                <div class="bento-card p-5 pb-5 flex flex-col w-full h-full" id="machine-container">
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="font-semibold text-title text-muted mr-2 cursor-pointer" onclick="swapCharts('os', 'machine')" data-i18n="summary.operating_systems">Operating Systems</span>
@@ -223,7 +233,9 @@
                             <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="4"></span>
                         </div>
                     </div>
-                    <canvas id="chart-machine" class="mt-4"></canvas>
+                    <div class="flex-1 min-h-0 relative mt-4">
+                        <canvas id="chart-machine"></canvas>
+                    </div>
                     <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                         <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                     </div>
@@ -232,7 +244,7 @@
 
             <!-- Labels -->
             <div class="{{ if .IsProjectDetails }} hidden {{ end }} w-full no-break">
-                <div class="bento-card p-5 pb-10 flex flex-col w-full {{ if .IsProjectDetails }} hidden {{ end }}" id="label-container" style="max-height: 300px">
+                <div class="bento-card p-5 pb-5 flex flex-col w-full h-full {{ if .IsProjectDetails }} hidden {{ end }}" id="label-container">
                     <div class="flex justify-between items-center" style="margin-bottom: -10px">
                         <div class="flex items-center gap-2">
                             <span class="font-semibold text-title" data-i18n="summary.labels">Labels</span>
@@ -246,7 +258,9 @@
                             <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="5"></span>
                         </div>
                     </div>
-                    <canvas id="chart-label" class="mt-4"></canvas>
+                    <div class="flex-1 min-h-0 relative mt-4">
+                        <canvas id="chart-label"></canvas>
+                    </div>
                     <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                         <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                     </div>
