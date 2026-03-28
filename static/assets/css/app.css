@@ -248,6 +248,40 @@ main {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ============================================
+   SIDEBAR & MOBILE NAVIGATION
+   ============================================ */
+.sidebar-item {
+    @apply flex items-center px-3 py-2.5 rounded-lg text-sm transition-colors;
+    color: rgb(var(--secondary));
+}
+.sidebar-item:hover, .sidebar-item.active {
+    background: rgb(var(--surface-2) / 0.5);
+    color: rgb(var(--foreground));
+}
+
+.sidebar-sub-item {
+    @apply flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors;
+    color: rgb(var(--secondary));
+}
+.sidebar-sub-item:hover {
+    background: rgb(var(--surface-2) / 0.5);
+    color: rgb(var(--foreground));
+}
+
+.mobile-nav-item {
+    @apply flex flex-col items-center justify-center py-1 px-4 text-secondary transition-colors rounded-lg;
+}
+.mobile-nav-item:hover, .mobile-nav-item.active {
+    color: rgb(var(--foreground));
+    background: rgb(var(--surface-2) / 0.5);
+}
+
+/* Safe area inset for mobile bottom bar */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
 @keyframes slideup {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -368,7 +402,9 @@ main {
    ============================================ */
 .input-default {
     @apply appearance-none outline-none rounded-lg w-full py-2 px-4;
-    background: rgb(var(--surface-2));
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     color: rgb(var(--foreground));
     border: 1px solid var(--glass-border);
     transition: all var(--transition-fast);
@@ -387,6 +423,19 @@ main {
 
 .select-default {
     @apply input-default cursor-pointer;
+}
+
+/* ============================================
+   SETTINGS TABS (Bento Grid / Glass Card styling)
+   ============================================ */
+#settings-page .tab {
+    @apply p-8 mb-6;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 /* ============================================

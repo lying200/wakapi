@@ -1,180 +1,199 @@
 <script type="module" src="assets/js/components/menu-main.js"></script>
 
-<nav class="glass-nav sticky top-0 z-50 no-print" id="main-menu" v-scope @vue:mounted="mounted">
-    <div class="flex justify-between items-center max-w-screen-xl mx-auto px-4 py-2">
-        <!-- Left: Logo + Nav Items -->
-        <div class="flex items-center space-x-1">
-            <div class="mr-4 hidden lg:inline-block shrink-0">
-            {{ template "logo.tpl.html" }}
-            </div>
+<!-- DESKTOP SIDEBAR -->
+<nav class="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col z-50 border-r no-print overflow-y-auto" id="main-sidebar" style="background: var(--glass-bg); backdrop-filter: blur(24px); border-right-color: var(--glass-border);" v-scope @vue:mounted="mounted">
+    <!-- Logo -->
+    <div class="px-6 py-6 shrink-0">
+        {{ template "logo.tpl.html" }}
+    </div>
 
-            <a class="menu-item" href="summary">
-                <span class="iconify inline text-lg" data-icon="ic:round-dashboard"></span>
-                <span class="hidden lg:inline-block" data-i18n="nav.dashboard">Dashboard</span>
+    <!-- Navigation Links -->
+    <div class="flex-1 px-4 space-y-2 mt-4">
+        <a class="sidebar-item" href="summary">
+            <span class="iconify inline text-xl" data-icon="ic:round-dashboard"></span>
+            <span class="font-medium" data-i18n="nav.dashboard">Dashboard</span>
+        </a>
+
+        {{ if .LeaderboardEnabled }}
+        <a class="sidebar-item" href="leaderboard">
+            <span class="iconify inline text-xl" data-icon="fluent:data-bar-horizontal-24-filled"></span>
+            <span class="font-medium" data-i18n="nav.leaderboard">Leaderboard</span>
+        </a>
+        {{ end }}
+
+        <a class="sidebar-item" href="projects">
+            <span class="iconify inline text-xl" data-icon="octicon:project-16"></span>
+            <span class="font-medium" data-i18n="nav.projects">Projects</span>
+        </a>
+
+        <!-- Resources Dropdown -->
+        <div class="relative mt-6 pt-6 border-t" style="border-top-color: var(--glass-border);">
+            <div class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 px-3" data-i18n="nav.resources">Resources</div>
+            <a class="sidebar-sub-item" href="https://github.com/muety/wakapi" target="_blank" rel="noreferrer noopener">
+                <span data-i18n="res.github">GitHub</span>
+                <span class="iconify inline" data-icon="codicon:github-inverted"></span>
             </a>
-
-            {{ if .LeaderboardEnabled }}
-            <a class="menu-item" href="leaderboard">
-                <span class="iconify inline text-lg" data-icon="fluent:data-bar-horizontal-24-filled"></span>
-                <span class="hidden lg:inline-block" data-i18n="nav.leaderboard">Leaderboard</span>
+            <a class="sidebar-sub-item" href="setup">
+                <span data-i18n="res.initial_setup">Initial setup</span>
+                <span class="iconify inline" data-icon="ic:outline-integration-instructions"></span>
             </a>
-            {{ end }}
-
-            <a class="menu-item" href="projects">
-                <span class="iconify inline text-lg" data-icon="octicon:project-16"></span>
-                <span class="hidden lg:inline-block" data-i18n="nav.projects">Projects</span>
+            <a class="sidebar-sub-item" href="swagger-ui">
+                <span data-i18n="res.api_docs">API Docs</span>
+                <span class="iconify inline" data-icon="bx:bx-code-curly"></span>
             </a>
-
-            {{ if false }}
-            <div class="menu-item hidden sm:flex imp:cursor-not-allowed">
-                <span class="iconify inline text-lg text-muted" data-icon="bi:people-fill"></span>
-                <a class="text-muted leading-none hidden lg:inline-block">Team<br>
-                    <span class="text-xxs whitespace-nowrap">(coming soon)</span>
-                </a>
-            </div>
-            {{ end }}
-
-            <div class="menu-item relative" @click="state.showDropdownResources = !state.showDropdownResources" data-trigger-for="showDropdownResources">
-                <span class="iconify inline text-lg" data-icon="ph:books-bold"></span>
-                <span class="hidden lg:inline-block" data-i18n="nav.resources">Resources</span>
-                <span class="iconify inline text-sm" data-icon="akar-icons:chevron-down"></span>
-
-                <div v-cloak v-show="state.showDropdownResources" class="popup flex z-50 p-2 absolute top-full right-0 mt-1" id="resources-menu-dropdown" style="min-width: 160px">
-                    <div class="grow flex flex-col">
-                        <div class="submenu-item">
-                            <a class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" href="https://github.com/muety/wakapi" target="_blank" rel="noreferrer noopener" @click="state.showDropdownResources = !state.showDropdownResources" data-trigger-for="showDropdownResources">
-                                <span data-i18n="res.github">GitHub</span>
-                                <span class="iconify inline text-muted" data-icon="codicon:github-inverted"></span>
-                            </a>
-                        </div>
-                        <div class="submenu-item">
-                            <a class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" href="setup" @click="state.showDropdownResources = !state.showDropdownResources" data-trigger-for="showDropdownResources">
-                                <span data-i18n="res.initial_setup">Initial setup</span>
-                                <span class="iconify inline text-muted" data-icon="ic:outline-integration-instructions"></span>
-                            </a>
-                        </div>
-                        <div class="submenu-item">
-                            <a class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" href="swagger-ui" @click="state.showDropdownResources = !state.showDropdownResources" data-trigger-for="showDropdownResources">
-                                <span data-i18n="res.api_docs">API Docs</span>
-                                <span class="iconify inline text-muted" data-icon="bx:bx-code-curly"></span>
-                            </a>
-                        </div>
-                        <div class="submenu-item">
-                            <a class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" href="https://wakatime.com" target="_blank" rel="noreferrer noopener" @click="state.showDropdownResources = !state.showDropdownResources" data-trigger-for="showDropdownResources">
-                                <span data-i18n="res.wakatime">WakaTime</span>
-                                <span class="iconify inline text-muted" data-icon="simple-icons:wakatime"></span>
-                            </a>
-                        </div>
-                        <div class="submenu-item">
-                            <a class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" href="https://github.com/sponsors/muety" target="_blank" rel="noreferrer noopener" @click="state.showDropdownResources = !state.showDropdownResources" data-trigger-for="showDropdownResources">
-                                <span data-i18n="res.donate">Donate</span>
-                                <span class="iconify inline text-muted" data-icon="bx:bxs-heart"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <a class="menu-item" href="settings">
-                <span class="iconify inline text-lg" data-icon="ci:settings-filled"></span>
-                <span class="hidden lg:inline-block" data-i18n="nav.settings">Settings</span>
+            <a class="sidebar-sub-item" href="https://wakatime.com" target="_blank" rel="noreferrer noopener">
+                <span data-i18n="res.wakatime">WakaTime</span>
+                <span class="iconify inline" data-icon="simple-icons:wakatime"></span>
             </a>
         </div>
+    </div>
 
-        <!-- Right: Theme toggle + Lang toggle + User -->
-        <div class="flex items-center space-x-2">
+    <!-- Bottom Actions (Theme, Lang, Settings, User) -->
+    <div class="p-4 mt-auto border-t shrink-0 flex flex-col space-y-3" style="border-top-color: var(--glass-border);">
+        <div class="flex justify-between px-2">
             <!-- Theme Toggle -->
-            <button class="menu-item" onclick="toggleTheme()" title="Toggle theme" data-i18n-title="toggle.theme">
-                <span class="iconify inline text-lg" data-icon="ph:moon-bold" id="theme-icon-dark"></span>
-                <span class="iconify inline text-lg hidden" data-icon="ph:sun-bold" id="theme-icon-light"></span>
+            <button class="text-muted hover:text-foreground transition-colors" onclick="toggleTheme()" title="Toggle theme" data-i18n-title="toggle.theme">
+                <span class="iconify inline text-lg" data-icon="ph:moon-bold" id="theme-icon-dark-sidebar"></span>
+                <span class="iconify inline text-lg hidden" data-icon="ph:sun-bold" id="theme-icon-light-sidebar"></span>
             </button>
             <script>
-                // Show correct theme icon
                 (function() {
-                    function updateIcons() {
+                    function updateIconsSidebar() {
                         var isDark = !document.documentElement.classList.contains('light');
-                        var dark = document.getElementById('theme-icon-dark');
-                        var light = document.getElementById('theme-icon-light');
+                        var dark = document.getElementById('theme-icon-dark-sidebar');
+                        var light = document.getElementById('theme-icon-light-sidebar');
                         if (dark && light) {
                             dark.classList.toggle('hidden', !isDark);
                             light.classList.toggle('hidden', isDark);
                         }
                     }
-                    // MutationObserver on class changes
-                    var obs = new MutationObserver(updateIcons);
+                    var obs = new MutationObserver(updateIconsSidebar);
                     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-                    if (document.readyState === 'loading') {
-                        document.addEventListener('DOMContentLoaded', updateIcons);
-                    } else {
-                        updateIcons();
-                    }
+                    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', updateIconsSidebar); } else { updateIconsSidebar(); }
                 })();
             </script>
 
             <!-- Language Toggle -->
-            <button class="menu-item" onclick="toggleLang()">
-                <span class="text-xs font-bold" data-i18n="toggle.lang">中文</span>
+            <button class="text-muted hover:text-foreground transition-colors font-bold text-sm" onclick="toggleLang()">
+                <span data-i18n="toggle.lang">中</span>
             </button>
 
-            <!-- User Menu -->
-            <div class="shrink-0 menu-item relative" @click="state.showDropdownUser = !state.showDropdownUser" data-trigger-for="showDropdownUser">
-                <div class="hidden md:flex flex-col text-right">
-                    <div>
-                        {{ if .SharedLoggedInViewModel.User.HasActiveSubscription }}
-                        <span class="iconify inline text-gold mr-1" data-icon="jam:crown-f" style="margin-bottom: -2px" title="Thanks for supporting Wakapi!"></span>
-                        {{ end }}
-                        <a class="text-foreground text-sm">{{ .SharedLoggedInViewModel.User.ID }}</a>
-                    </div>
-                    {{ if .SharedLoggedInViewModel.User.Email }}
-                    <span class="text-xxs text-muted">{{ .SharedLoggedInViewModel.User.Email }}</span>
-                    {{ end }}
-                </div>
-                {{ if avatarUrlTemplate }}
-                <img src="{{ .SharedLoggedInViewModel.User.AvatarURL avatarUrlTemplate }}" width="28px" class="rounded-full border border-accent/30 ml-2" alt="User Profile Avatar" title="Looks like you, doesn't it?"/>
-                {{ else }}
-                <span class="iconify inline cursor-pointer text-secondary rounded-full" style="width: 28px; height: 28px" data-icon="ic:round-person" @click="state.showDropdownUser = !state.showDropdownUser" data-trigger-for="showDropdownUser"></span>
-                {{ end }}
+            <!-- Settings -->
+            <a href="settings" class="text-muted hover:text-foreground transition-colors" title="Settings" data-i18n-title="nav.settings">
+                <span class="iconify inline text-lg" data-icon="ci:settings-filled"></span>
+            </a>
+        </div>
 
-                <div v-cloak v-show="state.showDropdownUser" class="popup flex z-50 p-2 absolute top-full right-0 mt-1" id="user-menu-popup" style="min-width: 180px;">
-                    <div class="grow flex flex-col">
-                        <div class="submenu-item">
-                            <button class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" @click="state.showApiKey = true" data-trigger-for="showApiKey">
-                                <span data-i18n="nav.show_api_key">Show API Key</span>
-                                <span class="iconify inline text-muted" data-icon="fluent:key-32-filled"></span>
-                            </button>
-                        </div>
-                        {{ if .InvitesEnabled }}
-                        <div class="submenu-item">
-                            <a class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm" href="settings#account">
-                                <span data-i18n="nav.invite_friend">Invite Friend</span>
-                                <span class="iconify inline text-muted" data-icon="mdi:invite"></span>
-                            </a>
-                        </div>
+        <!-- User Menu -->
+        <div class="relative" @click="state.showDropdownUser = !state.showDropdownUser" data-trigger-for="showDropdownUser">
+            <div class="flex items-center cursor-pointer p-2 rounded-lg hover:bg-surface-2 transition-colors">
+                {{ if avatarUrlTemplate }}
+                <img src="{{ .SharedLoggedInViewModel.User.AvatarURL avatarUrlTemplate }}" width="32px" class="rounded-full border border-accent/30 shrink-0" alt="Avatar"/>
+                {{ else }}
+                <span class="iconify inline text-secondary rounded-full shrink-0" style="width: 32px; height: 32px" data-icon="ic:round-person"></span>
+                {{ end }}
+                <div class="ml-3 truncate">
+                    <div class="text-sm font-semibold text-foreground truncate flex items-center">
+                        <span class="truncate">{{ .SharedLoggedInViewModel.User.ID }}</span>
+                        {{ if .SharedLoggedInViewModel.User.HasActiveSubscription }}
+                        <span class="iconify inline text-gold ml-1 shrink-0" data-icon="jam:crown-f" title="Supporter"></span>
                         {{ end }}
-                        <div class="submenu-item">
-                            <form action="logout" method="post" class="grow">
-                                <button type="submit" class="flex justify-between w-full text-foreground items-center px-3 py-1.5 font-medium text-sm">
-                                    <span data-i18n="nav.logout">Logout</span>
-                                    <span class="iconify inline text-muted" data-icon="ls:logout"></span>
-                                </button>
-                            </form>
-                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Popup -->
+            <div v-cloak v-show="state.showDropdownUser" class="popup flex z-50 p-2 absolute bottom-full left-0 mb-2 w-full" id="user-menu-popup-sidebar">
+                <div class="grow flex flex-col">
+                    <div class="sidebar-sub-item w-full cursor-pointer" @click="state.showApiKey = true" data-trigger-for="showApiKey">
+                        <span data-i18n="nav.show_api_key">Show API Key</span>
+                        <span class="iconify inline text-muted" data-icon="fluent:key-32-filled"></span>
+                    </div>
+                    {{ if .InvitesEnabled }}
+                    <a class="sidebar-sub-item w-full" href="settings#account">
+                        <span data-i18n="nav.invite_friend">Invite Friend</span>
+                        <span class="iconify inline text-muted" data-icon="mdi:invite"></span>
+                    </a>
+                    {{ end }}
+                    <form action="logout" method="post" class="w-full">
+                        <button type="submit" class="sidebar-sub-item w-full">
+                            <span data-i18n="nav.logout" class="text-danger">Logout</span>
+                            <span class="iconify inline text-danger" data-icon="ls:logout"></span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</nav>
 
-    <!-- API Key Popup -->
-    <div v-cloak v-show="state.showApiKey" class="popup flex z-50 p-3 absolute top-16 right-4" id="api-key-popup">
-        <div class="grow flex flex-col px-2">
-            <span class="text-xxs text-muted mx-1" data-i18n="nav.api_key">API Key</span>
-            <input type="text" class="bg-transparent text-sm text-foreground mx-1 font-mono mt-1" id="api-key-container" readonly value="{{ .ApiKey }}" style="min-width: 330px">
-        </div>
-        <div class="flex items-center px-2 border-l border-muted/20">
-            <button title="Copy to clipboard" onclick="copyApiKey(event)">
-                <span class="iconify inline text-foreground hover:text-accent transition-colors" data-icon="majesticons:clipboard-copy"></span>
-            </button>
-        </div>
+<!-- MOBILE TOP HEADER (Sticky) -->
+<div class="lg:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-40 border-b no-print" style="background: var(--glass-bg); backdrop-filter: blur(24px); border-bottom-color: var(--glass-border);">
+    <div class="shrink-0 scale-90 origin-left">
+        {{ template "logo.tpl.html" }}
+    </div>
+    <div class="flex items-center space-x-3">
+        <!-- Mobile Theme Toggle -->
+        <button class="text-muted hover:text-foreground transition-colors" onclick="toggleTheme()" title="Toggle theme">
+            <span class="iconify inline text-xl" data-icon="ph:moon-bold" id="theme-icon-dark-mobile"></span>
+            <span class="iconify inline text-xl hidden" data-icon="ph:sun-bold" id="theme-icon-light-mobile"></span>
+        </button>
+        <script>
+            (function() {
+                function updateIconsMob() {
+                    var isDark = !document.documentElement.classList.contains('light');
+                    var dark = document.getElementById('theme-icon-dark-mobile');
+                    var light = document.getElementById('theme-icon-light-mobile');
+                    if (dark && light) {
+                        dark.classList.toggle('hidden', !isDark);
+                        light.classList.toggle('hidden', isDark);
+                    }
+                }
+                var obs2 = new MutationObserver(updateIconsMob);
+                obs2.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+                if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', updateIconsMob); } else { updateIconsMob(); }
+            })();
+        </script>
+        <!-- Settings -->
+        <a href="settings" class="text-muted hover:text-foreground transition-colors">
+            <span class="iconify inline text-xl" data-icon="ci:settings-filled"></span>
+        </a>
+    </div>
+</div>
+
+<!-- MOBILE BOTTOM BAR (Fixed) -->
+<nav class="lg:hidden fixed inset-x-0 bottom-0 z-50 border-t no-print pb-safe" id="mobile-bottom-bar" style="background: var(--glass-bg); backdrop-filter: blur(24px); border-top-color: var(--glass-border);">
+    <div class="flex justify-around items-center px-2 py-2">
+        <a class="mobile-nav-item" href="summary">
+            <span class="iconify inline text-2xl mb-1" data-icon="ic:round-dashboard"></span>
+            <span class="text-xs font-medium" data-i18n="nav.dashboard">Dashboard</span>
+        </a>
+        
+        {{ if .LeaderboardEnabled }}
+        <a class="mobile-nav-item" href="leaderboard">
+            <span class="iconify inline text-2xl mb-1" data-icon="fluent:data-bar-horizontal-24-filled"></span>
+            <span class="text-xs font-medium" data-i18n="nav.leaderboard">Leaderboard</span>
+        </a>
+        {{ end }}
+
+        <a class="mobile-nav-item" href="projects">
+            <span class="iconify inline text-2xl mb-1" data-icon="octicon:project-16"></span>
+            <span class="text-xs font-medium" data-i18n="nav.projects">Projects</span>
+        </a>
     </div>
 </nav>
+
+<!-- Global API Key Popup (Vue scope needs to wrap this or we handle via native JS. Since it's global, we move it out or keep v-scope) -->
+<div v-cloak v-show="state && state.showApiKey" class="popup flex z-50 p-3 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-2xl" id="api-key-popup" style="min-width: 320px;">
+    <div class="grow flex flex-col px-2">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-xs text-muted font-bold uppercase tracking-wider" data-i18n="nav.api_key">API Key</span>
+            <button @click="state.showApiKey = false" class="text-muted hover:text-foreground">✕</button>
+        </div>
+        <input type="text" class="w-full bg-surface-2 text-sm text-foreground py-2 px-3 rounded border border-glass-border font-mono mb-3" id="api-key-container" readonly value="{{ .ApiKey }}">
+        <button class="btn-primary w-full flex justify-center items-center gap-2" onclick="copyApiKey(event)">
+            <span class="iconify inline text-lg" data-icon="majesticons:clipboard-copy"></span>
+            <span data-i18n="common.copy">Copy to clipboard</span>
+        </button>
+    </div>
+</div>
