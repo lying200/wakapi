@@ -12,36 +12,42 @@ PetiteVue.createApp({
             ...tzs.sort().map((tz) => ({ value: tz, text: tz })),
         ];
     },
+    rerenderTranslations() {
+        requestAnimationFrame(() => {
+            window.applyTranslations?.();
+        });
+    },
     updateTab() {
         this.activeTab = window.location.hash.slice(1) || defaultTab;
+        this.rerenderTranslations();
     },
     isActive(tab) {
         return this.activeTab === tab;
     },
     confirmChangeUsername() {
-        if (confirm("Are you sure? This cannot be undone.")) {
+        if (confirm(window.t ? window.t('settings.confirm.change_username') : "Are you sure? This cannot be undone.")) {
             document.querySelector("#form-change-username").submit();
         }
     },
     confirmRegenerate() {
-        if (confirm("Are you sure?")) {
+        if (confirm(window.t ? window.t('settings.confirm.regenerate') : "Are you sure?")) {
             document.querySelector("#form-regenerate-summaries").submit();
         }
     },
     confirmWakatimeImport() {
-        if (confirm("Are you sure? The import can not be undone.")) {
+        if (confirm(window.t ? window.t('settings.confirm.wakatime_import') : "Are you sure? The import can not be undone.")) {
             // weird hack to sync the "legacy importer" form field from the wakatime connection form to the (invisible) import form
             document.getElementById('use_legacy_importer').value = document.getElementById('use_legacy_importer_tmp').checked.toString()
             document.querySelector("#form-import-wakatime").submit();
         }
     },
     confirmClearData() {
-        if (confirm("Are you sure? This can not be undone!")) {
+        if (confirm(window.t ? window.t('settings.confirm.clear_data') : "Are you sure? This can not be undone!")) {
             document.querySelector("#form-clear-data").submit();
         }
     },
     confirmDeleteAccount() {
-        if (confirm("Are you sure? This can not be undone!")) {
+        if (confirm(window.t ? window.t('settings.confirm.delete_account') : "Are you sure? This can not be undone!")) {
             document.querySelector("#form-delete-user").submit();
         }
     },
@@ -70,5 +76,6 @@ PetiteVue.createApp({
     mounted() {
         this.updateTab();
         window.addEventListener("hashchange", () => this.updateTab());
+        this.rerenderTranslations();
     },
 }).mount("#settings-page");

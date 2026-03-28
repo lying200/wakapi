@@ -8,6 +8,15 @@ function TimePicker({ fromDate, toDate, timeSelection }) {
         fromDate: fromDate,
         toDate: toDate,
         timeSelection: timeSelection,
+        intervalLabel(interval) {
+            return window.t ? window.t(`time_picker.${interval}`) : interval
+        },
+        fieldLabel(field) {
+            return window.t ? window.t(`time_picker.${field}`) : field
+        },
+        applyLabel() {
+            return window.t ? window.t('common.apply') : 'Apply'
+        },
         intervalLink(interval) {
             const queryParams = new URLSearchParams(window.location.search)
             queryParams.set('interval', interval)
@@ -24,8 +33,8 @@ function TimePicker({ fromDate, toDate, timeSelection }) {
 
             const query = new URLSearchParams(window.location.search)
             if (query.has('interval')) {
-                const refEl = document.getElementById(`time-option-${query.get('interval')}`)
-                this.timeSelection = refEl ? refEl.childNodes[0].textContent : 'Unknown'
+                const interval = query.get('interval')
+                this.timeSelection = this.intervalLabel(interval)
             }
 
             // Time picker keyboard shortcuts

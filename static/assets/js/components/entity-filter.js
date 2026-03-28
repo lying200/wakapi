@@ -6,7 +6,12 @@ function EntityFilter({type, options, selection}) {
         options: options,
         selection: selection,
         display() {
-            return this.type.capitalize()
+            return window.t ? window.t(`entity_filter.type.${this.type}`) : this.type.capitalize()
+        },
+        placeholder() {
+            return window.t
+                ? window.t('entity_filter.placeholder').replace('{type}', this.display().toLowerCase())
+                : `Filter by ${this.type} ...`
         },
         onSelectionUpdated(e) {
             this.selection = e.target.value == 'null' ? null : e.target.value

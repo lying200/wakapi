@@ -10,7 +10,9 @@
     const userTimeZone = {{ .User.Location }}
     const userTzOffset = {{ localTZOffset.Hours }}
     const signPrefix = userTzOffset >= 0 ? '+' : ''
-    const defaultTzOption = { value: 'Local', text: `Local server time (UTC${signPrefix}${userTzOffset})` }
+    const lang = localStorage.getItem('wakapi_lang') === 'zh' ? 'zh' : 'en'
+    const localServerTimeLabel = lang === 'zh' ? '本地服务器时间' : 'Local server time'
+    const defaultTzOption = { value: 'Local', text: `${localServerTimeLabel} (UTC${signPrefix}${userTzOffset})` }
 </script>
 <script type="module" src="assets/js/components/settings.js"></script>
 
@@ -35,31 +37,31 @@
 
 <main class="flex-1 max-w-screen-xl mx-auto w-full px-4 pt-8 pb-16" v-scope @vue:mounted="mounted" id="settings-page">
     <div class="flex flex-col grow max-w-full">
-        <h1 class="text-headline text-primary mb-6">Settings</h1>
+        <h1 class="text-headline text-primary mb-6" data-i18n="settings.title">Settings</h1>
 
         <ul class="flex gap-2 mb-12 text-muted flex-wrap sm:flex-nowrap">
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('account'), 'hover:text-secondary': !isActive('account') }">
-                <a href="settings#account" @click="updateTab">Account</a>
+                <a href="settings#account" @click="updateTab" data-i18n="settings.tab.account">Account</a>
             </li>
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('data'), 'hover:text-secondary': !isActive('data') }">
-                <a href="settings#data" @click="updateTab">Data</a>
+                <a href="settings#data" @click="updateTab" data-i18n="settings.tab.data">Data</a>
             </li>
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('permissions'), 'hover:text-secondary': !isActive('permissions') }">
-                <a href="settings#permissions" @click="updateTab">Permissions</a>
+                <a href="settings#permissions" @click="updateTab" data-i18n="settings.tab.permissions">Permissions</a>
             </li>
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('integrations'), 'hover:text-secondary': !isActive('integrations') }">
-                <a href="settings#integrations" @click="updateTab">Integrations</a>
+                <a href="settings#integrations" @click="updateTab" data-i18n="settings.tab.integrations">Integrations</a>
             </li>
             {{ if .SubscriptionsEnabled }}
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('subscription'), 'hover:text-secondary': !isActive('subscription') }">
-                <a href="settings#subscription" @click="updateTab">Subscription</a>
+                <a href="settings#subscription" @click="updateTab" data-i18n="settings.tab.subscription">Subscription</a>
             </li>
             {{ end }}
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('api_keys'), 'hover:text-secondary': !isActive('api_keys') }">
-                <a href="settings#api_keys" @click="updateTab">API Keys</a>
+                <a href="settings#api_keys" @click="updateTab" data-i18n="settings.tab.api_keys">API Keys</a>
             </li>
             <li class="font-semibold text-lg" v-bind:class="{ 'text-foreground': isActive('danger_zone'), 'hover:text-secondary': !isActive('danger_zone') }">
-                <a href="settings#danger_zone" @click="updateTab">Danger Zone</a>
+                <a href="settings#danger_zone" @click="updateTab" data-i18n="settings.tab.danger_zone">Danger Zone</a>
             </li>
         </ul>
 
@@ -70,8 +72,8 @@
 
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="select-timezone">Time Zone</label>
-                        <span class="block text-sm text-muted">Time Zone, which you are located in. Relevant for displaying daily statistics.</span>
+                        <label class="font-semibold text-foreground" for="select-timezone" data-i18n="settings.account.timezone.label">Time Zone</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.timezone.desc">Time Zone, which you are located in. Relevant for displaying daily statistics.</span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <select name="location" id="select-timezone" class="select-default" v-model="selectedTimezone">
@@ -82,32 +84,32 @@
 
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="select-start-of-week">Start of Week</label>
-                        <span class="block text-sm text-muted">Choose which day your week starts on. This affects "This Week" and "Last Week" intervals.</span>
+                        <label class="font-semibold text-foreground" for="select-start-of-week" data-i18n="settings.account.start_of_week.label">Start of Week</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.start_of_week.desc">Choose which day your week starts on. This affects "This Week" and "Last Week" intervals.</span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <select name="start_of_week" id="select-start-of-week" class="select-default">
-                            <option value="0" {{ if eq .User.StartOfWeek 0 }}selected{{ end }}>Sunday</option>
-                            <option value="1" {{ if eq .User.StartOfWeek 1 }}selected{{ end }}>Monday</option>
-                            <option value="2" {{ if eq .User.StartOfWeek 2 }}selected{{ end }}>Tuesday</option>
-                            <option value="3" {{ if eq .User.StartOfWeek 3 }}selected{{ end }}>Wednesday</option>
-                            <option value="4" {{ if eq .User.StartOfWeek 4 }}selected{{ end }}>Thursday</option>
-                            <option value="5" {{ if eq .User.StartOfWeek 5 }}selected{{ end }}>Friday</option>
-                            <option value="6" {{ if eq .User.StartOfWeek 6 }}selected{{ end }}>Saturday</option>
+                            <option value="0" data-i18n="weekday.sunday" {{ if eq .User.StartOfWeek 0 }}selected{{ end }}>Sunday</option>
+                            <option value="1" data-i18n="weekday.monday" {{ if eq .User.StartOfWeek 1 }}selected{{ end }}>Monday</option>
+                            <option value="2" data-i18n="weekday.tuesday" {{ if eq .User.StartOfWeek 2 }}selected{{ end }}>Tuesday</option>
+                            <option value="3" data-i18n="weekday.wednesday" {{ if eq .User.StartOfWeek 3 }}selected{{ end }}>Wednesday</option>
+                            <option value="4" data-i18n="weekday.thursday" {{ if eq .User.StartOfWeek 4 }}selected{{ end }}>Thursday</option>
+                            <option value="5" data-i18n="weekday.friday" {{ if eq .User.StartOfWeek 5 }}selected{{ end }}>Friday</option>
+                            <option value="6" data-i18n="weekday.saturday" {{ if eq .User.StartOfWeek 6 }}selected{{ end }}>Saturday</option>
                         </select>
                     </div>
                 </div>
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="email">E-Mail Address</label>
-                        <span class="block text-sm text-muted">
+                        <label class="font-semibold text-foreground" for="email" data-i18n="settings.account.email.label">E-Mail Address</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.email.desc">
                             Optional in general, but required for weekly reports and for resetting your password.
                         </span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <input class="input-default {{ if .User.HasActiveSubscription }}cursor-not-allowed{{ end }}"
                                type="email" id="email"
-                               name="email" placeholder="Enter your e-mail address"
+                               name="email" placeholder="Enter your e-mail address" data-i18n-placeholder="settings.account.email.placeholder"
                                value="{{ .User.Email }}"
                         >
                     </div>
@@ -116,14 +118,14 @@
                 {{ if .User.Email }}
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="reports_weekly">Weekly E-Mail Reports</label>
-                        <span class="block text-sm text-muted">Opt in to receive a summary of your coding activity once a week.</span>
+                        <label class="font-semibold text-foreground" for="reports_weekly" data-i18n="settings.account.weekly_reports.label">Weekly E-Mail Reports</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.weekly_reports.desc">Opt in to receive a summary of your coding activity once a week.</span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <select autocomplete="off" id="reports_weekly" name="reports_weekly"
                                 class="select-default">
-                            <option value="false" class="cursor-pointer" {{ if not .User.ReportsWeekly }} selected{{ end }}>Disabled</option>
-                            <option value="true" class="cursor-pointer" {{ if .User.ReportsWeekly }} selected {{ end }}>Enabled</option>
+                            <option value="false" class="cursor-pointer" data-i18n="common.disabled" {{ if not .User.ReportsWeekly }} selected{{ end }}>Disabled</option>
+                            <option value="true" class="cursor-pointer" data-i18n="common.enabled" {{ if .User.ReportsWeekly }} selected {{ end }}>Enabled</option>
                         </select>
                     </div>
                 </div>
@@ -131,7 +133,7 @@
 
                 <div class="flex justify-end mt-4">
                     <button type="submit" class="btn-primary">
-                        Save
+                        <span data-i18n="common.save">Save</span>
                     </button>
                 </div>
             </form>
@@ -147,43 +149,43 @@
 
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="password_old">Current Password</label>
-                        <span class="block text-sm text-muted">Enter your old password for verification.</span>
+                        <label class="font-semibold text-foreground" for="password_old" data-i18n="settings.account.password.current">Current Password</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.password.current_desc">Enter your old password for verification.</span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <input class="input-default"
                                type="password" id="password_old"
-                               name="password_old" placeholder="Old password" minlength="6" required>
+                               name="password_old" placeholder="Old password" data-i18n-placeholder="settings.account.password.old_placeholder" minlength="6" required>
                     </div>
                 </div>
 
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="password_new">New Password</label>
-                        <span class="block text-sm text-muted">Choose a new password. Preferably, it is at least 8 characters long and contains letters, digits and special chars.</span>
+                        <label class="font-semibold text-foreground" for="password_new" data-i18n="settings.account.password.new">New Password</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.password.new_desc">Choose a new password. Preferably, it is at least 8 characters long and contains letters, digits and special chars.</span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <input class="input-default"
                                type="password" id="password_new"
-                               name="password_new" placeholder="New password" minlength="6" required>
+                               name="password_new" placeholder="New password" data-i18n-placeholder="settings.account.password.new_placeholder" minlength="6" required>
                     </div>
                 </div>
 
                 <div class="flex mb-8">
                     <div class="w-1/2 mr-4 inline-block">
-                        <label class="font-semibold text-foreground" for="password_repeat">Repeat Password</label>
-                        <span class="block text-sm text-muted">Once again ...</span>
+                        <label class="font-semibold text-foreground" for="password_repeat" data-i18n="settings.account.password.repeat">Repeat Password</label>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.password.repeat_desc">Once again ...</span>
                     </div>
                     <div class="w-1/2 ml-4">
                         <input class="input-default"
                                type="password" id="password_repeat"
-                               name="password_repeat" placeholder="Repeat your password" minlength="6" required>
+                               name="password_repeat" placeholder="Repeat your password" data-i18n-placeholder="settings.account.password.repeat_placeholder" minlength="6" required>
                     </div>
                 </div>
 
                 <div class="flex justify-end mt-4">
                     <button type="submit" class="btn-primary">
-                        Save
+                        <span data-i18n="common.save">Save</span>
                     </button>
                 </div>
             </form>
@@ -196,15 +198,15 @@
             </div>
 
             <div class="w-full lg:w-3/4">
-                <span class="flex font-semibold text-foreground text-lg mb-2">Passkeys</span>
+                <span class="flex font-semibold text-foreground text-lg mb-2" data-i18n="settings.account.passkeys.title">Passkeys</span>
                 {{ if .WebAuthnCredentials }}
                 <table class="w-full">
                     <thead>
                     <tr>
-                        <th class="text-left py-2 text-muted w-1/4">Name</th>
-                        <th class="text-left py-2 text-muted w-1/3">Created</th>
-                        <th class="text-left py-2 text-muted w-1/4">Last Used</th>
-                        <th class="text-center py-2 text-muted w-1/6">Actions</th>
+                        <th class="text-left py-2 text-muted w-1/4" data-i18n="common.name">Name</th>
+                        <th class="text-left py-2 text-muted w-1/3" data-i18n="common.created">Created</th>
+                        <th class="text-left py-2 text-muted w-1/4" data-i18n="common.last_used">Last Used</th>
+                        <th class="text-center py-2 text-muted w-1/6" data-i18n="common.actions">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -217,7 +219,7 @@
                             <form action="" method="post" class="inline">
                                 <input type="hidden" name="action" value="webauthn_delete">
                                 <input type="hidden" name="credential_name" value="{{ $credential.Name }}">
-                                <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-danger text-sm" title="Delete passkey">✕</button>
+                                <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-danger text-sm" title="Delete passkey" data-i18n-title="settings.account.passkeys.delete_title">✕</button>
                             </form>
                         </td>
                     </tr>
@@ -229,18 +231,18 @@
 
             <div class="flex w-full lg:w-3/4 justify-between items-center" id="form-webauthn-add-container">
                 <div class="w-1/2 mb-2">
-                    <span class="font-semibold text-foreground text-lg">Add Passkey</span>
-                    <span class="block text-sm text-muted">Register a new security key or biometric passkey to your account.</span>
+                    <span class="font-semibold text-foreground text-lg" data-i18n="settings.account.passkeys.add_title">Add Passkey</span>
+                    <span class="block text-sm text-muted" data-i18n="settings.account.passkeys.add_desc">Register a new security key or biometric passkey to your account.</span>
                 </div>
 
                 <form class="flex justify-end shrink-0" action="" id="form-webauthn-add" method="post" @submit.prevent="webAuthnAdd">
                     <input type="hidden" name="action" value="webauthn_add">
                     <div class="flex gap-2 items-center justify-end">
                         <input class="appearance-none bg-card text-foreground outline-none rounded py-2 px-4 focus:bg-focused" id="authenticator_name"
-                               name="authenticator_name" placeholder="Authenticator Name" required>
+                               name="authenticator_name" placeholder="Authenticator Name" data-i18n-placeholder="settings.account.passkeys.authenticator_placeholder" required>
                         <input type="hidden" id="credential_json" name="credential_json">
                         <button type="submit" class="btn-primary">
-                            Next
+                            <span data-i18n="common.next">Next</span>
                         </button>
                     </div>
                 </form>
@@ -258,14 +260,14 @@
 
                 <div class="flex mb-8">
                     <div class="w-2/3 mr-4 inline-block">
-                        <span class="font-semibold text-foreground">Invite Friends</span>
-                        <span class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground" data-i18n="settings.account.invites.title">Invite Friends</span>
+                        <span class="block text-sm text-muted" data-i18n="settings.account.invites.desc">
                             You can invite new users to Wakapi with an exclusive code. Click to generate one and then send the link to your friend. Thanks for spreading Wakapi to the world!
                         </span>
 
                         {{ if ne .InviteLink "" }}
                         <div class="mt-4">
-                            <label class="text-sm text-foreground mb-2" for="invite_code_result">Success! Here's your invite link:</label>
+                            <label class="text-sm text-foreground mb-2" for="invite_code_result" data-i18n="settings.account.invites.success">Success! Here's your invite link:</label>
                             <input type="url" name="invite_code" id="invite_code_result"
                                    class="w-full appearance-none bg-card text-foreground outline-none rounded py-2 px-4 mb-2 cursor-not-allowed font-mono text-sm"
                                    readonly value="{{ .InviteLink }}">
@@ -274,7 +276,7 @@
                     </div>
                     {{ if eq .InviteLink "" }}
                     <div class="w-1/3 ml-4 flex items-center justify-end">
-                        <button type="submit" class="btn-primary ml-1">Generate</button>
+                        <button type="submit" class="btn-primary ml-1" data-i18n="common.generate">Generate</button>
                     </div>
                     {{ end }}
                 </div>
@@ -290,8 +292,8 @@
                 <input type="hidden" name="action" value="update_unknown_projects">
                 <div class="flex flex-wrap md:flex-nowrap mb-2 gap-x-4">
                     <div class="w-full md:w-1/3 mb-2 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Unknown Projects</span>
-                        <p class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.data.unknown_projects.title">Unknown Projects</span>
+                        <p class="block text-sm text-muted" data-i18n="settings.data.unknown_projects.desc">
                             You can choose to exclude and ignore coding stats from unknown projects. Changing this setting will require to recompute your statistics.
                         </p>
                     </div>
@@ -299,15 +301,15 @@
                     <div class="flex-col w-full md:w-2/3 inline-block space-y-4">
                         <div class="flex justify-between items-center">
                             <div class="flex flex-col gap-y-1">
-                                <label class="font-semibold text-foreground" for="unknown-projects-toggle">Exclude unknown projects</label>
+                                <label class="font-semibold text-foreground" for="unknown-projects-toggle" data-i18n="settings.data.unknown_projects.exclude_label">Exclude unknown projects</label>
                                 <select autocomplete="off" id="unknown-projects-toggle" name="exclude_unknown_projects" class="select-default wi-min">
-                                    <option value="false" class="cursor-pointer" {{ if not .User.ExcludeUnknownProjects }} selected {{ end }}>No
+                                    <option value="false" class="cursor-pointer" data-i18n="common.no" {{ if not .User.ExcludeUnknownProjects }} selected {{ end }}>No
                                     </option>
-                                    <option value="true" class="cursor-pointer" {{ if .User.ExcludeUnknownProjects }} selected {{ end }}>Yes
+                                    <option value="true" class="cursor-pointer" data-i18n="common.yes" {{ if .User.ExcludeUnknownProjects }} selected {{ end }}>Yes
                                     </option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn-primary h-min">Save</button>
+                            <button type="submit" class="btn-primary h-min" data-i18n="common.save">Save</button>
                         </div>
                     </div>
                 </div>
@@ -321,14 +323,14 @@
             <div class="w-full">
                 <div class="flex flex-wrap flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/3 mb-4 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Aliases</span>
-                        <p class="block text-sm text-muted">You can specify aliases for any type of entity. For instance, you can define a rule, that both "myapp-frontend" and "myapp-backend" are combined under a project called "myapp".</p>
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.data.aliases.title">Aliases</span>
+                        <p class="block text-sm text-muted" data-i18n="settings.data.aliases.desc">You can specify aliases for any type of entity. For instance, you can define a rule, that both "myapp-frontend" and "myapp-backend" are combined under a project called "myapp".</p>
                     </div>
 
                     <div class="w-full md:w-2/3 inline-block">
                         {{ if .Aliases }}
                         <div class="mb-8">
-                            <h3 class="inline-block font-semibold text-foreground">Rules</h3>
+                            <h3 class="inline-block font-semibold text-foreground" data-i18n="settings.data.rules">Rules</h3>
                             {{ range $i, $alias := .Aliases }}
                             <div class="flex items-center">
                                 <div class="text-foreground border-1 w-full inline-block my-1 py-1 text-align text-sm"
@@ -349,7 +351,7 @@
                                     <input type="hidden" name="action" value="delete_alias">
                                     <input type="hidden" id="delete_alias_key" name="key" required value="{{ $alias.Key }}">
                                     <input type="hidden" id="delete_alias_type" name="type" required value="{{ $alias.Type }}">
-                                    <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-red-600 text-sm" title="Delete rule">✕</button>
+                                    <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-red-600 text-sm" title="Delete rule" data-i18n-title="settings.data.delete_rule_title">✕</button>
                                 </form>
                             </div>
                             {{end}}
@@ -357,33 +359,31 @@
                         {{end}}
 
                         <form action="" method="post" class="mb-2">
-                            <h3 class="inline-block font-semibold text-foreground">Add Rule</h3>
+                            <h3 class="inline-block font-semibold text-foreground" data-i18n="settings.data.add_rule">Add Rule</h3>
 
                             <input type="hidden" name="action" value="add_alias">
                             <div class="flex items-center mt-2 w-full text-secondary text-sm">
-                                <span class="mr-2">Map</span>
+                                <span class="mr-2" data-i18n="settings.data.aliases.map">Map</span>
                                 <select name="type" id="select-type" class="select-default" style="max-width: 256px">
                                     {{ range $i, $t := entityTypes }}
                                     <option value="{{ $t }}">{{ $t | typeName | capitalize }}</option>
                                     {{ end }}
                                 </select>
-                                <span class="mx-2">named</span>
+                                <span class="mx-2" data-i18n="settings.data.aliases.named">named</span>
                                 <input class="input-default"
                                        type="text" id="alias-value" style="width: 130px;"
-                                       name="value" placeholder="Original name" minlength="1" required>
-                                <span class="mx-2">to</span>
+                                       name="value" placeholder="Original name" data-i18n-placeholder="settings.data.aliases.original_name" minlength="1" required>
+                                <span class="mx-2" data-i18n="settings.data.aliases.to">to</span>
                                 <input class="input-default"
                                        type="text" id="alias-key" style="width: 100px"
-                                       name="key" placeholder="Replacement" minlength="1" required>
+                                       name="key" placeholder="Replacement" data-i18n-placeholder="settings.data.aliases.replacement" minlength="1" required>
                                 <div class="flex justify-end ml-4">
-                                    <button type="submit" class="btn-primary">
-                                        Add
-                                    </button>
+                                    <button type="submit" class="btn-primary" data-i18n="common.add">Add</button>
                                 </div>
                             </div>
                         </form>
 
-                        <p class="text-sm text-muted">Wildcard patterns are supported, see <a href="https://github.com/becheran/wildmatch-go" target="_blank" rel="noopener noreferrer" class="link">here</a>.</p>
+                        <p class="text-sm text-muted"><span data-i18n="settings.data.aliases.wildcard_prefix">Wildcard patterns are supported, see</span> <a href="https://github.com/becheran/wildmatch-go" target="_blank" rel="noopener noreferrer" class="link" data-i18n="settings.data.here">here</a>.</p>
                     </div>
                 </div>
             </div>
@@ -396,14 +396,14 @@
             <div class="w-full">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/3 mb-4 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Project Labels</span>
-                        <p class="block text-sm text-muted">You can assign labels (aka. tags) to projects to group them together, e.g. by "private" and "work".</p>
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.data.project_labels.title">Project Labels</span>
+                        <p class="block text-sm text-muted" data-i18n="settings.data.project_labels.desc">You can assign labels (aka. tags) to projects to group them together, e.g. by "private" and "work".</p>
                     </div>
 
                     <div class="w-full md:w-2/3 inline-block">
                         {{ if .Labels }}
                         <div class="mb-8">
-                            <h3 class="inline-block font-semibold text-foreground">Your labels</h3>
+                            <h3 class="inline-block font-semibold text-foreground" data-i18n="settings.data.project_labels.your_labels">Your labels</h3>
                             {{ range $i, $label := .Labels }}
                             <div class="flex items-center">
                                 <div class="text-secondary border-1 w-full border-accent inline-block my-1 py-1 text-align text-sm"
@@ -415,7 +415,7 @@
                                         <input type="hidden" name="key" value="{{ $label.Key }}">
                                         <input type="hidden" name="value" value="{{ $value }}">
                                         <span>{{- $value -}}</span>
-                                        <button type="submit" class="bg-background text-center hover:bg-muted rounded-full w-4 h-4 leading-none text-danger" title="Delete label">x</button>
+                                        <button type="submit" class="bg-background text-center hover:bg-muted rounded-full w-4 h-4 leading-none text-danger" title="Delete label" data-i18n-title="settings.data.project_labels.delete_label_title">x</button>
                                     </form>
                                     {{ end }}
                                     <div class="ml-3 inline">
@@ -445,25 +445,23 @@
                         {{end}}
 
                         {{ if .Projects }}
-                        <h3 class="inline-block font-semibold text-foreground">Bulk association</h3>
-                        <p class="text-sm text-muted">Associate a label with multiple projects</p>
+                        <h3 class="inline-block font-semibold text-foreground" data-i18n="settings.data.project_labels.bulk_association">Bulk association</h3>
+                        <p class="text-sm text-muted" data-i18n="settings.data.project_labels.bulk_desc">Associate a label with multiple projects</p>
                         <form action="" method="post">
                             <input type="hidden" name="action" value="add_label">
                             <input type="hidden" name="num_projects" value="multiple">
                             <div class="mt-2 w-1/2 space-y-4 text-secondary text-sm flex-col flex">
-                                <input class="input-default block" name="value" placeholder="Label" required>
+                                <input class="input-default block" name="value" placeholder="Label" data-i18n-placeholder="settings.data.project_labels.label_placeholder" required>
                                 <select name="key" class="block w-full p-2.5 select-default grow" multiple required>
                                     {{ range $i, $p := .Projects }}
                                     <option value="{{ $p }}" class="bg-transparent checked:text-green-500">{{ $p }}</option>
                                     {{ end }}
                                 </select>
-                                <button type="submit" class="btn-primary">
-                                    Submit
-                                </button>
+                                <button type="submit" class="btn-primary" data-i18n="common.submit">Submit</button>
                             </div>
                         </form>
                         {{ else }}
-                        <div class="text-foreground text-sm mb-4 mt-6">You don't have any projects, yet. Start out by sending a few heartbeats before you can then assign labels.</div>
+                        <div class="text-foreground text-sm mb-4 mt-6" data-i18n="settings.data.project_labels.no_projects">You don't have any projects, yet. Start out by sending a few heartbeats before you can then assign labels.</div>
                         {{ end }}
                     </div>
                 </div>
@@ -477,14 +475,14 @@
             <div class="w-full">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/3 mb-4 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Language Mappings</span>
-                        <p class="block text-sm text-muted">You can specify custom mapping from file extensions to programming languages, for instance a ".jsx" file could be mapped to the "React" language.</p>
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.data.language_mappings.title">Language Mappings</span>
+                        <p class="block text-sm text-muted" data-i18n="settings.data.language_mappings.desc">You can specify custom mapping from file extensions to programming languages, for instance a ".jsx" file could be mapped to the "React" language.</p>
                     </div>
 
                     <div class="w-full md:w-2/3 inline-block">
                         {{ if .LanguageMappings }}
                         <div class="mb-8">
-                            <h3 class="inline-block font-semibold text-foreground">Rules</h3>
+                            <h3 class="inline-block font-semibold text-foreground" data-i18n="settings.data.rules">Rules</h3>
                             {{ range $i, $mapping := .LanguageMappings }}
                             <div class="flex items-center mb-2">
                                 <div class="text-foreground border-1 w-full inline-block my-1 py-1 text-align text-sm">
@@ -496,7 +494,7 @@
                                 <form class="float-right" action="" method="post">
                                     <input type="hidden" name="action" value="delete_mapping">
                                     <input type="hidden" id="mapping_id" name="mapping_id" required value="{{ $mapping.ID }}">
-                                    <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-danger text-sm" title="Delete rule">✕</button>
+                                    <button type="submit" class="py-2 px-4 rounded bg-card hover:bg-focused text-danger text-sm" title="Delete rule" data-i18n-title="settings.data.delete_rule_title">✕</button>
                                 </form>
                             </div>
                             {{end}}
@@ -504,22 +502,20 @@
                         {{end}}
 
                         <form action="" method="post">
-                            <h3 class="inline-block font-semibold text-foreground">Add Rule</h3>
+                            <h3 class="inline-block font-semibold text-foreground" data-i18n="settings.data.add_rule">Add Rule</h3>
 
                             <input type="hidden" name="action" value="add_mapping">
                             <div class="flex items-center w-full text-secondary text-sm">
-                                <span class="mr-2">When filename ends in</span>
+                                <span class="mr-2" data-i18n="settings.data.language_mappings.when_filename_ends_in">When filename ends in</span>
                                 <input class="input-default grow"
                                        type="text" id="extension" style="width: 70px"
                                        name="extension" placeholder=".py" minlength="1" required>
-                                <span class="mx-2">change language to</span>
+                                <span class="mx-2" data-i18n="settings.data.language_mappings.change_language_to">change language to</span>
                                 <input class="input-default grow"
                                        type="text" id="language" style="width: 100px"
                                        name="language" placeholder="Python" minlength="1" required>
                                 <div class="flex justify-end ml-4">
-                                    <button type="submit" class="btn-primary">
-                                        Add
-                                    </button>
+                                    <button type="submit" class="btn-primary" data-i18n="common.add">Add</button>
                                 </div>
                             </div>
                         </form>
@@ -536,8 +532,8 @@
                 <input type="hidden" name="action" value="update_heartbeats_timeout">
                 <div class="flex flex-wrap md:flex-nowrap mb-2 gap-x-4">
                     <div class="w-full md:w-1/3 mb-2 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Heartbeats Timeout</span>
-                        <p class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.data.heartbeats_timeout.title">Heartbeats Timeout</span>
+                        <p class="block text-sm text-muted" data-i18n-html="settings.data.heartbeats_timeout.desc">
                             This parameter affects the heuristic based on which a series of consecutive heartbeats sent by your IDE are aggregated to total coding time. Please see the <i>"How are durations calculated?"</i> section in our <a class="link" href="https://github.com/muety/wakapi?tab=readme-ov-file#-faqs" rel="noreferrer noopener" target="_blank">FAQs</a> as well as the discussion in <a class="link" href="https://github.com/muety/wakapi/issues/156" rel="noreferrer noopener" target="_blank">#156</a>.
                         </p>
                     </div>
@@ -545,13 +541,13 @@
                     <div class="flex-col w-full md:w-2/3 inline-block space-y-4">
                         <div class="flex justify-between items-center">
                             <div class="flex flex-col flex-grow gap-y-1">
-                                <label class="font-semibold text-foreground" for="heartbeats_timeout">Timeout / offset (minutes)</label>
+                                <label class="font-semibold text-foreground" for="heartbeats_timeout" data-i18n="settings.data.heartbeats_timeout.label">Timeout / offset (minutes)</label>
                                 <div class="flex gap-x-2 items-center">
                                     <input class="input-default" type="number" id="heartbeats_timeout" name="heartbeats_timeout" style="max-width: 100px;" placeholder="1" min="1" max="60" step="1" required value="{{ .User.HeartbeatsTimeoutMin }}">
-                                    <span class="text-muted text-sm">(min. 1 min, max. 60 min)</span>
+                                    <span class="text-muted text-sm" data-i18n="settings.data.heartbeats_timeout.hint">(min. 1 min, max. 60 min)</span>
                                 </div>
                             </div>
-                            <button type="submit" class="btn-primary h-min">Save</button>
+                            <button type="submit" class="btn-primary h-min" data-i18n="common.save">Save</button>
                         </div>
                     </div>
                 </div>
@@ -565,15 +561,15 @@
             <div class="w-full">
                 <div class="flex flex-wrap md:flex-nowrap mb-8 gap-x-4">
                     <div class="w-full md:w-1/3 mb-4 md:mb-0 inline-block">
-                        <span class="font-semibold text-foreground text-lg">Vibrant Colors</span>
-                        <p class="block text-sm text-muted">You can view the entire summary in vibrant colors similar to the "Languages" chart. Note that this setting is saved in your web browser only.</p>
+                        <span class="font-semibold text-foreground text-lg" data-i18n="settings.data.vibrant_colors.title">Vibrant Colors</span>
+                        <p class="block text-sm text-muted" data-i18n="settings.data.vibrant_colors.desc">You can view the entire summary in vibrant colors similar to the "Languages" chart. Note that this setting is saved in your web browser only.</p>
                     </div>
 
                     <div class="w-full md:w-2/3 inline-block">
                         <div class="flex-col items-center w-full text-secondary text-sm">
                             <select autocomplete="off" id="vibrant-color-toggle" class="select-default" style="max-width: 6rem" v-model="vibrantColorsEnabled" @change="onToggleVibrantColors">
-                                <option value="false" class="cursor-pointer">Disabled</option>
-                                <option value="true" class="cursor-pointer">Enabled</option>
+                                <option value="false" class="cursor-pointer" data-i18n="common.disabled">Disabled</option>
+                                <option value="true" class="cursor-pointer" data-i18n="common.enabled">Enabled</option>
                             </select>
                         </div>
                     </div>
@@ -1062,13 +1058,13 @@
                     <input type="hidden" name="action" value="regenerate_summaries">
 
                     <div class="w-1/2 mr-4 inline-block">
-                        <span class="font-semibold text-foreground">Regenerate Summaries</span>
-                        <span class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground" data-i18n="settings.danger.regenerate.title">Regenerate Summaries</span>
+                        <span class="block text-sm text-muted" data-i18n="settings.danger.regenerate.desc">
                             Regenerate all pre-computed summaries from raw heartbeat data. This may be useful if, for some reason, summaries are faulty or preconditions have change (e.g. you modified language mappings retrospectively). This may take some time. Be careful and only run this action if you know, what your are doing, as data loss might occur.
                         </span>
                     </div>
                     <div class="w-1/2 ml-4 flex items-center">
-                        <button type="button" class="btn-danger ml-1" @click.stop="confirmRegenerate">Clear and regenerate</button>
+                        <button type="button" class="btn-danger ml-1" @click.stop="confirmRegenerate" data-i18n="settings.danger.regenerate.action">Clear and regenerate</button>
                     </div>
                 </form>
 
@@ -1076,13 +1072,13 @@
                     <input type="hidden" name="action" value="clear_data">
 
                     <div class="w-1/2 mr-4 inline-block">
-                        <span class="font-semibold text-foreground">Clear Data</span>
-                        <span class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground" data-i18n="settings.danger.clear_data.title">Clear Data</span>
+                        <span class="block text-sm text-muted" data-i18n="settings.danger.clear_data.desc">
                             Clear all your time tracking data from Wakapi. This cannot be undone. Be careful!
                         </span>
                     </div>
                     <div class="w-1/2 ml-4 flex items-center">
-                        <button type="button" class="btn-danger ml-1" @click.stop="confirmClearData">Clear data</button>
+                        <button type="button" class="btn-danger ml-1" @click.stop="confirmClearData" data-i18n="settings.danger.clear_data.action">Clear data</button>
                     </div>
                 </form>
 
@@ -1090,16 +1086,16 @@
                     <input type="hidden" name="action" value="change_userid">
 
                     <div class="w-1/2 mr-4 inline-block">
-                        <span class="font-semibold text-foreground">Change Username</span>
-                        <span class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground" data-i18n="settings.danger.change_username.title">Change Username</span>
+                        <span class="block text-sm text-muted" data-i18n="settings.danger.change_username.desc">
                             You can change your username, even though it is not recommended. Afterwards, you will only be able to log in via the new user name. Also, all externally referenced URLs etc. must be updated. This may take up to a few minutes.
                         </span>
                     </div>
                     <div class="w-1/2 ml-4 gap-x-2 flex items-center">
                         <input class="input-default {{ if .User.HasActiveSubscription }}cursor-not-allowed{{ end }}"
                                type="text" id="new_userid"
-                               name="new_userid" placeholder="Choose new username ..." style="width: auto;">
-                        <button type="button" class="btn-danger ml-1" @click.stop="confirmChangeUsername">Apply</button>
+                               name="new_userid" placeholder="Choose new username ..." data-i18n-placeholder="settings.danger.change_username.placeholder" style="width: auto;">
+                        <button type="button" class="btn-danger ml-1" @click.stop="confirmChangeUsername" data-i18n="common.apply">Apply</button>
                     </div>
                 </form>
 
@@ -1107,13 +1103,13 @@
                     <input type="hidden" name="action" value="delete_account">
 
                     <div class="w-1/2 mr-4 inline-block">
-                        <span class="font-semibold text-foreground">Delete Account</span>
-                        <span class="block text-sm text-muted">
+                        <span class="font-semibold text-foreground" data-i18n="settings.danger.delete_account.title">Delete Account</span>
+                        <span class="block text-sm text-muted" data-i18n="settings.danger.delete_account.desc">
                             Deleting your account will cause all data, including all your heartbeats, to be erased from the server immediately. This action is irreversible. Be careful!
                         </span>
                     </div>
                     <div class="w-1/2 ml-4 flex items-center">
-                        <button type="button" class="btn-danger ml-1" @click.stop="confirmDeleteAccount">Delete account</button>
+                        <button type="button" class="btn-danger ml-1" @click.stop="confirmDeleteAccount" data-i18n="settings.danger.delete_account.action">Delete account</button>
                     </div>
                 </form>
             </div>
