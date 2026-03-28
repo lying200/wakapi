@@ -524,7 +524,7 @@ function draw(subselection) {
                         data: [parseInt(p.total)],
                         backgroundColor: vibrantColors ? getRandomColor(p.key) : getColor(p.key, i % baseColors.length),
                         barPercentage: 1.0,
-                        borderRadius: 999,
+                        borderRadius: 0,
                         borderSkipped: false,
                     })),
             },
@@ -569,7 +569,7 @@ function draw(subselection) {
                         data: wakapiData.timelineStats.map(day => day.projects.reduce((acc, p) => p.name === project ? acc + p.duration : acc, 0)),
                         backgroundColor: vibrantColors ? getRandomColor(project) : getColor(project, i % baseColors.length),
                         barPercentage: 1.0,
-                        borderRadius: 8,
+                        borderRadius: 0,
                         borderSkipped: false,
                     }))
             },
