@@ -169,7 +169,7 @@ main {
 
 .glass-input:focus {
     border-color: rgb(var(--accent));
-    box-shadow: 0 0 0 3px rgba(var(--accent), 0.15);
+    box-shadow: 0 0 0 3px rgb(var(--accent) / 0.15);
     outline: none;
 }
 
@@ -200,7 +200,7 @@ main {
 .aurora-bg::before {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(var(--gradient-start), 0.3), transparent 70%);
+    background: radial-gradient(circle, rgb(var(--gradient-start) / 0.3), transparent 70%);
     top: -200px;
     right: -100px;
     animation-delay: 0s;
@@ -209,7 +209,7 @@ main {
 .aurora-bg::after {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(var(--gradient-end), 0.25), transparent 70%);
+    background: radial-gradient(circle, rgb(var(--gradient-end) / 0.25), transparent 70%);
     bottom: -150px;
     left: -100px;
     animation-delay: -10s;
@@ -382,7 +382,7 @@ main {
 
 .btn-danger:hover {
     opacity: 0.9;
-    box-shadow: 0 0 20px rgba(var(--danger), 0.2);
+    box-shadow: 0 0 20px rgb(var(--danger) / 0.2);
     transform: translateY(-1px);
 }
 
@@ -415,7 +415,7 @@ main {
 
 .input-default:focus {
     border-color: rgb(var(--accent));
-    box-shadow: 0 0 0 3px rgba(var(--accent), 0.15);
+    box-shadow: 0 0 0 3px rgb(var(--accent) / 0.15);
     background: rgb(var(--card));
 }
 
@@ -515,7 +515,7 @@ main {
     /* Move it slightly outside so the blur bleeds beautifully */
     top: -5px; bottom: -5px; left: -5px; right: -5px;
     z-index: -1;
-    background: radial-gradient(circle at center, rgba(var(--accent), 0.8) 0%, rgba(var(--gradient-mid), 0.4) 50%, transparent 80%);
+    background: radial-gradient(circle at center, rgb(var(--accent) / 0.8) 0%, rgb(var(--gradient-mid) / 0.4) 50%, transparent 80%);
     opacity: 0;
     filter: blur(24px);
     border-radius: inherit;
