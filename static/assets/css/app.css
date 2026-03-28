@@ -506,27 +506,29 @@ main {
    ============================================ */
 .glass-card, .bento-card, .kpi-card {
     isolation: isolate; /* ensures the glow stays behind the element context */
-    overflow: visible !important;
+    overflow: hidden; /* We now use overflow hidden so the light spot is contained cleanly inside the card and shines through the glass */
+    --mouse-x: 50%;
+    --mouse-y: 50%;
 }
 
 .glass-card::after, .bento-card::after, .kpi-card::after {
     content: '';
     position: absolute;
-    /* Move it slightly outside so the blur bleeds beautifully */
-    top: -5px; bottom: -5px; left: -5px; right: -5px;
+    width: 400px;
+    height: 400px;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
     z-index: -1;
-    background: radial-gradient(circle at center, rgb(var(--accent) / 0.8) 0%, rgb(var(--gradient-mid) / 0.4) 50%, transparent 80%);
+    background: radial-gradient(circle at center, rgb(var(--accent) / 0.25) 0%, rgb(var(--gradient-mid) / 0.1) 40%, transparent 70%);
     opacity: 0;
-    filter: blur(24px);
-    border-radius: inherit;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(0.95) translateY(5px);
+    border-radius: 50%;
+    transition: opacity 0.4s ease;
+    transform: translate(-50%, -50%);
     pointer-events: none;
 }
 
 .glass-card:hover::after, .bento-card:hover::after, .kpi-card:hover::after {
     opacity: 1;
-    transform: scale(1.05) translateY(0);
 }
 
 /* ============================================
