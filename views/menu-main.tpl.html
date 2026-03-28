@@ -134,9 +134,13 @@
     </div>
     <div class="flex items-center space-x-3">
         <!-- Mobile Theme Toggle -->
-        <button class="text-muted hover:text-foreground transition-colors" onclick="toggleTheme()" title="Toggle theme">
+        <button class="text-muted hover:text-foreground transition-colors" onclick="toggleTheme()" title="Toggle theme" data-i18n-title="toggle.theme">
             <span class="iconify inline text-xl" data-icon="ph:moon-bold" id="theme-icon-dark-mobile"></span>
             <span class="iconify inline text-xl hidden" data-icon="ph:sun-bold" id="theme-icon-light-mobile"></span>
+        </button>
+        <!-- Mobile Language Toggle -->
+        <button class="text-muted hover:text-foreground transition-colors font-bold text-sm" onclick="toggleLang()" title="Toggle language" data-i18n-title="toggle.lang">
+            <span data-i18n="toggle.lang">中</span>
         </button>
         <script>
             (function() {

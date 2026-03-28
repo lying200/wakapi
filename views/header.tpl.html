@@ -1,3 +1,36 @@
-<header class="flex justify-between mb-10">
-    {{ template "logo.tpl.html" . }}
+<header class="flex justify-between items-center px-4 py-4 w-full relative z-20">
+    <!-- Logo -->
+    <div class="shrink-0">
+        {{ template "logo.tpl.html" . }}
+    </div>
+
+    <!-- Right Controls: Theme and Lang -->
+    <div class="flex items-center space-x-4">
+        <!-- Theme Toggle -->
+        <button class="text-secondary hover:text-foreground transition-colors" onclick="toggleTheme()" title="Toggle theme" data-i18n-title="toggle.theme">
+            <span class="iconify inline text-xl" data-icon="ph:moon-bold" id="theme-icon-dark-header"></span>
+            <span class="iconify inline text-xl hidden" data-icon="ph:sun-bold" id="theme-icon-light-header"></span>
+        </button>
+        <script>
+            (function() {
+                function updateIconsHdr() {
+                    var isDark = !document.documentElement.classList.contains('light');
+                    var dark = document.getElementById('theme-icon-dark-header');
+                    var light = document.getElementById('theme-icon-light-header');
+                    if (dark && light) {
+                        dark.classList.toggle('hidden', !isDark);
+                        light.classList.toggle('hidden', isDark);
+                    }
+                }
+                var obs3 = new MutationObserver(updateIconsHdr);
+                obs3.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+                if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', updateIconsHdr); } else { updateIconsHdr(); }
+            })();
+        </script>
+
+        <!-- Language Toggle -->
+        <button class="text-secondary hover:text-foreground transition-colors font-bold text-sm" onclick="toggleLang()">
+            <span data-i18n="toggle.lang">中</span>
+        </button>
+    </div>
 </header>

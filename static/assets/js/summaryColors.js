@@ -1,16 +1,16 @@
 // https://hihayk.github.io/scale/#4/6/50/80/-51/67/20/14/276749/39/103/73/white
 const baseColors = [
-    '#112836',
-    '#163B43',
-    '#1C4F4D',
-    '#215B4C',
-    '#276749',
-    '#437C57',
-    '#5F9167',
-    '#7DA67C',
-    '#9FBA98',
-    '#BFCEB5',
-    '#DCE2D3'
+    '#059669', // emerald-600
+    '#0d9488', // teal-600
+    '#0891b2', // cyan-600
+    '#0284c7', // sky-600
+    '#2563eb', // blue-600
+    '#10b981', // emerald-500
+    '#14b8a6', // teal-500
+    '#06b6d4', // cyan-500
+    '#0ea5e9', // sky-500
+    '#3b82f6', // blue-500
+    '#34d399', // emerald-400
 ];
 
 Chart.defaults.color = "#E2E8F0"
