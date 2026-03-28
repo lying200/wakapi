@@ -55,22 +55,123 @@ function formatLocalizedDate(value, mode = 'date') {
     return window.formatDateValue ? window.formatDateValue(value, mode) : new Date(value).toLocaleDateString()
 }
 
-// Premium Minimalist Grid Defaults
+function getChartTheme() {
+    const isLight = document.documentElement.classList.contains('light')
+    return {
+        isLight,
+        text: isLight ? 'rgba(15, 23, 42, 0.78)' : 'rgba(255, 255, 255, 0.78)',
+        textMuted: isLight ? 'rgba(71, 85, 105, 0.9)' : 'rgba(255, 255, 255, 0.56)',
+        grid: isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.07)',
+        gridStrong: isLight ? 'rgba(15, 23, 42, 0.12)' : 'rgba(255, 255, 255, 0.11)',
+        tooltipBackground: isLight ? 'rgba(255, 255, 255, 0.96)' : 'rgba(16, 16, 20, 0.94)',
+        tooltipBorder: isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.08)',
+        ringBorder: isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(13, 13, 15, 0.9)',
+    }
+}
+
+function withOpacity(hex, alpha) {
+    const { r, g, b } = hexToRgb(hex)
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+function getLegendLabelsConfig() {
+    return {
+        usePointStyle: true,
+        pointStyle: 'circle',
+        boxWidth: 8,
+        boxHeight: 8,
+        padding: 14,
+        filter: filterLegendItem
+    }
+}
+
+function getDonutOptions(key) {
+    return {
+        plugins: {
+            tooltip: getTooltipOptions(key),
+            legend: {
+                position: 'right',
+                labels: getLegendLabelsConfig(),
+            },
+        },
+        cutout: '66%',
+        radius: '88%',
+        layout: {
+            padding: 4,
+        },
+        maintainAspectRatio: false,
+    }
+}
+
+function getDurationAxis() {
+    const theme = getChartTheme()
+    return {
+        title: {
+            display: true,
+            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
+        },
+        ticks: {
+            callback: (label) => label.toString().toHHMMSS(),
+        },
+        grid: {
+            color: theme.gridStrong,
+        }
+    }
+}
+
+function getHorizontalBarOptions(key, extra = {}) {
+    return {
+        indexAxis: 'y',
+        scales: {
+            xAxes: getDurationAxis(),
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: getTooltipOptions(key),
+        },
+        maintainAspectRatio: false,
+        ...extra,
+    }
+}
+
+function getTooltipOptions(key, stacked) {
+    return {
+        callbacks: {
+            label: (item) => {
+                const raw = item.chart.data.datasets[item.datasetIndex].data[item.dataIndex]
+                const val = (typeof raw === 'object' && raw !== null) ? raw.x : raw
+                const lbl = (typeof raw === 'object' && raw !== null && raw.details) ? raw.details : item.chart.data.labels[item.dataIndex]
+                const d = stacked
+                    ? [val, item.chart.data.datasets[item.datasetIndex].label]
+                    : [val, lbl]
+                return ` ${d[1]}: ${d[0].toString().toHHMMSS()}`
+            },
+            title: () => i18nText('summary.tooltip.total_time', 'Total Time'),
+            footer: () => key === 'projects' ? i18nText('summary.tooltip.click_details', 'Click for details') : null
+        }
+    }
+}
+
 function updateChartDefaults() {
-    const isLight = document.documentElement.classList.contains('light');
-    Chart.defaults.font.family = 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
-    Chart.defaults.color = isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.5)';
+    const theme = getChartTheme()
+    Chart.defaults.font.family = '"Source Sans 3", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+    Chart.defaults.color = theme.textMuted;
+    Chart.defaults.animation.duration = 420;
+    Chart.defaults.animation.easing = 'easeOutQuart';
 
     const gridDefaults = {
-        color: isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.08)',
+        color: theme.grid,
         lineWidth: 1,
-        borderDash: [3, 3],
+        borderDash: [2, 4],
         drawBorder: false,
         drawTicks: false
     }
 
     const tickDefaults = {
-        color: isLight ? 'rgba(0, 0, 0, 0.65)' : 'rgba(255, 255, 255, 0.5)'
+        color: theme.textMuted,
+        padding: 8
     }
 
     Chart.defaults.scales.linear.grid = { ...Chart.defaults.scales.linear.grid, ...gridDefaults }
@@ -85,13 +186,25 @@ function updateChartDefaults() {
     // Legend & Tooltip Defaults
     Chart.defaults.plugins.legend.labels = {
         ...Chart.defaults.plugins.legend.labels,
-        color: isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.5)'
+        color: theme.text,
+        usePointStyle: true,
+        pointStyle: 'circle',
+        boxWidth: 8,
+        boxHeight: 8,
+        padding: 14
     };
-    Chart.defaults.plugins.tooltip.backgroundColor = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(25, 25, 28, 0.9)';
-    Chart.defaults.plugins.tooltip.titleColor = isLight ? '#171717' : '#fff';
-    Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#171717' : '#fff';
-    Chart.defaults.plugins.tooltip.borderColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+    Chart.defaults.plugins.tooltip.backgroundColor = theme.tooltipBackground;
+    Chart.defaults.plugins.tooltip.titleColor = theme.text;
+    Chart.defaults.plugins.tooltip.bodyColor = theme.text;
+    Chart.defaults.plugins.tooltip.borderColor = theme.tooltipBorder;
     Chart.defaults.plugins.tooltip.borderWidth = 1;
+    Chart.defaults.plugins.tooltip.cornerRadius = 14;
+    Chart.defaults.plugins.tooltip.padding = 12;
+    Chart.defaults.plugins.tooltip.displayColors = false;
+    Chart.defaults.elements.arc.borderWidth = 3;
+    Chart.defaults.elements.arc.hoverOffset = 6;
+    Chart.defaults.elements.bar.borderRadius = 999;
+    Chart.defaults.elements.bar.borderSkipped = false;
 }
 
 updateChartDefaults();
@@ -132,7 +245,7 @@ function filterLegendItem(item) {
 }
 
 function draw(subselection) {
-    console.log('[Summary] draw called with subselection:', subselection);
+    const theme = getChartTheme()
     const projectsCanvas = getProjectsCanvas()
     const osCanvas = getOsCanvas()
     const editorsCanvas = getEditorsCanvas()
@@ -144,24 +257,6 @@ function draw(subselection) {
     const categoriesCanvas = getCategoriesCanvas()
     const timelineCanvas = getTimelineCanvas()
     const hourlyCanvas = getHourlyCanvas()
-
-    function getTooltipOptions(key, stacked) {
-        return {
-            callbacks: {
-                label: (item) => {
-                    const raw = item.chart.data.datasets[item.datasetIndex].data[item.dataIndex]
-                    const val = (typeof raw === 'object' && raw !== null) ? raw.x : raw
-                    const lbl = (typeof raw === 'object' && raw !== null && raw.details) ? raw.details : item.chart.data.labels[item.dataIndex]
-                    const d = stacked
-                        ? [val, item.chart.data.datasets[item.datasetIndex].label]
-                        : [val, lbl]
-                    return ` ${d[1]}: ${d[0].toString().toHHMMSS()}`
-                },
-                title: () => i18nText('summary.tooltip.total_time', 'Total Time'),
-                footer: () => key === 'projects' ? i18nText('summary.tooltip.click_details', 'Click for details') : null
-            }
-        }
-    }
 
     function shouldUpdate(index) {
         return !subselection || (subselection.includes(index) && data[index].length >= showTopN[index])
@@ -192,30 +287,16 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i % baseColors.length))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
+                    borderRadius: 999,
+                    borderSkipped: false,
+                    maxBarThickness: 18,
                 }],
                 labels: wakapiData.projects
                     .slice(0, Math.min(showTopN[0], wakapiData.projects.length))
                     .map(p => p.key)
             },
             options: {
-                indexAxis: 'y',
-                scales: {
-                    xAxes: {
-                        title: {
-                            display: true,
-                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
-                        },
-                        ticks: {
-                            callback: (label) => label.toString().toHHMMSS(),
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    tooltip: getTooltipOptions('projects'),
-                },
+                ...getHorizontalBarOptions('projects'),
                 maintainAspectRatio: false,
                 onClick: (event, data) => {
                     const url = new URL(window.location.href)
@@ -232,7 +313,7 @@ function draw(subselection) {
 
     let osChart = osCanvas && !osCanvas.classList.contains('hidden') && shouldUpdate(1)
         ? new Chart(osCanvas.getContext('2d'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 datasets: [{
                     data: wakapiData.operatingSystems
@@ -246,30 +327,21 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? (osColors[p.key.toLowerCase()] || getRandomColor(p.key)) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderWidth: 0
+                    borderColor: theme.ringBorder,
+                    borderWidth: 3,
+                    spacing: 3,
                 }],
                 labels: wakapiData.operatingSystems
                     .slice(0, Math.min(showTopN[1], wakapiData.operatingSystems.length))
                     .map(p => p.key)
             },
-            options: {
-                plugins: {
-                    tooltip: getTooltipOptions('operatingSystems'),
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            filter: filterLegendItem
-                        },
-                    },
-                },
-                maintainAspectRatio: false,
-            }
+            options: getDonutOptions('operatingSystems')
         })
         : null
 
     let editorChart = editorsCanvas && !editorsCanvas.classList.contains('hidden') && shouldUpdate(2)
         ? new Chart(editorsCanvas.getContext('2d'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 datasets: [{
                     data: wakapiData.editors
@@ -283,30 +355,21 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? (editorColors[p.key.toLowerCase()] || getRandomColor(p.key)) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderWidth: 0
+                    borderColor: theme.ringBorder,
+                    borderWidth: 3,
+                    spacing: 3,
                 }],
                 labels: wakapiData.editors
                     .slice(0, Math.min(showTopN[2], wakapiData.editors.length))
                     .map(p => p.key)
             },
-            options: {
-                plugins: {
-                    tooltip: getTooltipOptions('editors'),
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            filter: filterLegendItem
-                        },
-                    },
-                },
-                maintainAspectRatio: false,
-            }
+            options: getDonutOptions('editors')
         })
         : null
 
     let languageChart = languagesCanvas && !languagesCanvas.classList.contains('hidden') && shouldUpdate(3)
         ? new Chart(languagesCanvas.getContext('2d'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 datasets: [{
                     data: wakapiData.languages
@@ -320,33 +383,21 @@ function draw(subselection) {
                         const c = hexToRgb(languageColors[p.key.toLowerCase()] || getRandomColor(p.key))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderWidth: 0
+                    borderColor: theme.ringBorder,
+                    borderWidth: 3,
+                    spacing: 3,
                 }],
                 labels: wakapiData.languages
                     .slice(0, Math.min(showTopN[3], wakapiData.languages.length))
                     .map(p => p.key)
             },
-            options: {
-                plugins: {
-                    tooltip: getTooltipOptions('languages'),
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            filter: filterLegendItem
-                        },
-                        title: {
-                            display: true,
-                        }
-                    },
-                },
-                maintainAspectRatio: false,
-            }
+            options: getDonutOptions('languages')
         })
         : null
 
     let machineChart = machinesCanvas && !machinesCanvas.classList.contains('hidden') && shouldUpdate(4)
         ? new Chart(machinesCanvas.getContext('2d'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 datasets: [{
                     data: wakapiData.machines
@@ -360,30 +411,21 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderWidth: 0
+                    borderColor: theme.ringBorder,
+                    borderWidth: 3,
+                    spacing: 3,
                 }],
                 labels: wakapiData.machines
                     .slice(0, Math.min(showTopN[4], wakapiData.machines.length))
                     .map(p => p.key)
             },
-            options: {
-                plugins: {
-                    tooltip: getTooltipOptions('machines'),
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            filter: filterLegendItem
-                        },
-                    },
-                },
-                maintainAspectRatio: false,
-            }
+            options: getDonutOptions('machines')
         })
         : null
 
     let labelChart = labelsCanvas && !labelsCanvas.classList.contains('hidden') && shouldUpdate(5)
         ? new Chart(labelsCanvas.getContext('2d'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 datasets: [{
                     data: wakapiData.labels
@@ -397,24 +439,15 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderWidth: 0
+                    borderColor: theme.ringBorder,
+                    borderWidth: 3,
+                    spacing: 3,
                 }],
                 labels: wakapiData.labels
                     .slice(0, Math.min(showTopN[5], wakapiData.labels.length))
                     .map(p => p.key)
             },
-            options: {
-                plugins: {
-                    tooltip: getTooltipOptions('labels'),
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            filter: filterLegendItem
-                        },
-                    },
-                },
-                maintainAspectRatio: false,
-            }
+            options: getDonutOptions('labels')
         })
         : null
 
@@ -434,32 +467,15 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i % baseColors.length))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
+                    borderRadius: 999,
+                    borderSkipped: false,
+                    maxBarThickness: 18,
                 }],
                 labels: wakapiData.branches
                     .slice(0, Math.min(showTopN[6], wakapiData.branches.length))
                     .map(p => p.key)
             },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    xAxes: {
-                        title: {
-                            display: true,
-                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
-                        },
-                        ticks: {
-                            callback: (label) => label.toString().toHHMMSS(),
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    tooltip: getTooltipOptions('branches'),
-                },
-                maintainAspectRatio: false,
-            }
+            options: getHorizontalBarOptions('branches')
         })
         : null
 
@@ -484,32 +500,15 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i % baseColors.length))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
+                    borderRadius: 999,
+                    borderSkipped: false,
+                    maxBarThickness: 18,
                 }],
                 labels: wakapiData.entities
                     .slice(0, Math.min(showTopN[7], wakapiData.entities.length))
                     .map(p => extractFile(p.key))
             },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    xAxes: {
-                        title: {
-                            display: true,
-                            text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)'),
-                        },
-                        ticks: {
-                            callback: (label) => label.toString().toHHMMSS(),
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    tooltip: getTooltipOptions('entities'),
-                },
-                maintainAspectRatio: false,
-            }
+            options: getHorizontalBarOptions('entities')
         })
         : null
 
@@ -524,7 +523,9 @@ function draw(subselection) {
                         label: p.key,
                         data: [parseInt(p.total)],
                         backgroundColor: vibrantColors ? getRandomColor(p.key) : getColor(p.key, i % baseColors.length),
-                        barPercentage: 1.0
+                        barPercentage: 1.0,
+                        borderRadius: 999,
+                        borderSkipped: false,
                     })),
             },
             options: {
@@ -567,7 +568,9 @@ function draw(subselection) {
                         label: project,
                         data: wakapiData.timelineStats.map(day => day.projects.reduce((acc, p) => p.name === project ? acc + p.duration : acc, 0)),
                         backgroundColor: vibrantColors ? getRandomColor(project) : getColor(project, i % baseColors.length),
-                        barPercentage: 1.0
+                        barPercentage: 1.0,
+                        borderRadius: 8,
+                        borderSkipped: false,
                     }))
             },
             options: {
@@ -576,6 +579,9 @@ function draw(subselection) {
                 scales: {
                     x: {
                         stacked: true,
+                        grid: {
+                            color: theme.grid,
+                        },
                         title: {
                             display: true,
                             text: i18nText('summary.axis.date', 'Date')
@@ -583,6 +589,9 @@ function draw(subselection) {
                     },
                     y: {
                         stacked: true,
+                        grid: {
+                            color: theme.gridStrong,
+                        },
                         title: {
                             display: true,
                             text: i18nText('summary.axis.duration', 'Duration (hh:mm:ss)')
@@ -602,9 +611,7 @@ function draw(subselection) {
                     },
                     legend: {
                         position: 'right',
-                        labels: {
-                            filter: filterLegendItem
-                        }
+                        labels: getLegendLabelsConfig()
                     }
                 }
             }
@@ -641,6 +648,8 @@ function draw(subselection) {
                             label: cur.entity,
                             stack: project,
                             skipNull: true,
+                            borderRadius: 999,
+                            borderSkipped: false,
                         }
                     })
                 })
@@ -654,6 +663,9 @@ function draw(subselection) {
                         stacked: true,
                         min: +new Date(wakapiData.hourlyBreakdownFromTime),
                         max: +new Date(wakapiData.hourlyBreakdownToTime),
+                        grid: {
+                            color: theme.gridStrong,
+                        },
                         ticks: {
                             stepSize: 1000 * 60 * 60, // per hour
                             callback: (value) => {
@@ -667,6 +679,9 @@ function draw(subselection) {
                     },
                     y: {
                         stacked: true,
+                        grid: {
+                            display: false,
+                        },
                         title: {
                             display: true,
                             text: i18nText('summary.axis.projects', 'Projects')
@@ -725,7 +740,6 @@ function draw(subselection) {
     if (shouldUpdate(8)) charts[8] = categoryChart
     if (shouldUpdate(9)) charts[9] = timelineChart
     if (shouldUpdate(10)) charts[10] = hourlyBreakdownChart
-    console.log('[Summary] draw completed. Active charts:', charts.filter(c => c !== null).length);
 }
 
 function parseTopN() {

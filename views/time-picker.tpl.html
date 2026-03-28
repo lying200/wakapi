@@ -1,35 +1,36 @@
 <template id="time-picker-template">
-    <div class="menu-item flex items-center text-sm font-semibold space-x-2 rounded hover:bg-card py-2 px-4 cursor-pointer justify-end" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker">
-        <span class="iconify inline text-2xl text-secondary grow" data-icon="fa-regular:calendar-alt"></span>
-        <a v-cloak id="current-time-selection" class="text-foreground -mb-1">${timeSelection}</a>
-        <span class="iconify inline text-2xl text-secondary" data-icon="akar-icons:chevron-down"></span>
+    <div class="summary-time-picker__trigger" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker">
+        <span class="iconify inline summary-time-picker__icon" data-icon="fa-regular:calendar-alt"></span>
+        <div class="grow">
+            <span class="summary-time-picker__label" data-i18n="summary.time_window">Time Window</span>
+            <a v-cloak id="current-time-selection" class="summary-time-picker__value">${timeSelection}</a>
+        </div>
+        <span class="iconify inline text-xl text-secondary" data-icon="akar-icons:chevron-down"></span>
     </div>
 
-    <div v-cloak v-show="state.showDropdownTimepicker" class="z-10 absolute top-0 right-0 popup mt-12 w-40" id="time-picker-dropdown">
-        <div class="grow flex flex-col flex bg-card shadow-md rounded w-40 p-1 ">
-            <a id="time-option-today" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('today')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="d">${intervalLabel('today')} <kbd>D</kbd></a>
-            <a id="time-option-yesterday" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('yesterday')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="e">${intervalLabel('yesterday')} <kbd>E</kbd></a>
-            <a id="time-option-week" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('week')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="w">${intervalLabel('week')} <kbd>W</kbd></a>
-            <a id="time-option-month" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('month')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="m">${intervalLabel('month')} <kbd>M</kbd></a>
-            <a id="time-option-year" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('year')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="y">${intervalLabel('year')} <kbd>Y</kbd></a>
-            <a id="time-option-last_7_days" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('last_7_days')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="1">${intervalLabel('last_7_days')} <kbd>1</kbd></a>
-            <a id="time-option-last_30_days" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('last_30_days')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="2">${intervalLabel('last_30_days')} <kbd>2</kbd></a>
-            <a id="time-option-last_6_months" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('last_6_months')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="3">${intervalLabel('last_6_months')} <kbd>3</kbd></a>
-            <a id="time-option-last_12_months" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('last_12_months')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="4">${intervalLabel('last_12_months')} <kbd>4</kbd></a>
-            <a id="time-option-any" class="submenu-item hover:bg-focused rounded p-1 text-right w-full text-foreground px-2 font-semibold text-sm" :href="intervalLink('any')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="a">${intervalLabel('any')} <kbd>A</kbd></a>
-            <hr class="my-2">
-            <form id="time-picker-form" class="flex flex-col space-y-1">
-                <div class="flex flex-col space-x-1 bg-background rounded p-1 border-2 border-focused">
-                    <label for="from-date-picker" class="text-secondary text-xs ml-2">${fieldLabel('start')}</label>
-                    <input v-model="fromDate" id="from-date-picker" type="date" name="from" max="toDate" class="text-sm text-foreground bg-background cursor-pointer" required data-trigger-for="showDropdownTimepicker">
+    <div v-cloak v-show="state.showDropdownTimepicker" class="z-10 absolute top-0 right-0 popup mt-20 summary-time-picker__panel" id="time-picker-dropdown">
+        <div class="summary-time-picker__presets">
+            <a id="time-option-today" class="summary-time-picker__option" :href="intervalLink('today')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="d">${intervalLabel('today')} <kbd>D</kbd></a>
+            <a id="time-option-yesterday" class="summary-time-picker__option" :href="intervalLink('yesterday')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="e">${intervalLabel('yesterday')} <kbd>E</kbd></a>
+            <a id="time-option-week" class="summary-time-picker__option" :href="intervalLink('week')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="w">${intervalLabel('week')} <kbd>W</kbd></a>
+            <a id="time-option-month" class="summary-time-picker__option" :href="intervalLink('month')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="m">${intervalLabel('month')} <kbd>M</kbd></a>
+            <a id="time-option-year" class="summary-time-picker__option" :href="intervalLink('year')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="y">${intervalLabel('year')} <kbd>Y</kbd></a>
+            <a id="time-option-last_7_days" class="summary-time-picker__option" :href="intervalLink('last_7_days')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="1">${intervalLabel('last_7_days')} <kbd>1</kbd></a>
+            <a id="time-option-last_30_days" class="summary-time-picker__option" :href="intervalLink('last_30_days')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="2">${intervalLabel('last_30_days')} <kbd>2</kbd></a>
+            <a id="time-option-last_6_months" class="summary-time-picker__option" :href="intervalLink('last_6_months')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="3">${intervalLabel('last_6_months')} <kbd>3</kbd></a>
+            <a id="time-option-last_12_months" class="summary-time-picker__option" :href="intervalLink('last_12_months')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="4">${intervalLabel('last_12_months')} <kbd>4</kbd></a>
+            <a id="time-option-any" class="summary-time-picker__option" :href="intervalLink('any')" @click="state.showDropdownTimepicker = !state.showDropdownTimepicker" data-trigger-for="showDropdownTimepicker" data-hotkey="a">${intervalLabel('any')} <kbd>A</kbd></a>
+        </div>
+        <form id="time-picker-form" class="summary-time-picker__form">
+                <div class="summary-time-picker__field">
+                    <label for="from-date-picker">${fieldLabel('start')}</label>
+                    <input v-model="fromDate" id="from-date-picker" type="date" name="from" max="toDate" class="text-sm cursor-pointer" required data-trigger-for="showDropdownTimepicker">
                 </div>
-                <div class="flex flex-col space-x-1 bg-background rounded p-1 border-2 border-focused">
-                    <label for="to-date-picker" class="text-secondary text-xs ml-2">${fieldLabel('end')}</label>
-                    <input v-model="toDate" id="to-date-picker" type="date" name="to" :min="fromDate" class="text-sm text-foreground bg-background cursor-pointer" required data-trigger-for="showDropdownTimepicker">
+                <div class="summary-time-picker__field">
+                    <label for="to-date-picker">${fieldLabel('end')}</label>
+                    <input v-model="toDate" id="to-date-picker" type="date" name="to" :min="fromDate" class="text-sm cursor-pointer" required data-trigger-for="showDropdownTimepicker">
                 </div>
                 <button type="submit" class="btn-primary btn-small my-1 text-center text-xsi cursor-pointer">${applyLabel()}</button>
-
-            </form>
-        </div>
+        </form>
     </div>
 </template>

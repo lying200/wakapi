@@ -101,6 +101,9 @@
         'summary.activity': { en: 'Activity', zh: '活动' },
         'summary.no_data': { en: 'No data', zh: '暂无数据' },
         'summary.loading_activity': { en: 'Loading activity chart ...', zh: '加载活动图表中...' },
+        'summary.overview': { en: 'Overview', zh: '概览' },
+        'summary.dashboard_subtitle': { en: 'A sharper view of your recent coding patterns.', zh: '更聚焦地查看你最近的编码模式。' },
+        'summary.time_window': { en: 'Time Window', zh: '时间范围' },
         'summary.after': { en: 'after', zh: '起始于' },
         'summary.after_title': { en: '(your oldest heartbeat in selected range)', zh: '（所选时间范围内你最早的一次 heartbeat）' },
         'summary.category_info': {

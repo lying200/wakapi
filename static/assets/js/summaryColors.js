@@ -1,15 +1,14 @@
 // https://hihayk.github.io/scale/#4/6/50/80/-51/67/20/14/276749/39/103/73/white
 const baseColors = [
-    '#059669', // emerald-600
-    '#0d9488', // teal-600
-    '#0891b2', // cyan-600
-    '#0284c7', // sky-600
-    '#2563eb', // blue-600
+    '#22c55e', // green-500
     '#10b981', // emerald-500
     '#14b8a6', // teal-500
     '#06b6d4', // cyan-500
+    '#38bdf8', // sky-400
+    '#84cc16', // lime-500
+    '#eab308', // yellow-500
+    '#f97316', // orange-500
+    '#fb7185', // rose-400
     '#0ea5e9', // sky-500
-    '#3b82f6', // blue-500
-    '#34d399', // emerald-400
+    '#2dd4bf', // teal-400
 ];
-

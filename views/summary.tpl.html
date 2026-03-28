@@ -19,18 +19,42 @@
 
 {{ if .Summary }}
 
-<div id="summary-page" class="flex-1 max-w-screen-xl mx-auto w-full px-4" v-scope @vue:mounted="mounted({ userId: '{{ .SharedLoggedInViewModel.User.ID }}'})" >
-    <div class="flex justify-end md:space-x-4 mt-8 flex-wrap md:flex-nowrap relative items-center no-print">
+<div id="summary-page" class="summary-dashboard flex-1 max-w-screen-xl mx-auto w-full px-4" v-scope @vue:mounted="mounted({ userId: '{{ .SharedLoggedInViewModel.User.ID }}'})" >
+    <div class="summary-toolbar glass-card mt-8 no-print">
+        <div class="summary-toolbar__main">
+            <div class="summary-toolbar__copy">
+                <span class="summary-toolbar__eyebrow" data-i18n="summary.overview">Overview</span>
+                {{ if .IsProjectDetails }}
+                <h1 class="summary-toolbar__title">
+                    {{ if eq .GetProjectFilter "-" }}
+                    Unknown project
+                    {{ else }}
+                    Project "{{ .GetProjectFilter }}"
+                    {{ end }}
+                </h1>
+                <p class="summary-toolbar__subtitle">{{ .TotalTime | duration }}</p>
+                {{ else }}
+                <h1 class="summary-toolbar__title">Dashboard</h1>
+                <p class="summary-toolbar__subtitle" data-i18n="summary.dashboard_subtitle">A sharper view of your recent coding patterns.</p>
+                {{ end }}
+            </div>
+            <div class="summary-toolbar__picker" v-scope="TimePicker({
+                fromDate: '{{ .From | simpledate }}',
+                toDate: '{{ .To | ceildate | simpledate }}',
+                timeSelection: '{{ .From | date }} - {{ .To | ceildate | date }}'
+            })" @vue:mounted="mounted"></div>
+        </div>
+
         {{ if $.UserDataExpiring }}
-        <div class="flex-grow justify-start">
-            <div class="flex-grow p-4 text-sm rounded-lg text-foreground align-middle mb-4 md:mb-0" style="background: rgb(var(--surface-2)); border-left: 3px solid rgb(var(--warning));">
+        <div class="summary-toolbar__alert">
+            <div class="summary-alert summary-alert-warning">
                 <span class="iconify inline mr-1" data-icon="emojione-v1:warning"></span>
                 Some of&nbsp;&nbsp;your data is older than this instance's data retention period. This will cause old data to be deleted, unless you opt for a subscription. Go to <a class="font-semibold text-accent" href="settings#subscription">Settings → Subscription</a> for more details.
             </div>
         </div>
         {{ end }}
 
-        <div class="flex-grow flex-shrink hidden md:flex justify-start gap-x-4 flex-wrap">
+        <div class="summary-toolbar__filters">
             <div v-scope="EntityFilter({
                 type: 'project',
                 options: wakapiData.availableProjectNames.toSorted(),
@@ -61,12 +85,6 @@
                 selection: null,
             })" @vue:mounted="mounted"></div>
         </div>
-
-        <div class="flex-shrink-1 sm:flex-shrink-0" v-scope="TimePicker({
-            fromDate: '{{ .From | simpledate }}',
-            toDate: '{{ .To | ceildate | simpledate }}',
-            timeSelection: '{{ .From | date }} - {{ .To | ceildate | date }}'
-        })" @vue:mounted="mounted"></div>
     </div>
 
     <main class="flex flex-col items-center mt-8 grow">
@@ -75,46 +93,39 @@
 
         {{ if not .IsProjectDetails }}
         <!-- KPI Cards — Bento Row -->
-        <div class="w-full mb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 no-break">
-            <div class="kpi-card animate-fadein animate-fadein-delay-1">
-                <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.total_time">Total Time</span>
-                <span class="font-semibold text-xl text-foreground truncate block" title="{{ .TotalTime | duration }}">{{ .TotalTime | duration }}</span>
-                <span class="text-xs text-muted mt-1 block" data-i18n-title="summary.after_title" title="(your oldest heartbeat in selected range)">
+        <div class="summary-kpi-grid w-full mb-6 no-break">
+            <div class="kpi-card kpi-card-featured animate-fadein animate-fadein-delay-1">
+                <span class="summary-kpi-label" data-i18n="summary.total_time">Total Time</span>
+                <span class="summary-kpi-value" title="{{ .TotalTime | duration }}">{{ .TotalTime | duration }}</span>
+                <span class="summary-kpi-meta" data-i18n-title="summary.after_title" title="(your oldest heartbeat in selected range)">
                     <span data-i18n="summary.after">after</span>
                     <span data-localize-datetime="{{ .FromTime.T.Unix }}">{{ .FromTime.T | datetime }}</span>
                 </span>
+                <div class="summary-kpi-highlight">
+                    <span class="summary-kpi-highlight__label" data-i18n="summary.total_heartbeats">Total Heartbeats</span>
+                    <span class="summary-kpi-highlight__value" title="{{ .NumHeartbeats }}">{{ .NumHeartbeats }}</span>
+                </div>
             </div>
             <div class="kpi-card animate-fadein animate-fadein-delay-2">
-                <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.total_heartbeats">Total Heartbeats</span>
-                <span class="font-semibold text-xl text-foreground truncate block" title="{{ .NumHeartbeats }}">{{ .NumHeartbeats }}</span>
+                <span class="summary-kpi-label" data-i18n="summary.top_project">Top Project</span>
+                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 0 }}">{{ .MaxByToString 0 }}</span>
             </div>
             <div class="kpi-card animate-fadein animate-fadein-delay-3">
-                <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.top_project">Top Project</span>
-                <span class="font-semibold text-xl text-foreground truncate block" title="{{ .MaxByToString 0 }}">{{ .MaxByToString 0 }}</span>
+                <span class="summary-kpi-label" data-i18n="summary.top_language">Top Language</span>
+                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 1 }}">{{ .MaxByToString 1 }}</span>
             </div>
             <div class="kpi-card animate-fadein animate-fadein-delay-4">
-                <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.top_language">Top Language</span>
-                <span class="font-semibold text-xl text-foreground truncate block" title="{{ .MaxByToString 1 }}">{{ .MaxByToString 1 }}</span>
+                <span class="summary-kpi-label" data-i18n="summary.top_os">Top OS</span>
+                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 3 }}">{{ .MaxByToString 3 }}</span>
             </div>
             <div class="kpi-card animate-fadein animate-fadein-delay-5">
-                <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.top_os">Top OS</span>
-                <span class="font-semibold text-xl text-foreground truncate block" title="{{ .MaxByToString 3 }}">{{ .MaxByToString 3 }}</span>
-            </div>
-            <div class="kpi-card animate-fadein animate-fadein-delay-6">
-                <span class="text-xs text-muted font-medium block mb-1" data-i18n="summary.top_editor">Top Editor</span>
-                <span class="font-semibold text-xl text-foreground truncate block" title="{{ .MaxByToString 2 }}">{{ .MaxByToString 2 }}</span>
+                <span class="summary-kpi-label" data-i18n="summary.top_editor">Top Editor</span>
+                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 2 }}">{{ .MaxByToString 2 }}</span>
             </div>
         </div>
 
         {{ else }}
-        <div class="mb-8 w-full">
-        <h1 class="text-headline text-primary">
-            {{ if eq .GetProjectFilter "-" }}
-            Unknown project
-            {{ else }}
-            Project "{{ .GetProjectFilter }}"
-            {{ end }}
-        </h1>
+        <div class="summary-project-badge-row mb-8 w-full">
         <div class="flex space-x-4 items-center mt-2">
             <h4 class="font-semibold text-lg text-muted">{{ .TotalTime | duration }}</h4>
             <div v-cloak v-show="currentInterval">
@@ -127,10 +138,10 @@
         <!-- Charts — Bento Grid -->
         <div class="bento-grid w-full mt-2">
             <!-- Projects -->
-            <div class="bento-card bento-span-2 bento-row-2 p-5 pb-5 flex flex-col w-full h-full no-break {{ if .IsProjectDetails }} hidden {{ end }}" id="project-container">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-title" data-i18n="summary.projects">Projects</span>
-                    <div class="flex items-center text-xs text-muted gap-1">
+            <div class="bento-card chart-card bento-span-2 bento-row-2 p-5 pb-5 flex flex-col w-full h-full no-break {{ if .IsProjectDetails }} hidden {{ end }}" id="project-container">
+                <div class="chart-card-header">
+                    <span class="chart-card-title" data-i18n="summary.projects">Projects</span>
+                    <div class="chart-card-top">
                         <span data-i18n="common.top">Top</span>
                         <input type="number" min="1" id="project-top-picker" data-entity="0" class="top-picker text-center w-12" value="10">
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="0"></span>
@@ -145,10 +156,10 @@
             </div>
 
             <!-- Branches -->
-            <div class="bento-card bento-span-2 bento-row-2 p-5 pb-5 flex flex-col w-full h-full no-break {{ if not .IsProjectDetails }} hidden {{ end }}" id="branch-container">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-title" data-i18n="summary.branches">Branches</span>
-                    <div class="flex items-center text-xs text-muted gap-1">
+            <div class="bento-card chart-card bento-span-2 bento-row-2 p-5 pb-5 flex flex-col w-full h-full no-break {{ if not .IsProjectDetails }} hidden {{ end }}" id="branch-container">
+                <div class="chart-card-header">
+                    <span class="chart-card-title" data-i18n="summary.branches">Branches</span>
+                    <div class="chart-card-top">
                         <span data-i18n="common.top">Top</span>
                         <input type="number" min="1" id="branch-top-picker" data-entity="6" class="top-picker text-center w-12" value="10">
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="6"></span>
@@ -163,10 +174,10 @@
             </div>
 
             <!-- Languages -->
-            <div class="bento-card p-5 pb-5 flex flex-col w-full h-full no-break" id="language-container">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-title" data-i18n="summary.languages">Languages</span>
-                    <div class="flex items-center text-xs text-muted gap-1">
+            <div class="bento-card chart-card p-5 pb-5 flex flex-col w-full h-full no-break" id="language-container">
+                <div class="chart-card-header">
+                    <span class="chart-card-title" data-i18n="summary.languages">Languages</span>
+                    <div class="chart-card-top">
                         <span data-i18n="common.top">Top</span>
                         <input type="number" min="1" id="language-top-picker" data-entity="3" class="top-picker text-center w-12" value="10">
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="3"></span>
@@ -181,10 +192,10 @@
             </div>
 
             <!-- Editors -->
-            <div class="bento-card p-5 pb-5 flex flex-col w-full h-full no-break" id="editor-container">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-title" data-i18n="summary.editors">Editors</span>
-                    <div class="flex items-center text-xs text-muted gap-1">
+            <div class="bento-card chart-card p-5 pb-5 flex flex-col w-full h-full no-break" id="editor-container">
+                <div class="chart-card-header">
+                    <span class="chart-card-title" data-i18n="summary.editors">Editors</span>
+                    <div class="chart-card-top">
                         <span data-i18n="common.top">Top</span>
                         <input type="number" min="1" id="editor-top-picker" data-entity="2" class="top-picker text-center w-12" value="10">
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="2"></span>
@@ -200,13 +211,13 @@
 
             <!-- Operating Systems -->
             <div class="{{ if .IsProjectDetails }} hidden {{ end }} bento-span-2 bento-row-2 w-full no-break">
-                <div class="bento-card p-5 pb-5 flex flex-col w-full h-full" id="os-container">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="font-semibold text-title mr-2 cursor-pointer" data-i18n="summary.operating_systems">Operating Systems</span>
-                            <span class="font-semibold text-title text-muted cursor-pointer" onclick="swapCharts('machine', 'os')" data-i18n="summary.machines">Machines</span>
+                <div class="bento-card chart-card p-5 pb-5 flex flex-col w-full h-full" id="os-container">
+                    <div class="chart-card-header">
+                        <div class="chart-card-switch">
+                            <span class="chart-card-switch__item chart-card-switch__item-active cursor-pointer" data-i18n="summary.operating_systems">Operating Systems</span>
+                            <span class="chart-card-switch__item cursor-pointer" onclick="swapCharts('machine', 'os')" data-i18n="summary.machines">Machines</span>
                         </div>
-                        <div class="flex items-center text-xs text-muted gap-1">
+                        <div class="chart-card-top">
                             <span data-i18n="common.top">Top</span>
                             <input type="number" min="1" id="os-top-picker" data-entity="1" class="top-picker text-center w-12" value="10">
                             <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="1"></span>
@@ -223,13 +234,13 @@
 
             <!-- Machines (hidden initially) -->
             <div class="hidden bento-span-2 bento-row-2 w-full no-break">
-                <div class="bento-card p-5 pb-5 flex flex-col w-full h-full" id="machine-container">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="font-semibold text-title text-muted mr-2 cursor-pointer" onclick="swapCharts('os', 'machine')" data-i18n="summary.operating_systems">Operating Systems</span>
-                            <span class="font-semibold text-title cursor-pointer" data-i18n="summary.machines">Machines</span>
+                <div class="bento-card chart-card p-5 pb-5 flex flex-col w-full h-full" id="machine-container">
+                    <div class="chart-card-header">
+                        <div class="chart-card-switch">
+                            <span class="chart-card-switch__item cursor-pointer" onclick="swapCharts('os', 'machine')" data-i18n="summary.operating_systems">Operating Systems</span>
+                            <span class="chart-card-switch__item chart-card-switch__item-active cursor-pointer" data-i18n="summary.machines">Machines</span>
                         </div>
-                        <div class="flex items-center text-xs text-muted gap-1">
+                        <div class="chart-card-top">
                             <span data-i18n="common.top">Top</span>
                             <input type="number" min="1" id="machine-top-picker" data-entity="4" class="top-picker text-center w-12" value="10">
                             <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="4"></span>
@@ -246,15 +257,15 @@
 
             <!-- Labels -->
             <div class="{{ if .IsProjectDetails }} hidden {{ end }} w-full no-break">
-                <div class="bento-card p-5 pb-5 flex flex-col w-full h-full {{ if .IsProjectDetails }} hidden {{ end }}" id="label-container">
-                    <div class="flex justify-between items-center" style="margin-bottom: -10px">
+                <div class="bento-card chart-card p-5 pb-5 flex flex-col w-full h-full {{ if .IsProjectDetails }} hidden {{ end }}" id="label-container">
+                    <div class="chart-card-header" style="margin-bottom: -10px">
                         <div class="flex items-center gap-2">
-                            <span class="font-semibold text-title" data-i18n="summary.labels">Labels</span>
+                            <span class="chart-card-title" data-i18n="summary.labels">Labels</span>
                             <a href="settings#data" class="inline p-1.5 hover:bg-focused rounded-md transition-colors" style="margin-top: -2px">
                                 <span class="iconify inline" data-icon="twemoji:gear"></span>
                             </a>
                         </div>
-                        <div class="flex items-center text-xs text-muted gap-1">
+                        <div class="chart-card-top">
                             <span data-i18n="common.top">Top</span>
                             <input type="number" min="1" id="label-top-picker" data-entity="5" class="top-picker text-center w-12" value="10">
                             <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="5"></span>
@@ -270,10 +281,10 @@
             </div>
 
             <!-- Files (project details) -->
-            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break {{ if not .IsProjectDetails }} hidden {{ end }}" id="entity-container" style="max-height: 500px">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-title" data-i18n="summary.files">Files</span>
-                    <div class="flex items-center text-xs text-muted gap-1">
+            <div class="bento-card chart-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break {{ if not .IsProjectDetails }} hidden {{ end }}" id="entity-container" style="max-height: 500px">
+                <div class="chart-card-header">
+                    <span class="chart-card-title" data-i18n="summary.files">Files</span>
+                    <div class="chart-card-top">
                         <span data-i18n="common.top">Top</span>
                         <input type="number" min="1" id="entity-top-picker" data-entity="7" class="top-picker text-center w-12" value="10">
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="7"></span>
@@ -286,17 +297,17 @@
             </div>
 
             <!-- Categories -->
-            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break {{ if .IsProjectDetails }} hidden {{ end }}" id="category-container" style="height: 224px;">
-                <div class="flex justify-between items-center">
+            <div class="bento-card chart-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break {{ if .IsProjectDetails }} hidden {{ end }}" id="category-container" style="height: 224px;">
+                <div class="chart-card-header">
                     <div class="flex items-center gap-2">
-                        <span class="font-semibold text-title" data-i18n="summary.categories">Categories</span>
+                        <span class="chart-card-title" data-i18n="summary.categories">Categories</span>
                         <span
                             class="iconify inline text-xl text-muted p-1 cursor-help" data-icon="octicon:info-16"
                             title="After the category chart was introduced as a new feature in March '24, you will have to run &quot;Settings → Danger Zone → Regenerate Summaries&quot; once to have your categories reflected properly. This may take a few minutes."
                             data-i18n-title="summary.category_info"
                         ></span>
                     </div>
-                    <div class="flex items-center text-xs text-muted gap-1">
+                    <div class="chart-card-top">
                         <span data-i18n="common.top">Top</span>
                         <input type="number" min="1" id="category-top-picker" data-entity="8" class="top-picker text-center w-12" value="10">
                         <span data-i18n="common.of">of</span>&nbsp;<span class="num-total-items" data-entity="8"></span>
@@ -311,9 +322,9 @@
             </div>
 
             <!-- Timeline -->
-            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break" id="timeline-container" style="height: 296px;">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-title" data-i18n="summary.timeline">Timeline</span>
+            <div class="bento-card chart-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break" id="timeline-container" style="height: 296px;">
+                <div class="chart-card-header">
+                    <span class="chart-card-title" data-i18n="summary.timeline">Timeline</span>
                 </div>
                 <div class="mt-2 flex-1 min-h-0 relative">
                     <canvas id="chart-timeline" class="absolute inset-0 h-full w-full"></canvas>
@@ -330,10 +341,10 @@
             </div>
 
             <!-- Hourly Breakdown -->
-            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break cursor-move" id="hourly-container" style="height: 296px;">
-                <div class="flex justify-between items-center">
+            <div class="bento-card chart-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break cursor-move" id="hourly-container" style="height: 296px;">
+                <div class="chart-card-header">
                     <div class="flex items-center gap-2">
-                        <span class="font-semibold text-title" data-i18n="summary.hourly_breakdown">Hourly Breakdown</span>
+                        <span class="chart-card-title" data-i18n="summary.hourly_breakdown">Hourly Breakdown</span>
                         <span class="iconify inline text-xl text-muted p-1 cursor-help" data-icon="octicon:info-16"
                               title="Only the last 24 hours within the selected interval are shown in this chart. Use Ctrl + wheel to zoom, hold and click to drag. If there are too many small segments to be displayed, chart remains blank on purpose."
                               data-i18n-title="summary.hourly_info"></span>
@@ -349,9 +360,9 @@
         </div>
 
         <!-- Activity Chart -->
-        <div class="mt-12 flex flex-col space-y-2 text-foreground w-full no-break">
-            <div class="flex justify-start space-x-2 items-center">
-                <h2 class="text-title" data-i18n="summary.activity">Activity</h2>
+        <div class="summary-activity bento-card mt-12 flex flex-col space-y-2 text-foreground w-full no-break">
+            <div class="chart-card-header">
+                <h2 class="chart-card-title" data-i18n="summary.activity">Activity</h2>
                 <a v-cloak v-show="activityChartSvg" href="/api/activity/chart/{{ .SharedLoggedInViewModel.User.ID }}.svg" target="_blank" rel="noreferrer noopener" class="p-1.5 rounded-md hover:bg-focused transition-colors" title="Share...">
                     <span class="iconify inline text-lg text-muted p-px" data-icon="octicon:share-16"></span>
                 </a>

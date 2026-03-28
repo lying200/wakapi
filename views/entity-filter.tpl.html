@@ -1,6 +1,6 @@
 <template id="entity-filter-template">
     <div :id="type + '-filter-form'" class="entity-filter-control">
-        <label :for="'select-' + type + '-filter'"><span class="iconify inline mr-1" data-icon="mdi:filter"></span> ${displayText()}</label>
+        <label :for="'select-' + type + '-filter'">${displayText()}</label>
         <select :name="type" :id="'select-' + type + '-filter'" class="select-default" v-model="selection" @input="onSelectionUpdated">
             <option :value="null">${placeholderText()}</option>
             <option v-for="o in options" :value="o">{{ "{{" }}o{{ "}}" }}</option>
