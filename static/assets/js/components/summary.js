@@ -14,12 +14,27 @@ document.addEventListener('DOMContentLoaded', function () {
             return `${match[1]} 小时 ${match[2]} 分钟`;
         },
         localizeActivityChartSvg(svgText) {
-            if (!window.getLang || window.getLang() !== 'zh' || !svgText) return svgText;
-
             const parser = new DOMParser();
             const doc = parser.parseFromString(svgText, 'image/svg+xml');
+            const svg = doc.querySelector('svg');
 
-            const rangeText = doc.querySelector('svg > text');
+            if (!svg) return svgText;
+
+            const width = parseFloat(svg.getAttribute('width') || '0');
+            const height = parseFloat(svg.getAttribute('height') || '0');
+            if (width > 0 && height > 0) {
+                svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+                svg.setAttribute('width', '100%');
+                svg.removeAttribute('height');
+                svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+                svg.setAttribute('style', `display:block;width:100%;max-width:${width}px;height:auto;`);
+            }
+
+            if (!window.getLang || window.getLang() !== 'zh' || !svgText) {
+                return new XMLSerializer().serializeToString(doc);
+            }
+
+            const rangeText = svg.querySelector(':scope > text');
             if (rangeText && rangeText.textContent.includes(' to ')) {
                 const [from, to] = rangeText.textContent.split(' to ');
                 rangeText.textContent = `${this.formatActivityDate(from)} 至 ${this.formatActivityDate(to)}`;

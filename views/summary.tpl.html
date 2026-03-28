@@ -368,7 +368,7 @@
                 </a>
             </div>
             <span v-show="!activityChartSvg" class="text-sm font-medium text-muted mt-4" data-i18n="summary.loading_activity">Loading activity chart ...</span>
-            <div v-html="activityChartSvg" class="w-full overflow-x-auto"></div>
+            <div v-html="activityChartSvg" class="summary-activity-chart w-full overflow-hidden"></div>
         </div>
 
         {{ else }}

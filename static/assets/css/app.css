@@ -901,6 +901,12 @@ main {
     padding: 1.25rem;
 }
 
+.summary-activity-chart svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 .summary-project-badge-row {
     display: flex;
     justify-content: flex-end;
