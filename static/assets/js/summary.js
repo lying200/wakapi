@@ -65,17 +65,20 @@ function updateChartDefaults() {
         color: isLight ? 'rgba(0, 0, 0, 0.65)' : 'rgba(255, 255, 255, 0.5)'
     }
 
-    Chart.defaults.scales.linear.grid = { ...gridDefaults }
-    Chart.defaults.scales.linear.ticks = { ...tickDefaults }
-    Chart.defaults.scales.category.grid = { display: false, drawBorder: false }
-    Chart.defaults.scales.category.ticks = { ...tickDefaults }
-    Chart.defaults.scales.timeseries.grid = { ...gridDefaults }
-    Chart.defaults.scales.timeseries.ticks = { ...tickDefaults }
-    Chart.defaults.scales.time.grid = { ...gridDefaults }
-    Chart.defaults.scales.time.ticks = { ...tickDefaults }
+    Chart.defaults.scales.linear.grid = { ...Chart.defaults.scales.linear.grid, ...gridDefaults }
+    Chart.defaults.scales.linear.ticks = { ...Chart.defaults.scales.linear.ticks, ...tickDefaults }
+    Chart.defaults.scales.category.grid = { ...Chart.defaults.scales.category.grid, display: false, drawBorder: false }
+    Chart.defaults.scales.category.ticks = { ...Chart.defaults.scales.category.ticks, ...tickDefaults }
+    Chart.defaults.scales.timeseries.grid = { ...Chart.defaults.scales.timeseries.grid, ...gridDefaults }
+    Chart.defaults.scales.timeseries.ticks = { ...Chart.defaults.scales.timeseries.ticks, ...tickDefaults }
+    Chart.defaults.scales.time.grid = { ...Chart.defaults.scales.time.grid, ...gridDefaults }
+    Chart.defaults.scales.time.ticks = { ...Chart.defaults.scales.time.ticks, ...tickDefaults }
 
     // Legend & Tooltip Defaults
-    Chart.defaults.plugins.legend.labels.color = isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.5)';
+    Chart.defaults.plugins.legend.labels = {
+        ...Chart.defaults.plugins.legend.labels,
+        color: isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.5)'
+    };
     Chart.defaults.plugins.tooltip.backgroundColor = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(25, 25, 28, 0.9)';
     Chart.defaults.plugins.tooltip.titleColor = isLight ? '#171717' : '#fff';
     Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#171717' : '#fff';
