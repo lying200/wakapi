@@ -16,6 +16,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.011em;
+    overflow-x: hidden;
 }
 
 /* Chinese font fallback */
@@ -500,55 +501,32 @@ main {
     z-index: 1;
 }
 
-.kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--gradient-mid)), rgb(var(--gradient-end)));
-    opacity: 0;
-    border-top-left-radius: var(--radius-lg);
-    border-top-right-radius: var(--radius-lg);
-    transition: opacity var(--transition-fast);
-    z-index: 2;
-}
-
-.kpi-card:hover::before {
-    opacity: 1;
-}
-
-.kpi-card:hover {
-    border-color: var(--glass-border-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
 /* ============================================
    DYNAMIC GLOW EFFECT BEHIND CARDS
    ============================================ */
 .glass-card, .bento-card, .kpi-card {
     isolation: isolate; /* ensures the glow stays behind the element context */
+    overflow: visible !important;
 }
 
 .glass-card::after, .bento-card::after, .kpi-card::after {
     content: '';
     position: absolute;
-    top: 5%; bottom: 5%; left: 5%; right: 5%;
+    /* Move it slightly outside so the blur bleeds beautifully */
+    top: -5px; bottom: -5px; left: -5px; right: -5px;
     z-index: -1;
-    background: radial-gradient(circle, rgba(var(--accent), 0.5) 0%, rgba(var(--gradient-mid), 0.2) 60%, transparent 100%);
+    background: radial-gradient(circle at center, rgba(var(--accent), 0.8) 0%, rgba(var(--gradient-mid), 0.4) 50%, transparent 80%);
     opacity: 0;
-    filter: blur(30px);
+    filter: blur(24px);
     border-radius: inherit;
     transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(0.8) translateY(10px);
+    transform: scale(0.95) translateY(5px);
     pointer-events: none;
 }
 
 .glass-card:hover::after, .bento-card:hover::after, .kpi-card:hover::after {
     opacity: 1;
-    transform: scale(1.15) translateY(0);
+    transform: scale(1.05) translateY(0);
 }
 
 /* ============================================
