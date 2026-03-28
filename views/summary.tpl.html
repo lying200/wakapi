@@ -305,11 +305,13 @@
             </div>
 
             <!-- Timeline -->
-            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break" id="timeline-container" style="max-height: 224px;">
+            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break" id="timeline-container" style="height: 296px;">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-title" data-i18n="summary.timeline">Timeline</span>
                 </div>
-                <canvas id="chart-timeline" class="mt-2"></canvas>
+                <div class="mt-2 flex-1 min-h-0 relative">
+                    <canvas id="chart-timeline" class="absolute inset-0 h-full w-full"></canvas>
+                </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     {{ if lt .SummaryParams.RangeDays 3 }}
                     <span class="text-sm font-medium text-muted mt-4">Only available for intervals >= 3 days</span>
@@ -322,7 +324,7 @@
             </div>
 
             <!-- Hourly Breakdown -->
-            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break cursor-move" id="hourly-container" style="max-height: 224px;">
+            <div class="bento-card bento-span-3 p-5 pb-10 flex flex-col w-full no-break cursor-move" id="hourly-container" style="height: 296px;">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <span class="font-semibold text-title" data-i18n="summary.hourly_breakdown">Hourly Breakdown</span>
@@ -330,7 +332,9 @@
                               title="Only the last 24 hours within the selected interval are shown in this chart. Use Ctrl + wheel to zoom, hold and click to drag. If there are too many small segments to be displayed, chart remains blank on purpose."></span>
                     </div>
                 </div>
-                <canvas id="chart-hourly" class="mt-2"></canvas>
+                <div class="mt-2 flex-1 min-h-0 relative">
+                    <canvas id="chart-hourly" class="absolute inset-0 h-full w-full"></canvas>
+                </div>
                 <div class="hidden placeholder-container flex items-center justify-center h-full flex-col">
                     <span class="text-sm font-medium text-muted mt-4" data-i18n="summary.no_data">No data</span>
                 </div>
