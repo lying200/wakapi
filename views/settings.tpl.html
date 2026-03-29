@@ -2,8 +2,8 @@
 <html lang="en">
 
 {{ template "head.tpl.html" . }}
-<script src="assets/js/timezones.js"></script>
-<script type="module" src="assets/vendor/simplewebauthn.umd.min.js"></script>
+<script src="assets/js/timezones.js?v={{ getCacheBuster }}"></script>
+<script type="module" src="assets/vendor/simplewebauthn.umd.min.js?v={{ getCacheBuster }}"></script>
 <script>
     // Constants
     const defaultTab = 'account'
@@ -14,7 +14,7 @@
     const localServerTimeLabel = lang === 'zh' ? '本地服务器时间' : 'Local server time'
     const defaultTzOption = { value: 'Local', text: `${localServerTimeLabel} (UTC${signPrefix}${userTzOffset})` }
 </script>
-<script type="module" src="assets/js/components/settings.js"></script>
+<script type="module" src="assets/js/components/settings.js?v={{ getCacheBuster }}"></script>
 
 <body class="app-shell bg-background text-foreground min-h-screen flex flex-col pb-20 lg:pb-0">
 <style>

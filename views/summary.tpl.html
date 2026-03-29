@@ -447,8 +447,8 @@
     wakapiData.entities = []
     {{ end }}
 </script>
-<script src="assets/vendor/hammer.min.js"></script>
-<script src="assets/vendor/chartjs-plugin-zoom.min.js"></script>
+<script src="assets/vendor/hammer.min.js?v={{ getCacheBuster }}"></script>
+<script src="assets/vendor/chartjs-plugin-zoom.min.js?v={{ getCacheBuster }}"></script>
 <script src="assets/js/summary.js?v={{ getCacheBuster }}"></script>
 <script src="assets/js/summaryColors.js?v={{ getCacheBuster }}"></script>
 {{ end }}
