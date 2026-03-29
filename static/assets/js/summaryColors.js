@@ -3,39 +3,39 @@
 // Red tones pushed down to avoid overwhelming.
 
 const baseColorsLight = [
-    '#2a2626', // Warm stone gray (clean, premium)
-    '#628141', // Charcoal black (contrast)
-    '#c47c38', // Golden amber
-    '#D4A76A', // Warm tan
-    '#F2C46D', // Soft gold
-    '#E0734A', // Salmon terra-cotta
-    '#E84527', // Bright red-orange
-    '#F5DEB3', // Warm cream/wheat
-    '#C23018', // Deep crimson
-    '#A8A29E', // Warm silver
-    '#8B2500', // Dark burnt sienna
-    '#E8622A', // Warm orange
-    '#A03A12', // Chestnut
-    '#6B1D0E', // Mahogany dark
-    '#FFF5E1', // Pale cream
+    '#35513a',
+    '#89a56a',
+    '#c47c38',
+    '#D4A76A',
+    '#F2C46D',
+    '#E0734A',
+    '#E84527',
+    '#F5DEB3',
+    '#C23018',
+    '#A8A29E',
+    '#8B2500',
+    '#E8622A',
+    '#A03A12',
+    '#6B1D0E',
+    '#FFF5E1',
 ];
 
 const baseColorsDark = [
-    '#e3e3e3', // Warm stone silver (clean on dark bg)
-    '#3f6539', // Off-white (contrast)
-    '#9CAB84', // Golden amber
-    '#89986D', // Warm tan
-    '#F2C46D', // Soft gold
-    '#E0734A', // Salmon terra-cotta
-    '#E84527', // Bright red-orange
-    '#F5DEB3', // Warm cream/wheat
-    '#C23018', // Deep crimson
-    '#D6D3D1', // Light warm gray
-    '#E8622A', // Warm orange
-    '#A03A12', // Chestnut
-    '#FFF5E1', // Pale cream
-    '#8B2500', // Dark burnt sienna
-    '#D4A76A', // Warm tan
+    '#397e44',
+    '#cde3ca',
+    '#9CAB84',
+    '#89986D',
+    '#F2C46D',
+    '#E0734A',
+    '#E84527',
+    '#F5DEB3',
+    '#C23018',
+    '#D6D3D1',
+    '#E8622A',
+    '#A03A12',
+    '#FFF5E1',
+    '#8B2500',
+    '#D4A76A',
 ];
 
 // Theme-aware getter
