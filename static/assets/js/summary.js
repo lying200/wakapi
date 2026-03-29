@@ -85,7 +85,7 @@ function getLegendLabelsConfig() {
     }
 }
 
-function getDonutOptions(key) {
+function getPieOptions(key) {
     return {
         plugins: {
             tooltip: getTooltipOptions(key),
@@ -94,8 +94,7 @@ function getDonutOptions(key) {
                 labels: getLegendLabelsConfig(),
             },
         },
-        cutout: '66%',
-        radius: '88%',
+        radius: '92%',
         layout: {
             padding: 4,
         },
@@ -201,7 +200,7 @@ function updateChartDefaults() {
     Chart.defaults.plugins.tooltip.cornerRadius = 14;
     Chart.defaults.plugins.tooltip.padding = 12;
     Chart.defaults.plugins.tooltip.displayColors = false;
-    Chart.defaults.elements.arc.borderWidth = 3;
+    Chart.defaults.elements.arc.borderWidth = 0;
     Chart.defaults.elements.arc.hoverOffset = 6;
     Chart.defaults.elements.bar.borderRadius = 999;
     Chart.defaults.elements.bar.borderSkipped = false;
@@ -313,7 +312,7 @@ function draw(subselection) {
 
     let osChart = osCanvas && !osCanvas.classList.contains('hidden') && shouldUpdate(1)
         ? new Chart(osCanvas.getContext('2d'), {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 datasets: [{
                     data: wakapiData.operatingSystems
@@ -327,21 +326,19 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? (osColors[p.key.toLowerCase()] || getRandomColor(p.key)) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderColor: theme.ringBorder,
-                    borderWidth: 3,
-                    spacing: 3,
+                    borderWidth: 0,
                 }],
                 labels: wakapiData.operatingSystems
                     .slice(0, Math.min(showTopN[1], wakapiData.operatingSystems.length))
                     .map(p => p.key)
             },
-            options: getDonutOptions('operatingSystems')
+            options: getPieOptions('operatingSystems')
         })
         : null
 
     let editorChart = editorsCanvas && !editorsCanvas.classList.contains('hidden') && shouldUpdate(2)
         ? new Chart(editorsCanvas.getContext('2d'), {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 datasets: [{
                     data: wakapiData.editors
@@ -355,49 +352,45 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? (editorColors[p.key.toLowerCase()] || getRandomColor(p.key)) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderColor: theme.ringBorder,
-                    borderWidth: 3,
-                    spacing: 3,
+                    borderWidth: 0,
                 }],
                 labels: wakapiData.editors
                     .slice(0, Math.min(showTopN[2], wakapiData.editors.length))
                     .map(p => p.key)
             },
-            options: getDonutOptions('editors')
+            options: getPieOptions('editors')
         })
         : null
 
     let languageChart = languagesCanvas && !languagesCanvas.classList.contains('hidden') && shouldUpdate(3)
         ? new Chart(languagesCanvas.getContext('2d'), {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 datasets: [{
                     data: wakapiData.languages
                         .slice(0, Math.min(showTopN[3], wakapiData.languages.length))
                         .map(p => parseInt(p.total)),
-                    backgroundColor: wakapiData.languages.map(p => {
-                        const c = hexToRgb(languageColors[p.key.toLowerCase()] || getRandomColor(p.key))
+                    backgroundColor: wakapiData.languages.map((p, i) => {
+                        const c = hexToRgb(vibrantColors ? (languageColors[p.key.toLowerCase()] || getRandomColor(p.key)) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 1)`
                     }),
-                    hoverBackgroundColor: wakapiData.languages.map(p => {
-                        const c = hexToRgb(languageColors[p.key.toLowerCase()] || getRandomColor(p.key))
+                    hoverBackgroundColor: wakapiData.languages.map((p, i) => {
+                        const c = hexToRgb(vibrantColors ? (languageColors[p.key.toLowerCase()] || getRandomColor(p.key)) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderColor: theme.ringBorder,
-                    borderWidth: 3,
-                    spacing: 3,
+                    borderWidth: 0,
                 }],
                 labels: wakapiData.languages
                     .slice(0, Math.min(showTopN[3], wakapiData.languages.length))
                     .map(p => p.key)
             },
-            options: getDonutOptions('languages')
+            options: getPieOptions('languages')
         })
         : null
 
     let machineChart = machinesCanvas && !machinesCanvas.classList.contains('hidden') && shouldUpdate(4)
         ? new Chart(machinesCanvas.getContext('2d'), {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 datasets: [{
                     data: wakapiData.machines
@@ -411,21 +404,19 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderColor: theme.ringBorder,
-                    borderWidth: 3,
-                    spacing: 3,
+                    borderWidth: 0,
                 }],
                 labels: wakapiData.machines
                     .slice(0, Math.min(showTopN[4], wakapiData.machines.length))
                     .map(p => p.key)
             },
-            options: getDonutOptions('machines')
+            options: getPieOptions('machines')
         })
         : null
 
     let labelChart = labelsCanvas && !labelsCanvas.classList.contains('hidden') && shouldUpdate(5)
         ? new Chart(labelsCanvas.getContext('2d'), {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 datasets: [{
                     data: wakapiData.labels
@@ -439,15 +430,13 @@ function draw(subselection) {
                         const c = hexToRgb(vibrantColors ? getRandomColor(p.key) : getColor(p.key, i))
                         return `rgba(${c.r}, ${c.g}, ${c.b}, 0.8)`
                     }),
-                    borderColor: theme.ringBorder,
-                    borderWidth: 3,
-                    spacing: 3,
+                    borderWidth: 0,
                 }],
                 labels: wakapiData.labels
                     .slice(0, Math.min(showTopN[5], wakapiData.labels.length))
                     .map(p => p.key)
             },
-            options: getDonutOptions('labels')
+            options: getPieOptions('labels')
         })
         : null
 
@@ -770,7 +759,8 @@ function getPresentDataMask() {
 }
 
 function getColor(seed, index) {
-    if (index < baseColors.length) return baseColors[(index + 5) % baseColors.length]
+    const colors = getBaseColors()
+    if (index < colors.length) return colors[index % colors.length]
     return getRandomColor(seed)
 }
 
