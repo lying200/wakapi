@@ -69,10 +69,10 @@ main {
     --gradient-end: 6 182 212;       /* Cyan */
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 20px rgb(var(--accent) / 0.15);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 20px rgb(var(--accent) / 0.12);
 
     /* Glow Physics Tokens */
     --glow-color-1: 16 185 129;    /* Bright Emerald */
@@ -1340,7 +1340,8 @@ main {
    ============================================ */
 .projects-item {
     border-radius: var(--radius-lg);
-    overflow: hidden;
+    /* overflow: hidden; */ /* Removing clipping to allow hover shadow to show and prevent bottom gaps */
+    position: relative;
 }
 
 .projects-item a {
@@ -1357,7 +1358,7 @@ main {
 .projects-item a:hover {
     border-color: var(--glass-border-hover);
     box-shadow: var(--shadow-lg);
-    transform: translateY(-3px);
+    transform: translateY(-4px); /* Slightly more pronounced lift */
 }
 
 .projects-item .color-fading {
@@ -1370,7 +1371,7 @@ main {
 
 .projects-item:hover .color-fading {
     opacity: 0.95;
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-4px); /* Sync with card lift, remove scale to prevent border leaking */
 }
 
 .disabled {
