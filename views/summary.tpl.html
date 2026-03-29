@@ -22,7 +22,7 @@
 <div id="summary-page" class="summary-dashboard flex-1 max-w-screen-xl mx-auto w-full px-4" v-scope @vue:mounted="mounted({ userId: '{{ .SharedLoggedInViewModel.User.ID }}'})" >
     <div class="summary-toolbar glass-card mt-8 no-print">
         <div class="summary-toolbar__main">
-            <div class="summary-toolbar__copy">
+            <div class="summary-toolbar__headline">
                 <span class="summary-toolbar__eyebrow" data-i18n="summary.overview">Overview</span>
                 {{ if .IsProjectDetails }}
                 <h1 class="summary-toolbar__title">
@@ -32,10 +32,6 @@
                     Project "{{ .GetProjectFilter }}"
                     {{ end }}
                 </h1>
-                <p class="summary-toolbar__subtitle">{{ .TotalTime | duration }}</p>
-                {{ else }}
-                <h1 class="summary-toolbar__title">Dashboard</h1>
-                <p class="summary-toolbar__subtitle" data-i18n="summary.dashboard_subtitle">A sharper view of your recent coding patterns.</p>
                 {{ end }}
             </div>
             <div class="summary-toolbar__picker" v-scope="TimePicker({
@@ -43,6 +39,41 @@
                 toDate: '{{ .To | ceildate | simpledate }}',
                 timeSelection: '{{ .From | date }} - {{ .To | ceildate | date }}'
             })" @vue:mounted="mounted"></div>
+            <div class="summary-toolbar__stats">
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.total_time">Total Time</span>
+                    <span class="summary-toolbar__stat-value" title="{{ .TotalTime | duration }}">{{ .TotalTime | duration }}</span>
+                </div>
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.total_heartbeats">Total Heartbeats</span>
+                    <span class="summary-toolbar__stat-value" title="{{ .NumHeartbeats }}">{{ .NumHeartbeats }}</span>
+                </div>
+                <div class="summary-toolbar__stat summary-toolbar__stat-range">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.selected_range">Selected Range</span>
+                    <span
+                        class="summary-toolbar__stat-value"
+                        data-localize-range-from="{{ .From.Unix }}"
+                        data-localize-range-to="{{ .To.Unix }}"
+                        data-localize-range-mode="date"
+                    >{{ .From | date }} - {{ .To | ceildate | date }}</span>
+                </div>
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.top_project">Top Project</span>
+                    <span class="summary-toolbar__stat-value" title="{{ .MaxByToString 0 }}">{{ .MaxByToString 0 }}</span>
+                </div>
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.top_language">Top Language</span>
+                    <span class="summary-toolbar__stat-value" title="{{ .MaxByToString 1 }}">{{ .MaxByToString 1 }}</span>
+                </div>
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.top_os">Top OS</span>
+                    <span class="summary-toolbar__stat-value" title="{{ .MaxByToString 3 }}">{{ .MaxByToString 3 }}</span>
+                </div>
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.top_editor">Top Editor</span>
+                    <span class="summary-toolbar__stat-value" title="{{ .MaxByToString 2 }}">{{ .MaxByToString 2 }}</span>
+                </div>
+            </div>
         </div>
 
         {{ if $.UserDataExpiring }}
@@ -92,38 +123,6 @@
         {{ if .SharedLoggedInViewModel.User.HasData }}
 
         {{ if not .IsProjectDetails }}
-        <!-- KPI Cards — Bento Row -->
-        <div class="summary-kpi-grid w-full mb-6 no-break">
-            <div class="kpi-card kpi-card-featured animate-fadein animate-fadein-delay-1">
-                <span class="summary-kpi-label" data-i18n="summary.total_time">Total Time</span>
-                <span class="summary-kpi-value" title="{{ .TotalTime | duration }}">{{ .TotalTime | duration }}</span>
-                <span class="summary-kpi-meta" data-i18n-title="summary.after_title" title="(your oldest heartbeat in selected range)">
-                    <span data-i18n="summary.after">after</span>
-                    <span data-localize-datetime="{{ .FromTime.T.Unix }}">{{ .FromTime.T | datetime }}</span>
-                </span>
-                <div class="summary-kpi-highlight">
-                    <span class="summary-kpi-highlight__label" data-i18n="summary.total_heartbeats">Total Heartbeats</span>
-                    <span class="summary-kpi-highlight__value" title="{{ .NumHeartbeats }}">{{ .NumHeartbeats }}</span>
-                </div>
-            </div>
-            <div class="kpi-card animate-fadein animate-fadein-delay-2">
-                <span class="summary-kpi-label" data-i18n="summary.top_project">Top Project</span>
-                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 0 }}">{{ .MaxByToString 0 }}</span>
-            </div>
-            <div class="kpi-card animate-fadein animate-fadein-delay-3">
-                <span class="summary-kpi-label" data-i18n="summary.top_language">Top Language</span>
-                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 1 }}">{{ .MaxByToString 1 }}</span>
-            </div>
-            <div class="kpi-card animate-fadein animate-fadein-delay-4">
-                <span class="summary-kpi-label" data-i18n="summary.top_os">Top OS</span>
-                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 3 }}">{{ .MaxByToString 3 }}</span>
-            </div>
-            <div class="kpi-card animate-fadein animate-fadein-delay-5">
-                <span class="summary-kpi-label" data-i18n="summary.top_editor">Top Editor</span>
-                <span class="summary-kpi-value summary-kpi-value-compact" title="{{ .MaxByToString 2 }}">{{ .MaxByToString 2 }}</span>
-            </div>
-        </div>
-
         {{ else }}
         <div class="summary-project-badge-row mb-8 w-full">
         <div class="flex space-x-4 items-center mt-2">
