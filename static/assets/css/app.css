@@ -577,10 +577,13 @@ main {
 @media (min-width: 1024px) {
     .app-shell {
         display: grid;
-        grid-template-columns: minmax(13rem, 15rem) minmax(0, 1fr);
-        column-gap: clamp(2.5rem, 4vw, 4.75rem);
+        grid-template-columns: minmax(12.25rem, 13.75rem) minmax(0, 1fr);
+        column-gap: clamp(2rem, 3.2vw, 3.5rem);
         align-items: start;
-        padding: 1.6rem clamp(1.25rem, 2.4vw, 2.5rem) 0;
+        width: min(100%, 104rem);
+        margin-left: max(0px, calc((100vw - 104rem) / 2 - 2.25rem));
+        margin-right: auto;
+        padding: 1.6rem clamp(1.25rem, 2.2vw, 2.25rem) 0;
     }
 
     .app-shell > #main-sidebar {
@@ -598,6 +601,10 @@ main {
     .app-shell > footer {
         grid-column: 2;
         min-width: 0;
+        justify-self: start;
+        width: min(100%, 80rem);
+        margin-left: 0;
+        margin-right: auto;
     }
 
     .app-shell > .app-alerts {
