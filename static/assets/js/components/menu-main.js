@@ -11,4 +11,4 @@ PetiteVue.createApp({
             Object.keys(this.state).filter(k => k !== skip).forEach(k => this.state[k] = false)
         })
     }
-}).mount('#main-menu')
+}).mount('#main-menu-app')
