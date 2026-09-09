@@ -73,6 +73,10 @@
                     <span class="summary-toolbar__stat-label" data-i18n="summary.top_editor">Top Editor</span>
                     <span class="summary-toolbar__stat-value" title="{{ .MaxByToString 2 }}">{{ .MaxByToString 2 }}</span>
                 </div>
+                <div class="summary-toolbar__stat">
+                    <span class="summary-toolbar__stat-label" data-i18n="summary.ai_coding_ratio">AI Coding Ratio</span>
+                    <span class="summary-toolbar__stat-value">{{ printf "%.0f" (mulf64 (.Summary.CategoryRatio "ai coding" "ai coding" "coding") 100) }} %</span>
+                </div>
             </div>
         </div>
 

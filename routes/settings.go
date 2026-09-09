@@ -5,17 +5,18 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+	"uuid"
 
 	"github.com/duke-git/lancet/v2/condition"
 	datastructure "github.com/duke-git/lancet/v2/datastructure/set"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
-	"github.com/gofrs/uuid/v5"
 	"github.com/gorilla/schema"
 
 	conf "github.com/muety/wakapi/config"
@@ -330,16 +331,6 @@ func (h *SettingsHandler) actionChangePassword(w http.ResponseWriter, r *http.Re
 		return actionResult{http.StatusInternalServerError, "", conf.ErrInternalServerError, nil}
 	}
 
-	login := &models.Login{
-		Username: user.ID,
-		Password: user.Password,
-	}
-	encoded, err := h.config.Security.SecureCookie.Encode(models.AuthCookieKey, login.Username)
-	if err != nil {
-		return actionResult{http.StatusInternalServerError, "", conf.ErrInternalServerError, nil}
-	}
-
-	http.SetCookie(w, h.config.CreateCookie(models.AuthCookieKey, encoded))
 	return actionResult{http.StatusOK, "password was updated successfully", "", nil}
 }
 
@@ -360,6 +351,12 @@ func (h *SettingsHandler) actionChangeUserId(w http.ResponseWriter, r *http.Requ
 
 	if _, err := h.userSrvc.ChangeUserId(user, newUserId); err != nil {
 		return actionResult{http.StatusInternalServerError, "", conf.ErrInternalServerError, nil}
+	}
+
+	oidcProviders := h.config.Security.ListOidcProviders()
+	if slices.Contains(oidcProviders, user.AuthType) {
+		// OIDC Users will remain authenticated, just return ok
+		return actionResult{http.StatusOK, fmt.Sprintf("Successfully changed your username to %s", newUserId), "", nil}
 	}
 
 	routeutils.SetSuccess(r, w, fmt.Sprintf("Successfully changed your username to %s, please log back in.", newUserId))
@@ -882,7 +879,7 @@ func (h *SettingsHandler) actionGenerateInvite(w http.ResponseWriter, r *http.Re
 	}
 
 	user := middlewares.GetPrincipal(r)
-	inviteCode := uuid.Must(uuid.NewV4()).String()[0:8]
+	inviteCode := uuid.NewV4().String()[0:8]
 
 	if err := h.keyValueSrvc.PutString(&models.KeyStringValue{
 		Key:   fmt.Sprintf("%s_%s", conf.KeyInviteCode, inviteCode),
@@ -956,7 +953,7 @@ func (h *SettingsHandler) actionAddApiKey(w http.ResponseWriter, r *http.Request
 		loadTemplates()
 	}
 
-	apiKey := uuid.Must(uuid.NewV4()).String()
+	apiKey := uuid.NewV4().String()
 
 	if _, err := h.apiKeySrvc.Create(&models.ApiKey{
 		User:     middlewares.GetPrincipal(r),

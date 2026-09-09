@@ -16,7 +16,7 @@ import (
 type Duration struct {
 	ID     int64  `json:"-" gorm:"primaryKey; autoIncrement"` // https://github.com/muety/wakapi/issues/777
 	UserID string `json:"user_id" gorm:"not null; index:idx_time_duration_user"`
-	// note: on sqlite, table will have an additional column `time_real`, introduced "manually" by migration 20260111
+	// note: on sqlite, the time column is stored as INTEGER (Unix epoch milliseconds) rather than TEXT
 	// see https://github.com/muety/wakapi/issues/882 for details
 	Time            CustomTime    `json:"time" hash:"ignore" gorm:"not null; index:idx_time_duration; index:idx_time_duration_user"` // time of first heartbeat of this duration
 	Duration        time.Duration `json:"duration" hash:"ignore" gorm:"not null"`
@@ -26,6 +26,7 @@ type Duration struct {
 	OperatingSystem string        `json:"operating_system"`
 	Machine         string        `json:"machine"`
 	Category        string        `json:"category"`
+	AIModel         string        `json:"ai_model"`
 	Branch          string        `json:"branch"`
 	Entity          string        `json:"Entity"`
 	Extension       string        `json:"-"`
@@ -85,6 +86,7 @@ func NewDurationFromHeartbeat(h *Heartbeat) *Duration {
 		OperatingSystem: h.OperatingSystem,
 		Machine:         h.Machine,
 		Category:        h.Category,
+		AIModel:         h.AIModel,
 		Branch:          h.Branch,
 		Entity:          h.Entity,
 		Extension:       extension,
@@ -145,6 +147,8 @@ func (d *Duration) GetKey(t uint8) (key string) {
 		key = d.Entity
 	case SummaryCategory:
 		key = d.Category
+	case SummaryAiModel:
+		key = d.AIModel
 	}
 
 	if key == "" {

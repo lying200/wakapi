@@ -87,6 +87,7 @@
         'summary.top_language': { en: 'Top Language', zh: '最多语言' },
         'summary.top_os': { en: 'Top OS', zh: '最多系统' },
         'summary.top_editor': { en: 'Top Editor', zh: '最多编辑器' },
+        'summary.ai_coding_ratio': { en: 'AI Coding Ratio', zh: 'AI 编码占比' },
         'summary.projects': { en: 'Projects', zh: '项目' },
         'summary.branches': { en: 'Branches', zh: '分支' },
         'summary.languages': { en: 'Languages', zh: '语言' },

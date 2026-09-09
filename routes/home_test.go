@@ -64,7 +64,7 @@ func TestHomeHandler_Get_NotLoggedIn(t *testing.T) {
 				t.Errorf("unextected error. Error: %s", err)
 			}
 
-			assert.Contains(t, string(data), "<a href=\"login\" class=\"btn-primary\">")
+			assert.Contains(t, string(data), "<a href=\"login\" class=\"btn-primary")
 			keyValueServiceMock.AssertNumberOfCalls(t, "GetString", 3)
 		})
 	})
