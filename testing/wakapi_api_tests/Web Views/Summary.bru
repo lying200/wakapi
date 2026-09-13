@@ -7,14 +7,10 @@ meta {
 get {
   url: {{BASE_URL}}/summary
   body: none
-  auth: bearer
-}
-
-auth:bearer {
-  token: {{WRITEUSER_TOKEN}}
+  auth: none
 }
 
 assert {
   res.body: contains </html>
-  res.body: contains <span class="text-sm">Logout</span>
+  res.body: contains <form action="logout" method="post"
 }
